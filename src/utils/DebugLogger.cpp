@@ -2,13 +2,18 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-HardwareSerial *DebugLogger::serialPort = nullptr; // 静的メンバーの初期化
+// DebugLoggerクラスの静的メンバーの初期化
+HardwareSerial *DebugLogger::serialPort = nullptr;
 
+// DebugLoggerの初期化メソッド
+// 指定されたシリアルポートとボーレートで初期化する
 void DebugLogger::init(HardwareSerial &port, long baudRate) {
   serialPort = &port;
   serialPort->begin(baudRate);
 }
 
+// ログメッセージを出力するメソッド
+// クラス名、メソッド名、メッセージを指定して出力する
 void DebugLogger::print(const char *className, const char *methodName,
                         const char *message) {
 
@@ -22,6 +27,8 @@ void DebugLogger::print(const char *className, const char *methodName,
   }
 }
 
+// フォーマットされたログメッセージを出力するメソッド
+// クラス名、メソッド名、フォーマット、可変引数を指定して出力する
 void DebugLogger::printf(const char *className, const char *methodName,
                          const char *format, ...) {
 
@@ -29,10 +36,9 @@ void DebugLogger::printf(const char *className, const char *methodName,
     char buffer[256]; // バッファサイズを設定
     va_list args;
     va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format,
-              args); // フォーマットされた文字列を作成
+    // フォーマットされた文字列を作成
+    vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
-
     print(className, methodName, buffer); // logメソッドを呼び出す
   }
 }
