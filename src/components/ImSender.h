@@ -17,7 +17,7 @@ public:
 
     // データをバッファにシリアライズ
     uint8_t buffer[sizeof(T)];
-    serialize(data, buffer);
+    memccpy(buffer, &data, sizeof(T));
 
     // バッファの内容を送信
     serial.write(buffer, sizeof(T));
@@ -28,16 +28,6 @@ public:
 
 private:
   SoftwareSerial serial;
-
-  // データをバッファにシリアライズするテンプレートメソッド
-  template <typename T> void serialize(const T &data, uint8_t *buffer) {
-    const uint8_t *dataPtr = (const uint8_t *)&data;
-    for (size_t i = 0; i < sizeof(T); i++) {
-      buffer[i] = dataPtr[i];
-    }
-    // シリアライズされたデータをデバッグログに出力
-    DebugLogger::printf("ImSender", "serialize", "Serialized data: %d\n", data);
-  }
 };
 
 #endif // IM_SENDER_H

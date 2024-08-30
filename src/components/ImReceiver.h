@@ -63,19 +63,12 @@ public:
     }
 
     // バッファをデータにデシリアライズ
-    deserialize(buffer, data);
+    memcpy(&data, buffer, sizeof(T));
     return true;
   }
 
 private:
   SoftwareSerial serial;
-
-  // バッファをデータにデシリアライズするテンプレートメソッド
-  template <typename T> void deserialize(uint8_t *buffer, T &data) {
-    memcpy(&data, buffer, sizeof(T));
-    DebugLogger::printf("ImReceiver", "deserialize", "Deserialized data: %d\n",
-                        data);
-  }
 };
 
 #endif // IM_RECEIVER_H
