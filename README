@@ -1,0 +1,7 @@
+■exampleの実行の仕方
+①platform.iniのlib_depsにこのライブラリを記述
+②platform.iniに
+[platformio]
+src_dir = .pio/libdeps/${PIOENV}/liboshima/examples/実行したいプログラム名
+を記述
+③チェックボタンでビルド
