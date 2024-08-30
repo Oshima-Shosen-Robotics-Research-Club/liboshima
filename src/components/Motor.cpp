@@ -1,5 +1,10 @@
+/*
+モータドライバは部室に複数あるのでそれぞれにクラスを作成する必要がある
+このクラスが基底クラスになると思われる
+*/
+
 #include "Motor.h"
-#include <Arduino.h> // Arduino プラットフォーム用
+#include <Arduino.h>
 
 // コンストラクタ: モーター制御用のピンを設定
 Motor::Motor(int pin1, int pin2) : pin1(pin1), pin2(pin2) {
