@@ -49,8 +49,8 @@ public:
     // コロンの後のデータを抽出
     String hexData = recvedStr.substring(colonIndex + 1);
 
-    // データの長さが不足している場合は false を返す
-    if (hexData.length() < sizeof(T) * 2) {
+    // データが長さが適切でない場合は false を返す
+    if (hexData.length() != sizeof(T) * 2) {
       DebugLogger::print("ImReceiver", "receive", "Data length is too short\n");
       return false;
     }
