@@ -51,7 +51,7 @@ public:
 
     // データが長さが適切でない場合は false を返す
     if (hexData.length() != sizeof(T) * 2) {
-      DebugLogger::print("ImReceiver", "receive", "Data length is too short\n");
+      DebugLogger::print("ImReceiver", "receive", "Data length is invalid\n");
       return false;
     }
 
