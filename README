@@ -7,3 +7,6 @@ src_dir = .pio/libdeps/${PIOENV}/liboshima/examples/実行したいプログラ�
 ③チェックボタンでビルド
 
 参考: https://asukiaaa.blogspot.com/2021/04/build-an-examlpe-file-on-platformio.html
+
+■PlatformIO Library Registry
+https://registry.platformio.org/libraries/soshirofujimori/liboshima
