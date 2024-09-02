@@ -18,9 +18,8 @@ public:
     // データをバッファにシリアライズ
     uint8_t buffer[sizeof(T)];
     memccpy(buffer, &data, sizeof(T));
-
-    // バッファの内容を送信
-    serial.write(buffer, sizeof(T));
+    for (int i = 0; i < sizeof(T); i++)
+      serial.print(buffer[i], HEX);
 
     // 送信終了を示す改行を送信
     serial.println();
