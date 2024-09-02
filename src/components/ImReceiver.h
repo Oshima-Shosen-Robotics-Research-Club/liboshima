@@ -36,6 +36,7 @@ public:
       }
     }
 
+    // 例："00,0001,EA:12,34,56,78"（ペイロード::受信データ）
     DebugLogger::printf("ImReceiver", "receive", "Received data: %s\n",
                         recvedStr.c_str());
 
@@ -46,11 +47,15 @@ public:
       return false;
     }
 
-    // コロンの後のデータを抽出
-    String hexData = recvedStr.substring(colonIndex + 1);
+    // コロンの後のデータ（"12,34,56,78"）を抽出
+    String recvedData = recvedStr.substring(colonIndex + 1);
+
+    // データの長さを計算
+    int hexStrLen = sizeof(T) * 2;
+    int commaCount = sizeof(T) - 1;
 
     // データが長さが適切でない場合は false を返す
-    if (hexData.length() != sizeof(T) * 2) {
+    if (recvedData.length() != hexStrLen + commaCount) {
       DebugLogger::print("ImReceiver", "receive", "Data length is invalid\n");
       return false;
     }
@@ -58,7 +63,7 @@ public:
     uint8_t buffer[sizeof(T)];
     // 16進数のペアをバッファに変換
     for (size_t i = 0; i < sizeof(T); i++) {
-      String hexPair = hexData.substring(i * 2, i * 2 + 2);
+      String hexPair = recvedData.substring(i * 3, i * 3 + 2);
       buffer[i] = (uint8_t)strtol(hexPair.c_str(), nullptr, 16);
     }
 
