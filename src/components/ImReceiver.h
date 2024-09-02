@@ -17,7 +17,7 @@ public:
   template <typename T> bool receive(T &data) {
     // データが利用可能でない場合は false を返す
     if (!available()) {
-      DebugLogger::print("ImReceiver", "receive", "No data available\n");
+      DebugLogger::println("ImReceiver", "receive", "No data available\n");
       return false;
     }
 
@@ -36,14 +36,13 @@ public:
       }
     }
 
-    // 例："00,0001,EA:12,34,56,78"（ペイロード::受信データ）
-    DebugLogger::printf("ImReceiver", "receive", "Received data: %s\n",
+    DebugLogger::printlnf("ImReceiver", "receive", "Received data: %s\n",
                         recvedStr.c_str());
 
     // コロンのインデックスを見つける
     int colonIndex = recvedStr.indexOf(':');
     if (colonIndex == -1) {
-      DebugLogger::print("ImReceiver", "receive", "Colon not found\n");
+      DebugLogger::println("ImReceiver", "receive", "Colon not found\n");
       return false;
     }
 
@@ -56,7 +55,7 @@ public:
 
     // データが長さが適切でない場合は false を返す
     if (recvedData.length() != hexStrLen + commaCount) {
-      DebugLogger::print("ImReceiver", "receive", "Data length is invalid\n");
+      DebugLogger::println("ImReceiver", "receive", "Data length is invalid\n");
       return false;
     }
 

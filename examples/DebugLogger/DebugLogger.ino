@@ -5,6 +5,6 @@ void setup() {
 }
 
 void loop() {
-  DebugLogger::print("main", "loop", "Hello, world!\n");
+  DebugLogger::println("main", "loop", "Hello, world!\n");
   delay(1000);
 }

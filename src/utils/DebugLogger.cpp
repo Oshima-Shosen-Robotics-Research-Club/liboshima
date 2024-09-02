@@ -14,8 +14,8 @@ void DebugLogger::init(HardwareSerial &port, long baudRate) {
 
 // ログメッセージを出力するメソッド
 // クラス名、メソッド名、メッセージを指定して出力する
-void DebugLogger::print(const char *className, const char *methodName,
-                        const char *message) {
+void DebugLogger::println(const char *className, const char *methodName,
+                          const char *message) {
 
   if (serialPort) {
     serialPort->print("<");
@@ -29,8 +29,8 @@ void DebugLogger::print(const char *className, const char *methodName,
 
 // フォーマットされたログメッセージを出力するメソッド
 // クラス名、メソッド名、フォーマット、可変引数を指定して出力する
-void DebugLogger::printf(const char *className, const char *methodName,
-                         const char *format, ...) {
+void DebugLogger::printlnf(const char *className, const char *methodName,
+                           const char *format, ...) {
 
   if (serialPort) {
     char buffer[256]; // バッファサイズを設定
@@ -39,6 +39,6 @@ void DebugLogger::printf(const char *className, const char *methodName,
     // フォーマットされた文字列を作成
     vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
-    print(className, methodName, buffer); // logメソッドを呼び出す
+    println(className, methodName, buffer); // logメソッドを呼び出す
   }
 }
