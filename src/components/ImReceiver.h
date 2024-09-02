@@ -39,7 +39,7 @@ public:
       else
         recvedStr += recvedChar;
 
-      if (recvedStr.length() > recvedStrLen) {
+      if (recvedStr.length() > static_cast<size_t>(recvedStrLen)) {
         DebugLogger::println("ImReceiver", "receive",
                              "Received string is too long");
         return false;
@@ -60,7 +60,7 @@ public:
     String recvedData = recvedStr.substring(colonIndex + 1);
 
     // データが長さが適切でない場合は false を返す
-    if (recvedData.length() != hexStrLen + commaCount) {
+    if (recvedData.length() != static_cast<size_t>(hexStrLen + commaCount)) {
       DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
       return false;
     }
