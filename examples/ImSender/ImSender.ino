@@ -7,3 +7,6 @@ void setup(){
     int data = 123;
     imSender.send(data);
 }
+
+void loop(){
+}
