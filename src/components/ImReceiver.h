@@ -24,20 +24,30 @@ public:
     String recvedStr;
     char recvedChar;
 
-    DebugLogger::print("ImReceiver", "receive", "Waiting for data...\n");
+    // 受信文字列の例："00,0001,EA:12,34,56,78"（ペイロード::受信データ）
+    // 文字列の長さを計算
+    int payloadLen = 11;
+    int hexStrLen = sizeof(T) * 2;
+    int commaCount = sizeof(T) - 1;
+    int recvedStrLen = payloadLen + 1 + hexStrLen + commaCount;
 
-    // データが到着するのを待ち、文字列に読み込む
+    // 受信文字列を読み取る
     while (true) {
-      recvedChar = (char)serial.read();
-      if (recvedChar == '\n') {
+      recvedChar = serial.read();
+      if (recvedChar == '\n')
         break;
-      } else {
+      else
         recvedStr += recvedChar;
+
+      if (recvedStr.length() > recvedStrLen) {
+        DebugLogger::println("ImReceiver", "receive",
+                             "Received string is too long\n");
+        return false;
       }
     }
 
     DebugLogger::printlnf("ImReceiver", "receive", "Received data: %s\n",
-                        recvedStr.c_str());
+                          recvedStr.c_str());
 
     // コロンのインデックスを見つける
     int colonIndex = recvedStr.indexOf(':');
@@ -48,10 +58,6 @@ public:
 
     // コロンの後のデータ（"12,34,56,78"）を抽出
     String recvedData = recvedStr.substring(colonIndex + 1);
-
-    // データの長さを計算
-    int hexStrLen = sizeof(T) * 2;
-    int commaCount = sizeof(T) - 1;
 
     // データが長さが適切でない場合は false を返す
     if (recvedData.length() != hexStrLen + commaCount) {
