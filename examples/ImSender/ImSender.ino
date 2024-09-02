@@ -1,6 +1,6 @@
 #include <components/ImSender.h>
 
-ImSender imSender(2, 3, 9600);
+ImSender imSender(2, 3);
 
 void setup(){
     // 送信データを送信する

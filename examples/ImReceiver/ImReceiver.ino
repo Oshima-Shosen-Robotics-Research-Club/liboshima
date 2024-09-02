@@ -1,6 +1,6 @@
 #include <components/ImReceiver.h>
 
-ImReceiver imReceiver(4, 5, 9600);
+ImReceiver imReceiver(4, 5);
 
 void setup(){
 }
