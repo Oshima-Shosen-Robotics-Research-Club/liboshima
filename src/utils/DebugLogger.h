@@ -9,7 +9,7 @@ class DebugLogger {
 public:
   // シリアルポートの初期化
   // 指定されたシリアルポートとボーレートで初期化する
-  static void init(HardwareSerial &serialPort, long baudRate = 9600);
+  static void init(HardwareSerial &serialPort, long baudRate = 19200);
 
   // デバッグメッセージを出力する
   // クラス名、メソッド名、メッセージを指定して出力する
