@@ -17,7 +17,7 @@ public:
   template <typename T> bool receive(T &data) {
     // データが利用可能でない場合は false を返す
     if (!available()) {
-      DebugLogger::println("ImReceiver", "receive", "No data available\n");
+      DebugLogger::println("ImReceiver", "receive", "No data available");
       return false;
     }
 
@@ -41,18 +41,18 @@ public:
 
       if (recvedStr.length() > recvedStrLen) {
         DebugLogger::println("ImReceiver", "receive",
-                             "Received string is too long\n");
+                             "Received string is too long");
         return false;
       }
     }
 
-    DebugLogger::printlnf("ImReceiver", "receive", "Received data: %s\n",
+    DebugLogger::printlnf("ImReceiver", "receive", "Received data: %s",
                           recvedStr.c_str());
 
     // コロンのインデックスを見つける
     int colonIndex = recvedStr.indexOf(':');
     if (colonIndex == -1) {
-      DebugLogger::println("ImReceiver", "receive", "Colon not found\n");
+      DebugLogger::println("ImReceiver", "receive", "Colon not found");
       return false;
     }
 
@@ -61,7 +61,7 @@ public:
 
     // データが長さが適切でない場合は false を返す
     if (recvedData.length() != hexStrLen + commaCount) {
-      DebugLogger::println("ImReceiver", "receive", "Data length is invalid\n");
+      DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
       return false;
     }
 
