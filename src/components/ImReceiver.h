@@ -67,7 +67,7 @@ public:
 
     uint8_t buffer[sizeof(T)];
     // 16進数のペアをバッファに変換
-    for (size_t i = 0; i < sizeof(T); i++) {
+    for (int i = 0; i < (int)sizeof(T); i++) {
       String hexPair = recvedData.substring(i * 3, i * 3 + 2);
       buffer[i] = (uint8_t)strtol(hexPair.c_str(), nullptr, 16);
     }
