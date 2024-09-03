@@ -34,10 +34,14 @@ public:
     // 受信文字列を読み取る
     while (true) {
       recvedChar = serial.read();
-      if (recvedChar == '\n')
+
+      if (recvedChar == '\r') {
+        // \nを読み飛ばす
+        serial.read();
         break;
-      else
+      } else {
         recvedStr += recvedChar;
+      }
 
       if (recvedStr.length() > static_cast<size_t>(recvedStrLen)) {
         DebugLogger::println("ImReceiver", "receive",
