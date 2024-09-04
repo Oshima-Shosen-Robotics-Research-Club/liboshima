@@ -1,6 +1,6 @@
-#include <components/moters/BD62193.h>
-#include <components/moters/MotorDriver.h>
-#include <components/moters/TB67H450.h>
+#include <components/motors/BD62193.h>
+#include <components/motors/MotorDriver.h>
+#include <components/motors/TB67H450.h>
 
 // モータードライバのインスタンスを生成
 BD62193 motor1(3, 4, 5);
