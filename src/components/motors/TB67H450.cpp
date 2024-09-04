@@ -17,14 +17,12 @@ void TB67H450::run(int pwmValue1, int pwmValue2) {
 
 // 正転メソッド: モーターを前進させる
 void TB67H450::forward() {
-  // in1 に PWM 信号を出力し、in2 は LOW に設定
-  run(255, 0); // 最大出力で前進
+  setSpeed(1.0); // 最大出力で前進
 }
 
 // 後転メソッド: モーターを後退させる
 void TB67H450::reverse() {
-  // in1 は LOW、in2 に PWM 信号を出力
-  run(0, 255); // 最大出力で後退
+  setSpeed(-1.0); // 最大出力で後退
 }
 
 // モーター停止メソッド: モーターを停止させる

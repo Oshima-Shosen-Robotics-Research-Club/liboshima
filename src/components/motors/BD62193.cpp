@@ -13,25 +13,23 @@ BD62193::BD62193(int pwm, int inA, int inB)
 void BD62193::run(int pwmValue, bool inAState, bool inBState) {
   // 指定されたピンに信号を出力
   analogWrite(pwmPin, pwmValue);
-  digitalWrite(inAPin, inAState ? HIGH : LOW);
-  digitalWrite(inBPin, inBState ? HIGH : LOW);
+  digitalWrite(inAPin, inAState);
+  digitalWrite(inBPin, inBState);
 }
 
 // 正転メソッド: モーターを前進させる
 void BD62193::forward() {
-  // inAPin に PWM 信号を出力し、inBPin は LOW に設定
-  run(255, HIGH, LOW); // 最大出力で前進
+  setSpeed(1.0); // 最大出力で前進
 }
 
 // 後転メソッド: モーターを後退させる
 void BD62193::reverse() {
-  // inAPin は LOW、inBPin に PWM 信号を出力
-  run(255, LOW, HIGH); // 最大出力で後退
+  setSpeed(-1.0); // 最大出力で後退
 }
 
 // モーター停止メソッド: モーターを停止させる
 void BD62193::stop() {
-  run(0, LOW, LOW); // 停止設定
+  setSpeed(0); // 速度を 0 に設定
 }
 
 // モーターの速度を設定するメソッド
