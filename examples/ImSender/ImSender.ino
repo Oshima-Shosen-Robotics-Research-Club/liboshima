@@ -1,4 +1,4 @@
-#include <components/ImSender.h>
+#include <components/ims/ImSender.h>
 
 ImSender imSender(2, 3);
 

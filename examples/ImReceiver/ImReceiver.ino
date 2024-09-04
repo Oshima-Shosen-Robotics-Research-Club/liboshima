@@ -1,4 +1,4 @@
-#include <components/ImReceiver.h>
+#include <components/ims/ImReceiver.h>
 
 ImReceiver imReceiver(4, 5);
 
