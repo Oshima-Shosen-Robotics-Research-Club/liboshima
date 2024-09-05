@@ -43,6 +43,6 @@ void BD62193::setSpeed(float rate) {
   } else if (rate < 0) {
     run(pwmValue, LOW, HIGH); // 後退設定
   } else {
-    run(0, LOW, LOW); // 停止設定
+    run(0, HIGH, HIGH); // 停止設定
   }
 }
