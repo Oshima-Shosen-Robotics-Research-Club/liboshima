@@ -18,7 +18,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "SoftwareSerial": "*"
+    "SoftwareSerial": "*",
+    "fastled/FastLED": "3.7.5"
   },
   "frameworks": "arduino",
   "platforms": "*"
