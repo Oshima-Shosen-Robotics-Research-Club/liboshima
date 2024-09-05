@@ -2,9 +2,16 @@
 #include <components/motors/MotorDriver.h>
 #include <components/motors/TB67H450.h>
 
+// ピンの定義
+#define MOTOR1_PWM 3
+#define MOTOR1_INA 4
+#define MOTOR1_INB 5
+#define MOTOR2_IN1 6
+#define MOTOR2_IN2 7
+
 // モータードライバのインスタンスを生成
-BD62193 motor1(3, 4, 5);
-TB67H450 motor2(6, 7);
+BD62193 motor1(MOTOR1_PWM, MOTOR1_INA, MOTOR1_INB);
+TB67H450 motor2(MOTOR2_IN1, MOTOR2_IN2);
 
 void setup() {}
 

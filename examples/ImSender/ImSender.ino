@@ -1,12 +1,14 @@
 #include <components/ims/ImSender.h>
 
-ImSender imSender(2, 3);
+#define RX_PIN 2
+#define TX_PIN 3
 
-void setup(){
-    // 送信データを送信する
-    int data = 123;
-    imSender.send(data);
+ImSender imSender(RX_PIN, TX_PIN);
+
+void setup() {
+  // 送信データを送信する
+  int data = 123;
+  imSender.send(data);
 }
 
-void loop(){
-}
+void loop() {}
