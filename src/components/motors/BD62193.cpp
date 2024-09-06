@@ -9,10 +9,17 @@ BD62193::BD62193(int pwm, int inA, int inB)
   pinMode(inBPin, OUTPUT);
 }
 
+BD62193::BD62193(int inA, int inB) : inAPin(inA), inBPin(inB), isPWM(false) {
+  // ピンを出力モードに設定
+  pinMode(inAPin, OUTPUT);
+  pinMode(inBPin, OUTPUT);
+}
+
 // モーターを制御する内部メソッド
 void BD62193::run(int pwmValue, bool inAState, bool inBState) {
   // 指定されたピンに信号を出力
-  analogWrite(pwmPin, pwmValue);
+  if (isPWM)
+    analogWrite(pwmPin, pwmValue);
   digitalWrite(inAPin, inAState);
   digitalWrite(inBPin, inBState);
 }
@@ -34,6 +41,17 @@ void BD62193::stop() {
 
 // モーターの速度を設定するメソッド
 void BD62193::setSpeed(float rate) {
+
+  if (!isPWM) {
+    if (rate > 0) {
+      rate = 1.0; // 正転設定
+    } else if (rate < 0) {
+      rate = -1.0; // 後退設定
+    } else {
+      rate = 0; // 停止設定
+    }
+  }
+
   // スピードの範囲を -1.0 から 1.0 に制限
   rate = constrain(rate, -1.0, 1.0);
   int pwmValue = (int)(abs(rate) * 255); // 速度に応じた PWM 値を計算
