@@ -1,4 +1,5 @@
 #include "DebugLogger.h"
+#include <SoftwareSerial.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -7,7 +8,13 @@ Stream *DebugLogger::serialPort = nullptr;
 
 // DebugLoggerの初期化メソッド
 // 指定されたシリアルポートを初期化する
-void DebugLogger::init(Stream &port) {
+void DebugLogger::init(HardwareSerial &port, unsigned long baudrate) {
+  port.begin(baudrate); // シリアルポートを初期化
+  serialPort = &port;
+}
+
+void DebugLogger::init(SoftwareSerial &port, unsigned long baudrate) {
+  port.begin(baudrate); // シリアルポートを初期化
   serialPort = &port;
 }
 
