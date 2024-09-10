@@ -8,8 +8,8 @@
 class DebugLogger {
 public:
   // シリアルポートの初期化
-  // 指定されたシリアルポートとボーレートで初期化する
-  static void init(HardwareSerial &serialPort, long baudRate = 19200);
+  // 指定されたシリアルポートを初期化する
+  static void init(Stream &serialPort);
 
   // デバッグメッセージを出力する
   // クラス名、メソッド名、メッセージを指定して出力する
@@ -23,7 +23,7 @@ public:
 
 private:
   // シリアルポートを静的メンバーとして保持する
-  static HardwareSerial *serialPort;
+  static Stream *serialPort;
 };
 
 // マクロを定義して、簡単にログ出力できるようにする

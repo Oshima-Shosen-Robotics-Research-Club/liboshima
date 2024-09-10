@@ -3,13 +3,12 @@
 #include <stdio.h>
 
 // DebugLoggerクラスの静的メンバーの初期化
-HardwareSerial *DebugLogger::serialPort = nullptr;
+Stream *DebugLogger::serialPort = nullptr;
 
 // DebugLoggerの初期化メソッド
-// 指定されたシリアルポートとボーレートで初期化する
-void DebugLogger::init(HardwareSerial &port, long baudRate) {
+// 指定されたシリアルポートを初期化する
+void DebugLogger::init(Stream &port) {
   serialPort = &port;
-  serialPort->begin(baudRate);
 }
 
 // ログメッセージを出力するメソッド
@@ -39,6 +38,6 @@ void DebugLogger::printlnf(const char *className, const char *methodName,
     // フォーマットされた文字列を作成
     vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
-    println(className, methodName, buffer); // logメソッドを呼び出す
+    println(className, methodName, buffer); // printlnメソッドを呼び出す
   }
 }

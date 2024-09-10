@@ -1,6 +1,7 @@
 #include <utils/DebugLogger.h>
 
 void setup() {
+  Serial.begin(19200);
   DebugLogger::init(Serial);
 }
 
