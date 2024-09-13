@@ -8,7 +8,8 @@
 class ImReceiver {
 public:
   // コンストラクタ: 受信ピンと送信ピン、ボーレートを設定
-  ImReceiver(uint8_t rxPin, uint8_t txPin, long baudRate = 19200);
+  ImReceiver(HardwareSerial &serial, long baudRate = 19200);
+  ImReceiver(SoftwareSerial &serial, long baudRate = 19200);
 
   // データが利用可能かどうかをチェックするメソッド
   bool available();
@@ -82,7 +83,7 @@ public:
   }
 
 private:
-  SoftwareSerial serial;
+  Stream &serial;
 };
 
 #endif // IM_RECEIVER_H

@@ -7,8 +7,8 @@
 // ImSender クラスの宣言
 class ImSender {
 public:
-  // コンストラクタ: 受信ピンと送信ピン、ボーレートを設定
-  ImSender(uint8_t rxPin, uint8_t txPin, long baudRate = 19200);
+  ImSender(HardwareSerial &serial, long baudRate = 19200);
+  ImSender(SoftwareSerial &serial, long baudRate = 19200);
 
   // データを送信するテンプレートメソッド
   template <typename T> void send(const T &data) {
@@ -28,7 +28,7 @@ public:
   }
 
 private:
-  SoftwareSerial serial;
+  Stream &serial;
 };
 
 #endif // IM_SENDER_H
