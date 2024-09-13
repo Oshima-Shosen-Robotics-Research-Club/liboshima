@@ -31,3 +31,23 @@
 #define TX_PIN PD1_PIN
 
 #endif // PIN_MAPPING_ATMEGA328P_H
+
+/*
+                 ATmega328P Pinout
+     -----------------○-----------------------------
+    | PC6 (RESET)  1      28 PC5 (ADC5/SCL/PCINT13) |
+    | PD0 (RXD)    2      27 PC4 (ADC4/SDA/PCINT12) |
+    | PD1 (TXD)    3      26 PC3 (ADC3/PCINT11)     |
+    | PD2 (INT0)   4      25 PC2 (ADC2/PCINT10)     |
+    | PD3 (INT1)   5      24 PC1 (ADC1/PCINT9)      |
+    | PD4 (T0)     6      23 PC0 (ADC0/PCINT8)      |
+    | VCC          7      22 GND                    |
+    | GND          8      21 AREF                   |
+    | PB6 (XTAL1)  9      20 AVCC                   |
+    | PB7 (XTAL2) 10      19 PB5 (SCK/PCINT5)       |
+    | PD5 (T1)    11      18 PB4 (MISO/PCINT4)      |
+    | PD6 (AIN0)  12      17 PB3 (MOSI/OC2A/PCINT3) |
+    | PD7 (AIN1)  13      16 PB2 (SS/OC1B/PCINT2)   |
+    | PB0 (ICP1)  14      15 PB1 (OC1A/PCINT1)      |
+     -----------------------------------------------
+*/
