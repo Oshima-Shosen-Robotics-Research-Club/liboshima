@@ -1,5 +1,4 @@
 #include "components/LedTape.h"
-#include <FastLED.h>
 
 #define NUM_LEDS 30
 #define DATA_PIN 6
@@ -12,11 +11,11 @@ void setup() {
 
 void loop() {
   // すべてのLEDを赤色に設定
-  ledTape.solidColor(CRGB::Red);
+  ledTape.solidColor(LedTape::Red);
   delay(5000);
 
   // 青色で点滅
-  ledTape.blinkColor(CRGB::Blue, 500);
+  ledTape.blinkColor(LedTape::Blue, 500);
   delay(5000);
 
   // レインボーパターンを表示
@@ -24,10 +23,10 @@ void loop() {
   delay(5000);
 
   // 緑色でチェイスパターンを表示
-  ledTape.chase(CRGB::Green, 100);
+  ledTape.chase(LedTape::Red, 100);
   delay(5000);
 
   // 指定された色でグラデーションパターンを表示
-  ledTape.gradient(CRGB::Purple, 1000);
+  ledTape.gradient(LedTape::Purple, 1000);
   delay(5000);
 }
