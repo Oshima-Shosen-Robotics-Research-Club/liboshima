@@ -36,6 +36,10 @@ LedTape::LedTape(int numLeds, const int dataPin) : numLeds(numLeds) {
   }
 }
 
+LedTape::~LedTape() {
+  delete[] leds; // 動的メモリを解放
+}
+
 // 単色で全てのLEDを光らせる
 void LedTape::solidColor(uint32_t color) {
   for (int i = 0; i < numLeds; i++) {

@@ -7,6 +7,7 @@ class LedTape {
 public:
   // コンストラクタでLEDの数と信号ピンを初期化し、LEDをセットアップ
   LedTape(int numLeds, int dataPin);
+  ~LedTape();
 
   // 複数の光り方パターン
   void solidColor(uint32_t color);                // 単色で光らせる
