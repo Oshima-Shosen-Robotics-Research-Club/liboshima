@@ -5,9 +5,6 @@
 
 class MotorDriver {
 public:
-  // コンストラクタ: モータードライバの初期化
-  MotorDriver() {}
-
   // モーターの速度を設定するメソッド
   virtual void setSpeed(float rate) = 0;
 
