@@ -42,9 +42,7 @@ LedTape::~LedTape() {
 
 // 単色で全てのLEDを光らせる
 void LedTape::solidColor(uint32_t color) {
-  for (int i = 0; i < numLeds; i++) {
-    leds[i] = color;
-  }
+  fill_solid(leds, numLeds, CRGB(color));
   FastLED.show();
 }
 
