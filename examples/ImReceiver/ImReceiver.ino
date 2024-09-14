@@ -1,7 +1,7 @@
-#include <components/ims/ImReceiver.h>
 #include <SoftwareSerial.h>
+#include <components/ims/ImReceiver.h>
 
-ImReceiver imReceiver(Serial);
+ImReceiver imReceiver(0, 0, false);
 SoftwareSerial debugSerial(0, 0);
 
 void setup() {}

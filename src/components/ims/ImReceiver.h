@@ -9,8 +9,8 @@
 class ImReceiver {
 public:
   // コンストラクタ: 受信ピンと送信ピン、ボーレートを設定
-  ImReceiver(HardwareSerial &serial, long baudRate = 19200);
-  ImReceiver(SoftwareSerial &serial, long baudRate = 19200);
+  ImReceiver(int rxPin, int txPin, bool isSoftwareSerial = true,
+             unsigned long baudrate = 19200);
 
   // データが利用可能かどうかをチェックするメソッド
   bool available();
@@ -35,11 +35,11 @@ public:
 
     // 受信文字列を読み取る
     while (true) {
-      recvedChar = serial.read();
+      recvedChar = serial->read();
 
       if (recvedChar == '\r') {
         // \nを読み飛ばす
-        serial.read();
+        serial->read();
         break;
       } else {
         recvedStr += recvedChar;
@@ -84,7 +84,7 @@ public:
   }
 
 private:
-  Stream &serial;
+  Stream *serial;
 };
 
 #endif // IM_RECEIVER_H

@@ -8,10 +8,9 @@
 // DebugLoggerクラスの定義
 class DebugLogger {
 public:
-  // シリアルポートの初期化
-  // 指定されたシリアルポートを初期化する
-  static void init(SoftwareSerial &port, unsigned long baudrate = 19200);
-  static void init(HardwareSerial &port, unsigned long baudrate = 19200);
+  // シリアルポートを初期化する
+  static void init(int rxPin, int txPin, bool isSoftwareSerial = true,
+                   unsigned long baudrate = 19200);
 
   // デバッグメッセージを出力する
   // クラス名、メソッド名、メッセージを指定して出力する

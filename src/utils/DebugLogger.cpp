@@ -6,23 +6,30 @@
 // DebugLoggerクラスの静的メンバーの初期化
 Stream *DebugLogger::serialPort = nullptr;
 
-// DebugLoggerの初期化メソッド
-// 指定されたシリアルポートを初期化する
-void DebugLogger::init(HardwareSerial &port, unsigned long baudrate) {
-  port.begin(baudrate); // シリアルポートを初期化
-  serialPort = &port;
-}
+// シリアルポートを初期化するメソッド
+void DebugLogger::init(int rxPin, int txPin, bool isSoftwareSerial,
+                       unsigned long baudrate) {
+  if (serialPort) {
+    // 既にシリアルポートが初期化されている場合は何もしない
+    return;
+  }
 
-void DebugLogger::init(SoftwareSerial &port, unsigned long baudrate) {
-  port.begin(baudrate); // シリアルポートを初期化
-  serialPort = &port;
+  if (isSoftwareSerial) {
+    // ソフトウェアシリアルを使用する場合
+    SoftwareSerial *softSerial = new SoftwareSerial(rxPin, txPin);
+    softSerial->begin(baudrate);
+    serialPort = softSerial;
+  } else {
+    // ハードウェアシリアルを使用する場合
+    Serial.begin(baudrate);
+    serialPort = &Serial;
+  }
 }
 
 // ログメッセージを出力するメソッド
 // クラス名、メソッド名、メッセージを指定して出力する
 void DebugLogger::println(const char *className, const char *methodName,
                           const char *message) {
-
   if (serialPort) {
     serialPort->print("<");
     serialPort->print(className);
@@ -37,7 +44,6 @@ void DebugLogger::println(const char *className, const char *methodName,
 // クラス名、メソッド名、フォーマット、可変引数を指定して出力する
 void DebugLogger::printlnf(const char *className, const char *methodName,
                            const char *format, ...) {
-
   if (serialPort) {
     char buffer[256]; // バッファサイズを設定
     va_list args;
