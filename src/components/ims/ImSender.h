@@ -1,3 +1,4 @@
+// 通信モジュールIM920SLを用いた通信(送信)を行うためのクラス
 #ifndef IM_SENDER_H
 #define IM_SENDER_H
 

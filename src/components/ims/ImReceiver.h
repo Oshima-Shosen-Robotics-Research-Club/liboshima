@@ -1,3 +1,4 @@
+// 通信モジュールIM920SLを用いた通信(受信)を行うためのクラス
 #ifndef IM_RECEIVER_H
 #define IM_RECEIVER_H
 
