@@ -1,4 +1,3 @@
-// 通信モジュールIM920SLを用いた通信(受信)を行うためのクラス
 #ifndef IM_RECEIVER_H
 #define IM_RECEIVER_H
 
@@ -8,9 +7,9 @@
 // ImReceiver クラスの宣言
 class ImReceiver {
 public:
-  // コンストラクタ: 受信ピンと送信ピン、ボーレートを設定
-  ImReceiver(int rxPin, int txPin, bool isSoftwareSerial = true,
-             unsigned long baudrate = 19200);
+  // コンストラクタ
+  ImReceiver(HardwareSerial &serial, unsigned long baudrate = 19200);
+  ImReceiver(SoftwareSerial &serial, unsigned long baudrate = 19200);
 
   // データが利用可能かどうかをチェックするメソッド
   bool available();
@@ -35,11 +34,11 @@ public:
 
     // 受信文字列を読み取る
     while (true) {
-      recvedChar = serial->read();
+      recvedChar = serial.read();
 
       if (recvedChar == '\r') {
         // \nを読み飛ばす
-        serial->read();
+        serial.read();
         break;
       } else {
         recvedStr += recvedChar;
@@ -65,7 +64,7 @@ public:
     // コロンの後のデータ（"12,34,56,78"）を抽出
     String recvedData = recvedStr.substring(colonIndex + 1);
 
-    // データが長さが適切でない場合は false を返す
+    // データの長さが適切でない場合は false を返す
     if (recvedData.length() != static_cast<size_t>(hexStrLen + commaCount)) {
       DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
       return false;
@@ -84,7 +83,7 @@ public:
   }
 
 private:
-  Stream *serial;
+  Stream &serial;
 };
 
 #endif // IM_RECEIVER_H

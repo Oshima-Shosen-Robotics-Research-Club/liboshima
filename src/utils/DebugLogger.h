@@ -9,8 +9,9 @@
 class DebugLogger {
 public:
   // シリアルポートを初期化する
-  static void init(int rxPin, int txPin, bool isSoftwareSerial = true,
-                   unsigned long baudrate = 19200);
+  static void init(HardwareSerial &serial, unsigned long baudrate = 19200);
+  static void init(SoftwareSerial &serial, unsigned long baudrate = 19200);
+  static void init(int rxPin, int txPin, unsigned long baudrate = 19200);
 
   // デバッグメッセージを出力する
   // クラス名、メソッド名、メッセージを指定して出力する

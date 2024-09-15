@@ -7,23 +7,37 @@
 Stream *DebugLogger::serialPort = nullptr;
 
 // シリアルポートを初期化するメソッド
-void DebugLogger::init(int rxPin, int txPin, bool isSoftwareSerial,
-                       unsigned long baudrate) {
-  if (serialPort) {
-    // 既にシリアルポートが初期化されている場合は何もしない
+// ハードウェアシリアルポートを指定して初期化する
+void DebugLogger::init(HardwareSerial &serial, unsigned long baudrate) {
+  // 既にシリアルポートが初期化されている場合は何もしない
+  if (DebugLogger::serialPort) {
     return;
   }
+  serial.begin(baudrate);
+  serialPort = &serial;
+}
 
-  if (isSoftwareSerial) {
-    // ソフトウェアシリアルを使用する場合
-    SoftwareSerial *softSerial = new SoftwareSerial(rxPin, txPin);
-    softSerial->begin(baudrate);
-    serialPort = softSerial;
-  } else {
-    // ハードウェアシリアルを使用する場合
-    Serial.begin(baudrate);
-    serialPort = &Serial;
+// シリアルポートを初期化するメソッド
+// ソフトウェアシリアルポートを指定して初期化する
+void DebugLogger::init(SoftwareSerial &serial, unsigned long baudrate) {
+  // 既にシリアルポートが初期化されている場合は何もしない
+  if (DebugLogger::serialPort) {
+    return;
   }
+  serial.begin(baudrate);
+  serialPort = &serial;
+}
+
+// シリアルポートを初期化するメソッド
+// RXピン、TXピン、ボーレートを指定して初期化する
+void DebugLogger::init(int rxPin, int txPin, unsigned long baudrate) {
+  // 既にシリアルポートが初期化されている場合は何もしない
+  if (DebugLogger::serialPort) {
+    return;
+  }
+  SoftwareSerial *serial = new SoftwareSerial(rxPin, txPin);
+  serial->begin(baudrate);
+  serialPort = serial;
 }
 
 // ログメッセージを出力するメソッド

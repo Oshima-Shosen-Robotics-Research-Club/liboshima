@@ -4,7 +4,8 @@
 #define RX_PIN 0
 #define TX_PIN 0
 
-ImSender imSender(0, 0);
+SoftwareSerial serial(RX_PIN, TX_PIN);
+ImSender imSender(serial);
 
 void setup() {
   // 送信データを送信する
