@@ -27,32 +27,21 @@ public:
     }
 
     String recvedStr;
-    char recvedChar;
 
     // 受信文字列の例："00,0001,EA:12,34,56,78"（ペイロード::受信データ）
     // 文字列の長さを計算
-    int payloadLen = 11;
+    int payloadLen = 10;
     int hexStrLen = sizeof(T) * 2;
     int commaCount = sizeof(T) - 1;
     int recvedStrLen = payloadLen + 1 + hexStrLen + commaCount;
 
-    // 受信文字列を読み取る
-    while (true) {
-      recvedChar = serial.read();
+    // 受信文字列を読み取る("\r\n" は取取り除く)
+    recvedStr = serial.readStringUntil('\n');
+    recvedStr.remove(recvedStr.length() - 1);
 
-      if (recvedChar == '\r') {
-        // \nを読み飛ばす
-        serial.read();
-        break;
-      } else {
-        recvedStr += recvedChar;
-      }
-
-      if (recvedStr.length() > static_cast<size_t>(recvedStrLen)) {
-        DebugLogger::println("ImReceiver", "receive",
-                             "Received string is too long");
-        return false;
-      }
+    if (recvedStr.length() != recvedStrLen) {
+      DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
+      return false;
     }
 
     DebugLogger::printlnf("ImReceiver", "receive", "Received data: %s",
