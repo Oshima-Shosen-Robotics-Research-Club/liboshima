@@ -5,12 +5,15 @@
 #include "utils/DebugLogger.h"
 #include <SoftwareSerial.h>
 
+// 最適な時間間隔(ms)
+#define IM_SEND_INTERVAL 60
+
 // ImSender クラスの宣言
 class ImSender {
 public:
   ImSender(HardwareSerial &serial, unsigned long baudrate = 19200);
   ImSender(SoftwareSerial &serial, unsigned long baudrate = 19200);
-   
+
   // データを送信するテンプレートメソッド
   // int型、float型、構造体のみに対応
   template <typename T> void send(const T &data) {

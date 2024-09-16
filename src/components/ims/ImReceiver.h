@@ -4,6 +4,9 @@
 #include "utils/DebugLogger.h"
 #include <SoftwareSerial.h>
 
+// タイマーオーバーフローに最適な時間間隔(ms)
+#define IM_RECEIVE_INTERVAL 500
+
 // ImReceiver クラスの宣言
 class ImReceiver {
 public:
