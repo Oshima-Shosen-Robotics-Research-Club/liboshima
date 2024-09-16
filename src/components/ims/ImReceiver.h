@@ -39,7 +39,7 @@ public:
     recvedStr = serial.readStringUntil('\n');
     recvedStr.remove(recvedStr.length() - 1);
 
-    if (recvedStr.length() != recvedStrLen) {
+    if (recvedStr.length() != (uint8_t)recvedStrLen) {
       DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
       return false;
     }
