@@ -10,8 +10,9 @@ class ImSender {
 public:
   ImSender(HardwareSerial &serial, unsigned long baudrate = 19200);
   ImSender(SoftwareSerial &serial, unsigned long baudrate = 19200);
-
+   
   // データを送信するテンプレートメソッド
+  // int型、float型、構造体のみに対応
   template <typename T> void send(const T &data) {
     // 送信データのプレフィックスを送信
     serial.print("TXDA ");

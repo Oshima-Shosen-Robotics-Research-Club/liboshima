@@ -15,6 +15,7 @@ public:
   bool available();
 
   // データを受信するテンプレートメソッド
+  // int型、float型、構造体のみに対応
   template <typename T> bool receive(T &data) {
     // データが利用可能でない場合は false を返す
     if (!available()) {
