@@ -65,7 +65,6 @@ public:
       return false;
     }
 
-    uint8_t buffer[sizeof(T)];
     // 16進数のペアをバッファに変換
     for (uint8_t i = 0; i < sizeof(T); i++) {
       String hexPair = recvedData.substring(i * 3, i * 3 + 2);
