@@ -10,7 +10,7 @@ ImSender imSender(serial);
 void setup() {
   // 送信データを送信する
   int data = 123;
-  if (imSender.send(data) == ImSender::SUCCESS) {
+  if (imSender.send(data) == ImSender::ErrorCode::SUCCESS) {
     Serial.println("Data sent successfully");
   } else {
     Serial.println("Failed to send data");
