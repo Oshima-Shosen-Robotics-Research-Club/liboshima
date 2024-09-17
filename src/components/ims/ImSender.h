@@ -20,8 +20,8 @@ public:
     // 送信データのプレフィックスを送信
     serial.print("TXDA ");
 
-    for (int i = 0; i < (int)sizeof(T); i++) {
-      int8_t byte = ((int8_t *)&data)[i];
+    for (uint8_t i = 0; i < sizeof(T); i++) {
+      uint8_t byte = ((uint8_t *)&data)[i];
       serial.print(byte >> 4, HEX);
       serial.print(byte & 0xf, HEX);
     }

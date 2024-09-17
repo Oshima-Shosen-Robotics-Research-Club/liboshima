@@ -32,16 +32,16 @@ public:
 
     // 受信文字列の例："00,0001,EA:12,34,56,78"（ペイロード::受信データ）
     // 文字列の長さを計算
-    int payloadLen = 10;
-    int hexStrLen = sizeof(T) * 2;
-    int commaCount = sizeof(T) - 1;
-    int recvedStrLen = payloadLen + 1 + hexStrLen + commaCount;
+    uint8_t payloadLen = 10;
+    uint8_t hexStrLen = sizeof(T) * 2;
+    uint8_t commaCount = sizeof(T) - 1;
+    uint8_t recvedStrLen = payloadLen + 1 + hexStrLen + commaCount;
 
     // 受信文字列を読み取る("\r\n" は取取り除く)
     recvedStr = serial.readStringUntil('\n');
     recvedStr.remove(recvedStr.length() - 1);
 
-    if (recvedStr.length() != (uint8_t)recvedStrLen) {
+    if (recvedStr.length() != recvedStrLen) {
       DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
       return false;
     }
@@ -50,7 +50,7 @@ public:
                           recvedStr.c_str());
 
     // コロンのインデックスを見つける
-    int colonIndex = recvedStr.indexOf(':');
+    int8_t colonIndex = recvedStr.indexOf(':');
     if (colonIndex == -1) {
       DebugLogger::println("ImReceiver", "receive", "Colon not found");
       return false;
@@ -60,20 +60,18 @@ public:
     String recvedData = recvedStr.substring(colonIndex + 1);
 
     // データの長さが適切でない場合は false を返す
-    if (recvedData.length() != static_cast<size_t>(hexStrLen + commaCount)) {
+    if (recvedData.length() != hexStrLen + commaCount) {
       DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
       return false;
     }
 
     uint8_t buffer[sizeof(T)];
     // 16進数のペアをバッファに変換
-    for (int i = 0; i < (int)sizeof(T); i++) {
+    for (uint8_t i = 0; i < sizeof(T); i++) {
       String hexPair = recvedData.substring(i * 3, i * 3 + 2);
-      buffer[i] = (uint8_t)strtol(hexPair.c_str(), nullptr, 16);
+      ((uint8_t *)data)[i] = (uint8_t)strtol(hexPair.c_str(), nullptr, 16);
     }
 
-    // バッファをデータにデシリアライズ
-    memcpy(&data, buffer, sizeof(T));
     return true;
   }
 

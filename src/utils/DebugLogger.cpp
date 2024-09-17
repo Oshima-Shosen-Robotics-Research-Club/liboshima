@@ -30,7 +30,7 @@ void DebugLogger::init(SoftwareSerial &serial, unsigned long baudrate) {
 
 // シリアルポートを初期化するメソッド
 // RXピン、TXピン、ボーレートを指定して初期化する
-void DebugLogger::init(int rxPin, int txPin, unsigned long baudrate) {
+void DebugLogger::init(uint8_t rxPin, uint8_t txPin, unsigned long baudrate) {
   // 既にシリアルポートが初期化されている場合は何もしない
   if (DebugLogger::serialPort) {
     return;

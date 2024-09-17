@@ -7,7 +7,7 @@
     break;
 
 // コンストラクタ：LEDの数とデータピンを指定し、LEDをセットアップ
-LedTape::LedTape(int numLeds, const int dataPin) : numLeds(numLeds) {
+LedTape::LedTape(uint8_t numLeds, const uint8_t dataPin) : numLeds(numLeds) {
   leds = new CRGB[numLeds]; // LED配列を動的に割り当て
 
   // メモリーがもったいないい（泣）
@@ -47,7 +47,7 @@ void LedTape::solidColor(uint32_t color) {
 }
 
 // LEDを点滅させる
-void LedTape::blinkColor(uint32_t color, int delayTime) {
+void LedTape::blinkColor(uint32_t color, unsigned long delayTime) {
   solidColor(color); // 全部同じ色で光らせる
   delay(delayTime);
   solidColor(CRGB::Black); // 消す
@@ -55,9 +55,9 @@ void LedTape::blinkColor(uint32_t color, int delayTime) {
 }
 
 // レインボーパターンで光らせる
-void LedTape::rainbow(int delayTime) {
-  for (int j = 0; j < 256; j++) {
-    for (int i = 0; i < numLeds; i++) {
+void LedTape::rainbow(unsigned long delayTime) {
+  for (uint8_t j = 0; j < 256; j++) {
+    for (uint8_t i = 0; i < numLeds; i++) {
       leds[i] = CHSV((i + j) % 256, 255, 255); // HSV色空間で色を変える
     }
     FastLED.show();
@@ -66,8 +66,8 @@ void LedTape::rainbow(int delayTime) {
 }
 
 // チェイスパターンで光らせる
-void LedTape::chase(uint32_t color, int delayTime) {
-  for (int i = 0; i < numLeds; i++) {
+void LedTape::chase(uint32_t color, unsigned long delayTime) {
+  for (uint8_t i = 0; i < numLeds; i++) {
     leds[i] = color; // 1つずつ色を設定
     FastLED.show();
     delay(delayTime);
@@ -76,12 +76,12 @@ void LedTape::chase(uint32_t color, int delayTime) {
 }
 
 // 指定された色を基にしたグラデーションパターン
-void LedTape::gradient(uint32_t baseColor, int delayTime) {
+void LedTape::gradient(uint32_t baseColor, unsigned long delayTime) {
   CRGB color = CRGB(baseColor); // 指定された色をCRGBオブジェクトに変換
-  int maxBrightness = 255;
+  uint8_t maxBrightness = 255;
 
   // 色相を基に、グラデーションを生成
-  for (int i = 0; i < numLeds; i++) {
+  for (uint8_t i = 0; i < numLeds; i++) {
     float factor = (float)i / numLeds; // グラデーションの割合
 
     // ベースの色に基づいて、明るさを段階的に変化させる

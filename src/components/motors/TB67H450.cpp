@@ -2,14 +2,14 @@
 #include <Arduino.h>
 
 // コンストラクタ: モーター制御用のピンを設定
-TB67H450::TB67H450(int in1, int in2) : in1(in1), in2(in2) {
+TB67H450::TB67H450(uint8_t in1, uint8_t in2) : in1(in1), in2(in2) {
   // ピンを出力モードに設定
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
 }
 
 // モーターを制御する内部メソッド
-void TB67H450::run(int pwmValue1, int pwmValue2) {
+void TB67H450::run(uint8_t pwmValue1, uint8_t pwmValue2) {
   // 指定されたピンに PWM 信号を出力
   analogWrite(in1, pwmValue1);
   analogWrite(in2, pwmValue2);
@@ -34,7 +34,7 @@ void TB67H450::stop() {
 void TB67H450::setSpeed(float rate) {
   // スピードの範囲を -1.0 から 1.0 に制限
   rate = constrain(rate, -1.0, 1.0);
-  int pwmValue = (int)(abs(rate) * 255); // 速度に応じた PWM 値を計算
+  uint8_t pwmValue = (uint8_t)(abs(rate) * 255); // 速度に応じた PWM 値を計算
   if (rate > 0) {
     run(pwmValue, 0); // 正転
   } else if (rate < 0) {

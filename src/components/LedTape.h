@@ -6,15 +6,16 @@
 class LedTape {
 public:
   // コンストラクタでLEDの数と信号ピンを初期化し、LEDをセットアップ
-  LedTape(int numLeds, int dataPin);
+  LedTape(uint8_t numLeds, uint8_t dataPin);
   ~LedTape();
 
   // 複数の光り方パターン
-  void solidColor(uint32_t color);                // 単色で光らせる
-  void blinkColor(uint32_t color, int delayTime); // 点滅させる
-  void rainbow(int delayTime);                    // レインボーパターン
-  void chase(uint32_t color, int delayTime);      // チェイスパターン
-  void gradient(uint32_t baseColor, int delayTime); // グラデーションパターン
+  void solidColor(uint32_t color); // 単色で光らせる
+  void blinkColor(uint32_t color, unsigned long delayTime); // 点滅させる
+  void rainbow(unsigned long delayTime); // レインボーパターン
+  void chase(uint32_t color, unsigned long delayTime); // チェイスパターン
+  void gradient(uint32_t baseColor,
+                unsigned long delayTime); // グラデーションパターン
 
   // FastLEDより抜粋（長いので行番号のすぐ右を押して閉じよう）
   typedef enum {
@@ -179,7 +180,7 @@ public:
   } HTMLColorCode;
 
 private:
-  int numLeds; // LEDの数
+  uint8_t numLeds; // LEDの数
   CRGB *leds;  // LED配列
 };
 

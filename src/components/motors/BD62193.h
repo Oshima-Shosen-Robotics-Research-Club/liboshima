@@ -5,16 +5,17 @@
 
 class BD62193 : public MotorDriver {
 private:
-  int pwmPin;
-  int inAPin;
-  int inBPin;
+  uint8_t pwmPin;
+  uint8_t inAPin;
+  uint8_t inBPin;
   bool isPWM = true; // PWM ピンを使うかどうかのフラグ
-  void run(int pwmValue, bool inAState,
+  void run(uint8_t pwmValue, bool inAState,
            bool inBState); // モーターを制御する内部メソッド
 
 public:
-  BD62193(int pwm, int inA, int inB); // コンストラクタ、ピン番号を初期化
-  BD62193(int inA, int inB); // コンストラクタ、PWM ピンを使わない場合
+  BD62193(uint8_t pwm, uint8_t inA,
+          uint8_t inB); // コンストラクタ、ピン番号を初期化
+  BD62193(uint8_t inA, uint8_t inB); // コンストラクタ、PWM ピンを使わない場合
   void forward() override; // モーターを前進させるメソッド
   void reverse() override; // モーターを後退させるメソッド
   void stop() override;    // モーターを停止させるメソッド

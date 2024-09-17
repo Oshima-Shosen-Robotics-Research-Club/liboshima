@@ -1,7 +1,7 @@
 #include "BD62193.h"
 
 // コンストラクタ: モーター制御用のピンを設定
-BD62193::BD62193(int pwm, int inA, int inB)
+BD62193::BD62193(uint8_t pwm, uint8_t inA, uint8_t inB)
     : pwmPin(pwm), inAPin(inA), inBPin(inB) {
   // ピンを出力モードに設定
   pinMode(pwmPin, OUTPUT);
@@ -9,14 +9,15 @@ BD62193::BD62193(int pwm, int inA, int inB)
   pinMode(inBPin, OUTPUT);
 }
 
-BD62193::BD62193(int inA, int inB) : inAPin(inA), inBPin(inB), isPWM(false) {
+BD62193::BD62193(uint8_t inA, uint8_t inB)
+    : inAPin(inA), inBPin(inB), isPWM(false) {
   // ピンを出力モードに設定
   pinMode(inAPin, OUTPUT);
   pinMode(inBPin, OUTPUT);
 }
 
 // モーターを制御する内部メソッド
-void BD62193::run(int pwmValue, bool inAState, bool inBState) {
+void BD62193::run(uint8_t pwmValue, bool inAState, bool inBState) {
   // 指定されたピンに信号を出力
   if (isPWM)
     analogWrite(pwmPin, pwmValue);
@@ -54,7 +55,7 @@ void BD62193::setSpeed(float rate) {
 
   // スピードの範囲を -1.0 から 1.0 に制限
   rate = constrain(rate, -1.0, 1.0);
-  int pwmValue = (int)(abs(rate) * 255); // 速度に応じた PWM 値を計算
+  uint8_t pwmValue = (uint8_t)(abs(rate) * 255); // 速度に応じた PWM 値を計算
 
   if (rate > 0) {
     run(pwmValue, HIGH, LOW); // 正転設定
