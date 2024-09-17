@@ -12,7 +12,9 @@ void setup() {}
 void loop() {
   // ImSender.inoから送信されたデータを受信する
   int data;
-  if (imReceiver.receive(data)) {
+  if (imReceiver.receive(data) == ImReceiver::SUCCESS) {
     Serial.println(data);
+  } else {
+    Serial.println("Failed to receive data");
   }
 }
