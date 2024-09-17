@@ -10,7 +10,7 @@ Stream *DebugLogger::serialPort = nullptr;
 // ハードウェアシリアルポートを指定して初期化する
 void DebugLogger::init(HardwareSerial &serial, unsigned long baudrate) {
   // 既にシリアルポートが初期化されている場合は何もしない
-  if (DebugLogger::serialPort) {
+  if (serialPort) {
     return;
   }
   serial.begin(baudrate);
@@ -21,7 +21,7 @@ void DebugLogger::init(HardwareSerial &serial, unsigned long baudrate) {
 // ソフトウェアシリアルポートを指定して初期化する
 void DebugLogger::init(SoftwareSerial &serial, unsigned long baudrate) {
   // 既にシリアルポートが初期化されている場合は何もしない
-  if (DebugLogger::serialPort) {
+  if (serialPort) {
     return;
   }
   serial.begin(baudrate);
@@ -32,7 +32,7 @@ void DebugLogger::init(SoftwareSerial &serial, unsigned long baudrate) {
 // RXピン、TXピン、ボーレートを指定して初期化する
 void DebugLogger::init(uint8_t rxPin, uint8_t txPin, unsigned long baudrate) {
   // 既にシリアルポートが初期化されている場合は何もしない
-  if (DebugLogger::serialPort) {
+  if (serialPort) {
     return;
   }
   SoftwareSerial *serial = new SoftwareSerial(rxPin, txPin);
