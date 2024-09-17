@@ -1,23 +1,99 @@
+/**
+ * @file LedTape.h
+ * @brief LEDテープを制御するクラス定義
+ *
+ * このファイルには、LEDテープの制御を行う `LedTape` クラスが
+ * 定義されています。このクラスは、LEDの数と信号ピンを指定して
+ * LEDテープを制御する機能を提供します。
+ */
+
 #ifndef LED_TAPE_H
 #define LED_TAPE_H
 
 #include <FastLED.h>
 
+/**
+ * @class LedTape
+ * @brief LEDテープを制御するクラス
+ *
+ * `LedTape` クラスは、FastLEDライブラリを使用してLEDテープの
+ * 様々な光り方を制御します。LEDの数とデータピンを指定して、
+ * 複数の光り方パターン（単色、点滅、レインボーなど）を提供します。
+ */
 class LedTape {
 public:
-  // コンストラクタでLEDの数と信号ピンを初期化し、LEDをセットアップ
+  /**
+   * @brief コンストラクタ
+   *
+   * LEDの数とデータピンを指定して、LEDテープを初期化します。
+   *
+   * @param numLeds LEDの数
+   * @param dataPin LED信号用のピン番号
+   */
   LedTape(uint8_t numLeds, uint8_t dataPin);
+
+  /**
+   * @brief デストラクタ
+   *
+   * LEDテープのメモリを解放します。
+   */
   ~LedTape();
 
-  // 複数の光り方パターン
-  void solidColor(uint32_t color); // 単色で光らせる
-  void blinkColor(uint32_t color, unsigned long delayTime); // 点滅させる
-  void rainbow(unsigned long delayTime); // レインボーパターン
-  void chase(uint32_t color, unsigned long delayTime); // チェイスパターン
-  void gradient(uint32_t baseColor,
-                unsigned long delayTime); // グラデーションパターン
+  /**
+   * @brief 単色で光らせる
+   *
+   * LEDテープ全体を指定した単色で光らせます。
+   *
+   * @param color 光らせたい色（0xRRGGBB形式）
+   */
+  void solidColor(uint32_t color);
 
-  // FastLEDより抜粋（長いので行番号のすぐ右を押して閉じよう）
+  /**
+   * @brief 点滅させる
+   *
+   * LEDテープ全体を指定した色で点滅させます。
+   *
+   * @param color 点滅させたい色（0xRRGGBB形式）
+   * @param delayTime 点滅の間隔（ミリ秒）
+   */
+  void blinkColor(uint32_t color, unsigned long delayTime);
+
+  /**
+   * @brief レインボーパターン
+   *
+   * LEDテープにレインボー色のグラデーションを表示します。
+   *
+   * @param delayTime 色が変わる間隔（ミリ秒）
+   */
+  void rainbow(unsigned long delayTime);
+
+  /**
+   * @brief チェイスパターン
+   *
+   * LEDテープに指定した色のチェイスパターンを表示します。
+   *
+   * @param color チェイスパターンで使用する色（0xRRGGBB形式）
+   * @param delayTime LEDが移動する速度（ミリ秒）
+   */
+  void chase(uint32_t color, unsigned long delayTime);
+
+  /**
+   * @brief グラデーションパターン
+   *
+   * LEDテープに指定したベースカラーからのグラデーションパターンを表示します。
+   *
+   * @param baseColor グラデーションのベースカラー（0xRRGGBB形式）
+   * @param delayTime 色が変わる間隔（ミリ秒）
+   */
+  void gradient(uint32_t baseColor, unsigned long delayTime);
+
+  /**
+   * @enum HTMLColorCode
+   * @brief 代表的なHTMLカラーコード
+   *
+   * 代表的なHTMLカラーコードを定義しています。これを使用することで、
+   * 色を簡単に指定できます。
+   */
   typedef enum {
     AliceBlue = 0xF0F8FF,            ///< @htmlcolorblock{F0F8FF}
     Amethyst = 0x9966CC,             ///< @htmlcolorblock{9966CC}
@@ -180,8 +256,20 @@ public:
   } HTMLColorCode;
 
 private:
-  uint8_t numLeds; // LEDの数
-  CRGB *leds;  // LED配列
+  /**
+   * @brief LEDの数
+   *
+   * この変数は、制御するLEDテープのLEDの総数を保持します。
+   */
+  uint8_t numLeds; ///< LEDの数
+
+  /**
+   * @brief LED配列
+   *
+   * FastLEDライブラリを使用して制御するLEDの配列を指します。
+   * LEDテープの各LEDの状態を保持するために使用されます。
+   */
+  CRGB *leds; ///< LED配列
 };
 
 #endif // LED_TAPE_H

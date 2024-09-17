@@ -5,34 +5,82 @@
 #include <SoftwareSerial.h>
 #include <Stream.h>
 
-// DebugLoggerクラスの定義
+/**
+ * @brief デバッグメッセージをシリアルポートに出力するクラス
+ *
+ * `DebugLogger`
+ * クラスは、ハードウェアまたはソフトウェアのシリアルポートにデバッグメッセージを出力するためのメソッドを提供します。
+ * シンプルなメッセージやフォーマットされたメッセージの出力がサポートされています。
+ */
 class DebugLogger {
 public:
-  // シリアルポートを初期化する
+  /**
+   * @brief ハードウェアシリアルポートで `DebugLogger` を初期化します。
+   *
+   * @param serial ログ出力に使用するハードウェアシリアルポート（例: Serial）。
+   * @param baudrate シリアル通信のボーレート（デフォルトは 19200）。
+   */
   static void init(HardwareSerial &serial, unsigned long baudrate = 19200);
+
+  /**
+   * @brief ソフトウェアシリアルポートで `DebugLogger` を初期化します。
+   *
+   * @param serial ログ出力に使用するソフトウェアシリアルポート。
+   * @param baudrate シリアル通信のボーレート（デフォルトは 19200）。
+   */
   static void init(SoftwareSerial &serial, unsigned long baudrate = 19200);
+
+  /**
+   * @brief ピン番号を使用してソフトウェアシリアルポートで `DebugLogger`
+   * を初期化します。
+   *
+   * @param rxPin ソフトウェアシリアルポートの RX ピン番号。
+   * @param txPin ソフトウェアシリアルポートの TX ピン番号。
+   * @param baudrate シリアル通信のボーレート（デフォルトは 19200）。
+   */
   static void init(uint8_t rxPin, uint8_t txPin,
                    unsigned long baudrate = 19200);
 
-  // デバッグメッセージを出力する
-  // クラス名、メソッド名、メッセージを指定して出力する
+  /**
+   * @brief シンプルなデバッグメッセージをシリアルポートに出力します。
+   *
+   * @param className ログが呼び出されるクラスの名前。
+   * @param methodName ログが呼び出されるメソッドの名前。
+   * @param message 出力するデバッグメッセージ。
+   */
   static void println(const char *className, const char *methodName,
                       const char *message);
 
-  // フォーマットされたデバッグメッセージを出力する
-  // クラス名、メソッド名、フォーマット、可変引数を指定して出力する
+  /**
+   * @brief フォーマットされたデバッグメッセージをシリアルポートに出力します。
+   *
+   * @param className ログが呼び出されるクラスの名前。
+   * @param methodName ログが呼び出されるメソッドの名前。
+   * @param format メッセージのフォーマット文字列（printf 形式）。
+   * @param ... メッセージをフォーマットするための可変引数。
+   */
   static void printlnf(const char *className, const char *methodName,
                        const char *format, ...);
 
 private:
-  // シリアルポートを静的メンバーとして保持する
+  /**
+   * @brief ログ出力に使用するシリアルポートへの静的ポインタ。
+   */
   static Stream *serialPort;
 };
 
-// マクロを定義して、簡単にログ出力できるようにする
+// デバッグメッセージを簡単に出力するためのマクロを定義します。
 #define LOG(className, methodName, message)                                    \
   DebugLogger::println(className, methodName, message)
 
+/**
+ * @brief フォーマットされたデバッグメッセージを簡単に出力するためのマクロ。
+ *
+ * @param className ログが呼び出されるクラスの名前。
+ * @param methodName ログが呼び出されるメソッドの名前。
+ * @param format メッセージのフォーマット文字列（printf 形式）。
+ * @param ... メッセージをフォーマットするための可変引数。
+ */
 #define LOGF(className, methodName, format, ...)                               \
   DebugLogger::printlnf(className, methodName, format, ##__VA_ARGS__)
 

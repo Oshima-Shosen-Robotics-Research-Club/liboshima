@@ -1,7 +1,7 @@
 #include "ImReceiver.h"
 #include <SoftwareSerial.h>
 
-// HardwareSerial の場合、解放は行わない
+// HardwareSerial の場合
 ImReceiver::ImReceiver(HardwareSerial &serial, unsigned long baudrate)
     : serial(serial) {
   serial.begin(baudrate);
