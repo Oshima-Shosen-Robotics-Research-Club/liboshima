@@ -77,7 +77,7 @@ public:
     // 16進数のペアをバッファに変換
     for (uint8_t i = 0; i < sizeof(T); i++) {
       String hexPair = recvedData.substring(i * 3, i * 3 + 2);
-      ((uint8_t *)data)[i] = (uint8_t)strtol(hexPair.c_str(), nullptr, 16);
+      ((uint8_t *)&data)[i] = (uint8_t)strtol(hexPair.c_str(), nullptr, 16);
     }
 
     return SUCCESS;
