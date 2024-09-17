@@ -20,12 +20,10 @@ public:
     // 送信データのプレフィックスを送信
     serial.print("TXDA ");
 
-    // データをバッファにシリアライズ
-    uint8_t buffer[sizeof(T)];
-    memcpy(buffer, &data, sizeof(T));
     for (int i = 0; i < (int)sizeof(T); i++) {
-      serial.print(buffer[i] >> 4, HEX);
-      serial.print(buffer[i] & 0xf, HEX);
+      int8_t byte = ((int8_t *)&data)[i];
+      serial.print(byte >> 4, HEX);
+      serial.print(byte & 0xf, HEX);
     }
 
     // 送信終了を示す改行を送信
