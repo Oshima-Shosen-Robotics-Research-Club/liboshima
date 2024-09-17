@@ -22,7 +22,7 @@ public:
   // データを送信するテンプレートメソッド
   // int型、float型、構造体のみに対応
   template <typename T> ErrorCode send(const T &data) {
-    if (sizeof(T) < 1 && sizeof(T) > 32) {
+    if (sizeof(T) < 1 || sizeof(T) > 32) {
       DebugLogger::println("ImSender", "send", "Data size is invalid");
       return INVALID_DATA_SIZE;
     }
