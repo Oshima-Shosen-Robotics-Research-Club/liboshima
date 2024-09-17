@@ -16,16 +16,24 @@ public:
   ImReceiver(HardwareSerial &serial, unsigned long baudrate = 19200);
   ImReceiver(SoftwareSerial &serial, unsigned long baudrate = 19200);
 
+  enum ErrorCode {
+    SUCCESS,
+    NO_DATA_AVAILABLE,
+    RECEIVED_STRING_LENGTH_INVALID,
+    COLON_NOT_FOUND,
+    DATA_LENGTH_INVALID,
+  };
+
   // データが利用可能かどうかをチェックするメソッド
   bool available();
 
   // データを受信するテンプレートメソッド
   // int型、float型、構造体のみに対応
-  template <typename T> bool receive(T &data) {
+  template <typename T> ErrorCode receive(T &data) {
     // データが利用可能でない場合は false を返す
     if (!available()) {
       DebugLogger::println("ImReceiver", "receive", "No data available");
-      return false;
+      return NO_DATA_AVAILABLE;
     }
 
     String recvedStr;
@@ -42,18 +50,19 @@ public:
     recvedStr.remove(recvedStr.length() - 1);
 
     if (recvedStr.length() != recvedStrLen) {
-      DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
-      return false;
+      DebugLogger::println("ImReceiver", "receive",
+                           "Received string length is invalid");
+      return RECEIVED_STRING_LENGTH_INVALID;
     }
 
-    DebugLogger::printlnf("ImReceiver", "receive", "Received data: %s",
+    DebugLogger::printlnf("ImReceiver", "receive", "Received string: %s",
                           recvedStr.c_str());
 
     // コロンのインデックスを見つける
     int8_t colonIndex = recvedStr.indexOf(':');
     if (colonIndex == -1) {
       DebugLogger::println("ImReceiver", "receive", "Colon not found");
-      return false;
+      return COLON_NOT_FOUND;
     }
 
     // コロンの後のデータ（"12,34,56,78"）を抽出
@@ -62,7 +71,7 @@ public:
     // データの長さが適切でない場合は false を返す
     if (recvedData.length() != hexStrLen + commaCount) {
       DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
-      return false;
+      return DATA_LENGTH_INVALID;
     }
 
     // 16進数のペアをバッファに変換
@@ -71,7 +80,7 @@ public:
       ((uint8_t *)data)[i] = (uint8_t)strtol(hexPair.c_str(), nullptr, 16);
     }
 
-    return true;
+    return SUCCESS;
   }
 
 private:
