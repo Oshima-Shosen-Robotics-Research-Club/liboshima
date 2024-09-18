@@ -1,8 +1,6 @@
 #include "DebugLogger.h"
-#include <SoftwareSerial.h>
-#include <stdarg.h>
-#include <stdio.h>
 
+#ifdef DEBUG
 // DebugLoggerクラスの静的メンバーの初期化
 Stream *DebugLogger::serialPort = nullptr;
 
@@ -68,3 +66,4 @@ void DebugLogger::printlnf(const char *className, const char *methodName,
     println(className, methodName, buffer); // printlnメソッドを呼び出す
   }
 }
+#endif // DEBUG
