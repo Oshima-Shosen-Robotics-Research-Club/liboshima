@@ -58,7 +58,7 @@ public:
    *
    * `ImSender` クラスで発生する可能性のあるエラーコードを定義します。
    */
-  enum ErrorCode {
+  enum class ErrorCode {
     SUCCESS, /**< データ送信が成功したことを示します。 */
     INVALID_DATA_SIZE /**< データサイズが無効であることを示します。 */
   };

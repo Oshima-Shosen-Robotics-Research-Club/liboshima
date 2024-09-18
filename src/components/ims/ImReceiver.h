@@ -65,7 +65,7 @@ public:
    *
    * `ImReceiver` クラスで発生する可能性のあるエラーコードを定義します。
    */
-  enum ErrorCode {
+  enum class ErrorCode {
     SUCCESS, /**< データ受信が成功したことを示します。 */
     NO_DATA_AVAILABLE, /**< データが利用可能でないことを示します。 */
     RECEIVED_STRING_LENGTH_INVALID, /**<
