@@ -17,6 +17,8 @@ ImReceiver::ImReceiver(SoftwareSerial &serial, unsigned long baudrate)
 bool ImReceiver::available() { return serial.available(); }
 
 ImReceiver::ErrorCode ImReceiver::receive(uint8_t *data, size_t size) {
+  DebugLogger::println("ImReceiver", "receive", "Start receiving data");
+
   // データが利用可能でない場合はエラーを返す
   if (!available()) {
     DebugLogger::println("ImReceiver", "receive", "No data available");
@@ -35,15 +37,15 @@ ImReceiver::ErrorCode ImReceiver::receive(uint8_t *data, size_t size) {
   recvedStr = serial.readStringUntil('\n');
   recvedStr.remove(recvedStr.length() - 1);
 
+  DebugLogger::printlnf("ImReceiver", "receive", "Received string: %s",
+                        recvedStr.c_str());
+
   // 受信文字列の長さが無効な場合はエラーを返す
   if (recvedStr.length() != recvedStrLen) {
     DebugLogger::println("ImReceiver", "receive",
                          "Received string length is invalid");
     return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
   }
-
-  DebugLogger::printlnf("ImReceiver", "receive", "Received string: %s",
-                        recvedStr.c_str());
 
   // コロンのインデックスを見つける
   int8_t colonIndex = recvedStr.indexOf(':');
