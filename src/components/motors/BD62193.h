@@ -25,9 +25,9 @@
  */
 class BD62193 : public MotorDriver {
 private:
-  uint8_t pwm_PIN;      /**< PWM信号を出力するピンの番号 */
   uint8_t inA_PIN;      /**< モーターの入力Aピンの番号 */
   uint8_t inB_PIN;      /**< モーターの入力Bピンの番号 */
+  uint8_t pwm_PIN;      /**< PWM信号を出力するピンの番号 */
   bool speedAdjustable; /**< 速度調整が可能かどうか */
 
   /**
