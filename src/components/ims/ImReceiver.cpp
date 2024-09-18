@@ -18,54 +18,61 @@ bool ImReceiver::available() { return serial.available(); }
 
 // "00,0000,00:00,00,00\r\n" という形式のデータを受信する
 ImReceiver::ErrorCode ImReceiver::receive(uint8_t *data, size_t size) {
+  DebugLogger::println("ImReceiver", "receive", "Receiving data");
+
   // データが利用可能でない場合はエラーを返す
   if (!available()) {
     DebugLogger::println("ImReceiver", "receive", "No data available");
     return ErrorCode::NO_DATA_AVAILABLE;
   }
 
-  String recvedStr;
+  // 受信データの読み取り
+  // 最大32バイトのデータを受信する
+  // "00,0000,00:01,02,03,04,05,06,07,08,09,0A,0B,0C,0D,0E,0F,10,11,12,13,14,15,16,17,18,19,1A,1B,1C,1D,1E,1F,20"
+  // ペイロード = 10、コロン = 1、データ = 32 * 2、カンマ = 32 - 1 = 31
+  char recvedStr[10 + 1 + 32 * 2 + 31 + 1]; // null文字を含める
+  size_t length = serial.readBytesUntil('\n', recvedStr, sizeof(recvedStr) - 1);
+  recvedStr[length] = '\0'; // Null-terminate the string
 
-  // 受信文字列の長さを計算
-  uint8_t payloadLen = 10;
-  uint8_t hexStrLen = size * 2;
-  uint8_t commaCount = size - 1;
-  uint8_t recvedStrLen = payloadLen + 1 + hexStrLen + commaCount;
-
-  // 受信文字列を読み取り、改行文字を削除する
-  recvedStr = serial.readStringUntil('\n');
-  recvedStr.remove(recvedStr.length() - 1);
-
-  // 受信文字列の長さが無効な場合はエラーを返す
-  if (recvedStr.length() != recvedStrLen) {
-    DebugLogger::println("ImReceiver", "receive",
-                         "Received string length is invalid");
-    return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
+  // コロンの位置を手動で探す
+  char *pos = recvedStr;
+  while (*pos != '\0') {
+    if (*pos == ':') {
+      pos++;
+      break;
+    }
+    pos++;
   }
-
-  DebugLogger::printlnf("ImReceiver", "receive", "Received string: %s",
-                        recvedStr.c_str());
-
-  // コロンのインデックスを見つける
-  int8_t colonIndex = recvedStr.indexOf(':');
-  if (colonIndex == -1) {
+  if (*pos == '\0') {
     DebugLogger::println("ImReceiver", "receive", "Colon not found");
     return ErrorCode::COLON_NOT_FOUND;
   }
 
-  // コロンの後のデータ（例: "12,34,56,78"）を抽出する
-  String recvedData = recvedStr.substring(colonIndex + 1);
+  // 16進数のデータを手動で解析
+  for (size_t i = 0; i < size; i++) {
+    if (*pos >= '0' && *pos <= '9') {
+      data[i] = (*pos - '0') << 4;
+    } else if (*pos >= 'A' && *pos <= 'F') {
+      data[i] = (*pos - 'A' + 10) << 4;
+    } else {
+      DebugLogger::println("ImReceiver", "receive", "Data length invalid");
+      return ErrorCode::DATA_LENGTH_INVALID;
+    }
 
-  // データの長さが無効な場合はエラーを返す
-  if (recvedData.length() != hexStrLen + commaCount) {
-    DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
-    return ErrorCode::DATA_LENGTH_INVALID;
-  }
+    pos++;
+    if (*pos >= '0' && *pos <= '9') {
+      data[i] |= (*pos - '0');
+    } else if (*pos >= 'A' && *pos <= 'F') {
+      data[i] |= (*pos - 'A' + 10);
+    } else {
+      DebugLogger::println("ImReceiver", "receive", "Data length invalid");
+      return ErrorCode::DATA_LENGTH_INVALID;
+    }
 
-  // 16進数のペアをデータバッファに変換する
-  for (uint8_t i = 0; i < size; i++) {
-    String hexPair = recvedData.substring(i * 3, i * 3 + 2);
-    data[i] = (uint8_t)strtol(hexPair.c_str(), nullptr, 16);
+    pos++;
+    if (*pos == ',') {
+      pos++;
+    }
   }
 
   return ErrorCode::SUCCESS;
