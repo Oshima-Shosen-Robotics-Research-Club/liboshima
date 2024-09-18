@@ -36,11 +36,11 @@ private:
    * このメソッドは、指定されたPWM値と入力ピンの状態に基づいて
    * モーターを制御します。
    *
-   * @param pwmValue PWM信号の値（0〜255）
    * @param inAState 入力Aピンの状態（HIGH または LOW）
    * @param inBState 入力Bピンの状態（HIGH または LOW）
+   * @param pwmValue 速度に対応するPWM値（0〜255）
    */
-  void run(uint8_t pwmValue, bool inAState, bool inBState);
+  void run(bool inAState, bool inBState, uint8_t pwmValue);
 
   /**
    * @brief モーターを制御する内部メソッド (PWMピンを使用しない場合)
@@ -58,21 +58,21 @@ public:
    *
    * PWMピンを使用してモーターを制御するためのコンストラクタです。
    *
-   * @param pwm PWM信号を出力するピンの番号
-   * @param inA モーターの入力Aピンの番号
-   * @param inB モーターの入力Bピンの番号
+   * @param inA_PIN モーターの入力Aピンの番号
+   * @param inB_PIN モーターの入力Bピンの番号
+   * @param pwm_PIN モーターのPWMピンの番号（速度調整用）
    */
-  BD62193(uint8_t pwm, uint8_t inA, uint8_t inB);
+  BD62193(uint8_t inA_PIN, uint8_t inB_PIN, uint8_t pwm_PIN);
 
   /**
    * @brief コンストラクタ (PWMピンを使用しない場合)
    *
    * PWMピンを使用せずにモーターを制御するためのコンストラクタです。
    *
-   * @param inA モーターの入力Aピンの番号
-   * @param inB モーターの入力Bピンの番号
+   * @param inA_PIN モーターの入力Aピンの番号
+   * @param inB_PIN モーターの入力Bピンの番号
    */
-  BD62193(uint8_t inA, uint8_t inB);
+  BD62193(uint8_t inA_PIN, uint8_t inB_PIN);
 
   /**
    * @brief モーターを前進させるメソッド

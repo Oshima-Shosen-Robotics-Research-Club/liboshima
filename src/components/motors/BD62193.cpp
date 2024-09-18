@@ -3,23 +3,24 @@
 #include <digitalWriteFast.h>
 
 // コンストラクタ: モーター制御用のピンを設定
-BD62193::BD62193(uint8_t pwm, uint8_t inA, uint8_t inB)
-    : pwmPin(pwm), inAPin(inA), inBPin(inB), speedAdjustable(true) {
+BD62193::BD62193(uint8_t inA_PIN, uint8_t inB_PIN, uint8_t pwm_PIN)
+    : inAPin(inA_PIN), inBPin(inB_PIN), pwmPin(pwm_PIN), speedAdjustable(true) {
   // ピンを出力モードに設定
   pinModeFast(pwmPin, OUTPUT);
   pinModeFast(inAPin, OUTPUT);
   pinModeFast(inBPin, OUTPUT);
 }
 
-BD62193::BD62193(uint8_t inA, uint8_t inB)
-    : inAPin(inA), inBPin(inB), speedAdjustable(false) {
+// コンストラクタ: モーター制御用のピンを設定 (PWMピンを使用しない場合)
+BD62193::BD62193(uint8_t inA_PIN, uint8_t inB_PIN)
+    : inAPin(inA_PIN), inBPin(inB_PIN), speedAdjustable(false) {
   // ピンを出力モードに設定
   pinModeFast(inAPin, OUTPUT);
   pinModeFast(inBPin, OUTPUT);
 }
 
 // モーターを制御する内部メソッド
-void BD62193::run(uint8_t pwmValue, bool inAState, bool inBState) {
+void BD62193::run(bool inAState, bool inBState, uint8_t pwmValue) {
   // 指定されたピンに信号を出力
   analogWrite(pwmPin, pwmValue);
   digitalWriteFast(inAPin, inAState);
