@@ -4,34 +4,35 @@
 
 // コンストラクタ: モーター制御用のピンを設定
 BD62193::BD62193(uint8_t inA_PIN, uint8_t inB_PIN, uint8_t pwm_PIN)
-    : inAPin(inA_PIN), inBPin(inB_PIN), pwmPin(pwm_PIN), speedAdjustable(true) {
+    : inA_PIN(inA_PIN), inB_PIN(inB_PIN), pwm_PIN(pwm_PIN),
+      speedAdjustable(true) {
   // ピンを出力モードに設定
-  pinModeFast(pwmPin, OUTPUT);
-  pinModeFast(inAPin, OUTPUT);
-  pinModeFast(inBPin, OUTPUT);
+  pinModeFast(pwm_PIN, OUTPUT);
+  pinModeFast(inA_PIN, OUTPUT);
+  pinModeFast(inB_PIN, OUTPUT);
 }
 
 // コンストラクタ: モーター制御用のピンを設定 (PWMピンを使用しない場合)
 BD62193::BD62193(uint8_t inA_PIN, uint8_t inB_PIN)
-    : inAPin(inA_PIN), inBPin(inB_PIN), speedAdjustable(false) {
+    : inA_PIN(inA_PIN), inB_PIN(inB_PIN), speedAdjustable(false) {
   // ピンを出力モードに設定
-  pinModeFast(inAPin, OUTPUT);
-  pinModeFast(inBPin, OUTPUT);
+  pinModeFast(inA_PIN, OUTPUT);
+  pinModeFast(inB_PIN, OUTPUT);
 }
 
 // モーターを制御する内部メソッド
 void BD62193::run(bool inAState, bool inBState, uint8_t pwmValue) {
   // 指定されたピンに信号を出力
-  analogWrite(pwmPin, pwmValue);
-  digitalWriteFast(inAPin, inAState);
-  digitalWriteFast(inBPin, inBState);
+  analogWrite(pwm_PIN, pwmValue);
+  digitalWriteFast(inA_PIN, inAState);
+  digitalWriteFast(inB_PIN, inBState);
 }
 
 // モーターを制御する内部メソッド (PWMピンを使用しない場合)
 void BD62193::run(bool inAState, bool inBState) {
   // 指定されたピンに信号を出力
-  digitalWriteFast(inAPin, inAState);
-  digitalWriteFast(inBPin, inBState);
+  digitalWriteFast(inA_PIN, inAState);
+  digitalWriteFast(inB_PIN, inBState);
 }
 
 // 正転メソッド: モーターを前進させる
