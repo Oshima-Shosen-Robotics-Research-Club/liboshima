@@ -34,19 +34,23 @@ ImReceiver::ErrorCode ImReceiver::receive(uint8_t *data, size_t size) {
   size_t length = serial.readBytesUntil('\n', recvedStr, sizeof(recvedStr) - 1);
   recvedStr[length] = '\0'; // Null-terminate the string
 
-  // コロンの位置を手動で探す
-  char *pos = recvedStr;
-  while (*pos != '\0') {
-    if (*pos == ':') {
-      pos++;
-      break;
-    }
-    pos++;
+  // 受信文字をデバッグ出力
+  DebugLogger::printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
+
+  // 受信文字列の長さが予期される長さと一致しない場合はエラーを返す
+  if (length != 10 + 1 + size * 2 + size - 1) {
+    DebugLogger::println("ImReceiver", "receive",
+                         "Received string length invalid");
+    return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
   }
-  if (*pos == '\0') {
+
+  if (recvedStr[10] != ':') {
     DebugLogger::println("ImReceiver", "receive", "Colon not found");
     return ErrorCode::COLON_NOT_FOUND;
   }
+
+  // データ部分のみを抽出
+  char *pos = recvedStr + 11;
 
   // 16進数のデータを手動で解析
   for (size_t i = 0; i < size; i++) {
