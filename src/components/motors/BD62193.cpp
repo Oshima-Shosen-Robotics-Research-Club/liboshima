@@ -4,7 +4,7 @@
 
 // コンストラクタ: モーター制御用のピンを設定
 BD62193::BD62193(uint8_t pwm, uint8_t inA, uint8_t inB)
-    : pwmPin(pwm), inAPin(inA), inBPin(inB) {
+    : pwmPin(pwm), inAPin(inA), inBPin(inB), speedAdjustable(true) {
   // ピンを出力モードに設定
   pinModeFast(pwmPin, OUTPUT);
   pinModeFast(inAPin, OUTPUT);
@@ -12,7 +12,7 @@ BD62193::BD62193(uint8_t pwm, uint8_t inA, uint8_t inB)
 }
 
 BD62193::BD62193(uint8_t inA, uint8_t inB)
-    : inAPin(inA), inBPin(inB), isPWM(false) {
+    : inAPin(inA), inBPin(inB), speedAdjustable(false) {
   // ピンを出力モードに設定
   pinModeFast(inAPin, OUTPUT);
   pinModeFast(inBPin, OUTPUT);
@@ -55,7 +55,7 @@ void BD62193::setSpeed(float rate) {
 
   if (rate == 0) {
     run(HIGH, HIGH); // 速度を 0 に設定
-  } else if (!isPWM) {
+  } else if (!speedAdjustable) {
     run(rate > 0, rate < 0); // PWM を使用しない場合
   } else {
     uint8_t pwmValue = (uint8_t)(abs(rate) * 255); // 速度に応じた PWM 値を計算
