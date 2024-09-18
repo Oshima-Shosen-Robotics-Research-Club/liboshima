@@ -42,6 +42,16 @@ private:
    */
   void run(uint8_t pwmValue, bool inAState, bool inBState);
 
+  /**
+   * @brief モーターを制御する内部メソッド (PWMピンを使用しない場合)
+   *
+   * PWMピンを使用しない場合にモーターを制御するための内部メソッドです。
+   *
+   * @param inAState 入力Aピンの状態（HIGH または LOW）
+   * @param inBState 入力Bピンの状態（HIGH または LOW）
+   */
+  void run(bool inAState, bool inBState);
+
 public:
   /**
    * @brief コンストラクタ (PWMピンを使用する場合)

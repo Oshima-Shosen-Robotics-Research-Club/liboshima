@@ -32,10 +32,20 @@ private:
    *
    * このメソッドは、指定されたPWM値に基づいてモーターを制御します。
    *
-   * @param pwmValue1 PWM信号の値1（0〜255）
-   * @param pwmValue2 PWM信号の値2（0〜255）
+   * @param analogueValue1 PWM信号の値1（0〜255）
+   * @param analogueValue2 PWM信号の値2（0〜255）
    */
-  void run(uint8_t pwmValue1, uint8_t pwmValue2);
+  void runAnalogue(uint8_t analogueValue1, uint8_t analogueValue2);
+
+  /**
+   * @brief モーターを制御する内部メソッド
+   *
+   * このメソッドは、指定されたDigital値に基づいてモーターを制御します。
+   *
+   * @param digitalValue1 Digital信号の値1（HIGH または LOW）
+   * @param digitalValue2 Digital信号の値2（HIGH または LOW）
+   */
+  void runDigital(bool digitalValue1, bool digitalValue2);
 
 public:
   /**
