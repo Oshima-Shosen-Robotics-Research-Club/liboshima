@@ -101,61 +101,12 @@ public:
    *       長さが無効である場合は、エラーコードが返されます。
    */
   template <typename T> ErrorCode receive(T &data) {
-    // データが利用可能でない場合はエラーを返す
-    if (!available()) {
-      DebugLogger::println("ImReceiver", "receive", "No data available");
-      return NO_DATA_AVAILABLE;
-    }
-
-    String recvedStr;
-
-    // 受信文字列の長さを計算
-    uint8_t payloadLen = 10;
-    uint8_t hexStrLen = sizeof(T) * 2;
-    uint8_t commaCount = sizeof(T) - 1;
-    uint8_t recvedStrLen = payloadLen + 1 + hexStrLen + commaCount;
-
-    // 受信文字列を読み取り、改行文字を削除する
-    recvedStr = serial.readStringUntil('\n');
-    recvedStr.remove(recvedStr.length() - 1);
-
-    // 受信文字列の長さが無効な場合はエラーを返す
-    if (recvedStr.length() != recvedStrLen) {
-      DebugLogger::println("ImReceiver", "receive",
-                           "Received string length is invalid");
-      return RECEIVED_STRING_LENGTH_INVALID;
-    }
-
-    DebugLogger::printlnf("ImReceiver", "receive", "Received string: %s",
-                          recvedStr.c_str());
-
-    // コロンのインデックスを見つける
-    int8_t colonIndex = recvedStr.indexOf(':');
-    if (colonIndex == -1) {
-      DebugLogger::println("ImReceiver", "receive", "Colon not found");
-      return COLON_NOT_FOUND;
-    }
-
-    // コロンの後のデータ（例: "12,34,56,78"）を抽出する
-    String recvedData = recvedStr.substring(colonIndex + 1);
-
-    // データの長さが無効な場合はエラーを返す
-    if (recvedData.length() != hexStrLen + commaCount) {
-      DebugLogger::println("ImReceiver", "receive", "Data length is invalid");
-      return DATA_LENGTH_INVALID;
-    }
-
-    // 16進数のペアをデータバッファに変換する
-    for (uint8_t i = 0; i < sizeof(T); i++) {
-      String hexPair = recvedData.substring(i * 3, i * 3 + 2);
-      ((uint8_t *)&data)[i] = (uint8_t)strtol(hexPair.c_str(), nullptr, 16);
-    }
-
-    return SUCCESS;
+    return receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
   }
 
 private:
   Stream &serial; /**< データ受信に使用するシリアル通信ストリーム */
+  ErrorCode receive(uint8_t *data, size_t size);
 };
 
 #endif // IM_RECEIVER_H

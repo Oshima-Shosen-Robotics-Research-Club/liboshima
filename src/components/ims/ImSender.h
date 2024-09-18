@@ -78,30 +78,12 @@ public:
    *       それ以外のサイズの場合は `INVALID_DATA_SIZE` が返されます。
    */
   template <typename T> ErrorCode send(const T &data) {
-    // データサイズが1バイト未満または32バイトを超える場合はエラーを返す
-    if (sizeof(T) < 1 || sizeof(T) > 32) {
-      DebugLogger::println("ImSender", "send", "Data size is invalid");
-      return INVALID_DATA_SIZE;
-    }
-
-    // 送信データのプレフィックスを送信
-    serial.print("TXDA ");
-
-    // データをバイトごとに16進数形式で送信
-    for (uint8_t i = 0; i < sizeof(T); i++) {
-      uint8_t byte = ((uint8_t *)&data)[i];
-      serial.print(byte >> 4, HEX);
-      serial.print(byte & 0xf, HEX);
-    }
-
-    // 送信終了を示す改行を送信
-    serial.println();
-
-    return SUCCESS;
+    return send(reinterpret_cast<const uint8_t *>(&data), sizeof(T));
   }
 
 private:
   Stream &serial; /**< データ送信に使用するシリアル通信ストリーム */
+  ErrorCode send(const uint8_t *data, size_t size);
 };
 
 #endif // IM_SENDER_H
