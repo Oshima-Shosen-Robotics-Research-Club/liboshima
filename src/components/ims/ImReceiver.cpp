@@ -16,7 +16,7 @@ ImReceiver::ImReceiver(SoftwareSerial &serial, unsigned long baudrate)
 // データが利用可能かどうかをチェックするメソッド
 bool ImReceiver::available() { return serial.available(); }
 
-// "00,0000,00:00,00,00" という形式のデータを受信する
+// "00,0000,00:00,00,00\r\n" という形式のデータを受信する
 ImReceiver::ErrorCode ImReceiver::receive(uint8_t *data, size_t size) {
   // データが利用可能でない場合はエラーを返す
   if (!available()) {

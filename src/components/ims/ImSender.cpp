@@ -11,7 +11,7 @@ ImSender::ImSender(SoftwareSerial &serial, unsigned long baudrate)
   serial.begin(baudrate);
 }
 
-// "TXDA 000000" という形式でデータを送信する
+// "TXDA 000000\r\n" という形式でデータを送信する
 ImSender::ErrorCode ImSender::send(const uint8_t *data, size_t size) {
   // データサイズが1バイト未満または32バイトを超える場合はエラーを返す
   if (size < 1 || size > 32) {
