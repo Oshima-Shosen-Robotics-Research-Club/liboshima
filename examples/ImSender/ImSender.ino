@@ -10,11 +10,16 @@ ImSender imSender(serial);
 void setup() {
   // 送信データを送信する
   int data = 123;
+
+#ifdef DEBUG
   if (imSender.send(data) == ImSender::ErrorCode::SUCCESS) {
     Serial.println("Data sent successfully");
   } else {
     Serial.println("Failed to send data");
   }
+#else
+  imSender.send(data);
+#endif
 }
 
 void loop() {}
