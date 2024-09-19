@@ -11,15 +11,11 @@
  * このクラスは、テンプレートを用いて様々なデータ型の送信をサポートします。
  */
 
-#ifndef IM_SENDER_H
-#define IM_SENDER_H
+#pragma once
 
-#include "utils/DebugLogger.h"
-#include <SoftwareSerial.h>
+#include "serials/DebugLogger.h"
 
 // データ送信に適した時間間隔 (ミリ秒単位)
-// この定義は、データ送信間隔の設定や調整に使用される可能性があります。
-// ユーザー側で調整することで、送信頻度を制御できます。
 #define IM_SEND_INTERVAL 60
 
 /**
@@ -30,27 +26,20 @@
  * 機能を提供します。このクラスは `HardwareSerial` または `SoftwareSerial` と
  * 連携し、テンプレートメソッドを使用して様々な型のデータを送信できます。
  */
-class ImSender {
+template <typename SerialType> class ImSender {
 public:
   /**
-   * @brief コンストラクタ (HardwareSerial バージョン)
+   * @brief コンストラクタ
    *
-   * `HardwareSerial` インスタンスを使用して通信を行います。
+   * `SerialType` インスタンスを使用して通信を行います。
    *
-   * @param serial 使用する `HardwareSerial` インスタンスの参照
+   * @param serial 使用する `SerialType` インスタンスの参照
    * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
    */
-  ImSender(HardwareSerial &serial, unsigned long baudrate = 19200);
-
-  /**
-   * @brief コンストラクタ (SoftwareSerial バージョン)
-   *
-   * `SoftwareSerial` インスタンスを使用して通信を行います。
-   *
-   * @param serial 使用する `SoftwareSerial` インスタンスの参照
-   * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
-   */
-  ImSender(SoftwareSerial &serial, unsigned long baudrate = 19200);
+  ImSender(SerialType &serial, unsigned long baudrate = 19200)
+      : serial(serial) {
+    serial.begin(baudrate);
+  }
 
 #ifdef DEBUG
   /**
@@ -81,24 +70,40 @@ public:
    */
   template <typename T>
 #ifdef DEBUG
-  ErrorCode send(const T &data) {
-    return send(reinterpret_cast<const uint8_t *>(&data), sizeof(T));
-  }
-#else
-  void send(const T &data) {
-    send(reinterpret_cast<const uint8_t *>(&data), sizeof(T));
-  }
-#endif
-
-private:
-  Stream &serial; /**< データ送信に使用するシリアル通信ストリーム */
-  
-#ifdef DEBUG
   ErrorCode
 #else
   void
 #endif
-  send(const uint8_t *data, size_t size);
-};
+  send(T &data) {
+    DebugLogger::println("ImSender", "send", "Sending data");
 
-#endif // IM_SENDER_H
+#ifdef DEBUG
+    // データサイズが1バイト未満または32バイトを超える場合はエラーを返す
+    if (sizeof(T) < 1 || sizeof(T) > 32) {
+      DebugLogger::println("ImSender", "send", "Data size is invalid");
+      return ErrorCode::INVALID_DATA_SIZE;
+    }
+#endif
+
+    // 送信データのプレフィックスを送信
+    serial.print("TXDA ");
+
+    // データをバイトごとに16進数形式で送信
+    for (uint8_t i = 0; i < sizeof(T); i++) {
+      serial.print(((uint8_t *)data)[i] >> 4, HEX);
+      serial.print(((uint8_t *)data)[i] & 0xF, HEX);
+    }
+
+    // 送信終了を示す改行を送信
+    serial.println();
+
+    DebugLogger::println("ImSender", "send", "Data sent");
+
+#ifdef DEBUG
+    return ErrorCode::SUCCESS;
+#endif
+  }
+
+private:
+  SerialType &serial; /**< データ送信に使用するシリアル通信ストリーム */
+};
