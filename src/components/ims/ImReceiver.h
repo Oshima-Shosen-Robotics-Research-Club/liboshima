@@ -102,26 +102,23 @@ public:
    */
   template <typename T>
 #ifdef DEBUG
-  ErrorCode
-#else
-  void
-#endif
-  receive(T &data) {
-#ifdef DEBUG
-    return
-#endif
-        receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
+  ErrorCode receive(T &data) {
+    receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
   }
+#else
+  void receive(T &data) {
+    receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
+  }
+#endif
 
 private:
   Stream &serial; /**< データ受信に使用するシリアル通信ストリーム */
 
 #ifdef DEBUG
-  ErrorCode
+  ErrorCode receive(uint8_t *data, size_t size);
 #else
-  void
+  void receive(uint8_t *data, size_t size);
 #endif
-  receive(uint8_t *data, size_t size);
 };
 
 #endif // IM_RECEIVER_H
