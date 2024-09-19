@@ -59,6 +59,7 @@ public:
    */
   ImReceiver(SoftwareSerial &serial, unsigned long baudrate = 19200);
 
+#ifdef DEBUG
   /**
    * @enum ErrorCode
    * @brief エラーコードの列挙型
@@ -74,6 +75,7 @@ public:
     COLON_NOT_FOUND, /**< 文字列内にコロンが見つからないことを示します。 */
     DATA_STRING_INVALID, /**< データ文字列が無効であることを示します。*/
   };
+#endif
 
   /**
    * @brief データが利用可能かどうかをチェックするメソッド
