@@ -105,7 +105,7 @@ public:
   template <typename T>
 #ifdef DEBUG
   ErrorCode receive(T &data) {
-    receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
+    return receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
   }
 #else
   void receive(T &data) {
