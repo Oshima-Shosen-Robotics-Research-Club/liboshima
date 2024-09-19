@@ -17,7 +17,8 @@
   "license": "MIT",
   "dependencies": {
     "fastled/FastLED": "*",
-    "arduino-libraries/Servo": "*"
+    "arduino-libraries/Servo": "*",
+    "watterott/digitalWriteFast": "*"
   },
   "frameworks": "arduino",
   "platforms": "*"

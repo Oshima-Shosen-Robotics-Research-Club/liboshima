@@ -5,12 +5,16 @@
 #include <SoftwareSerial.h>
 #include <Stream.h>
 
+#ifdef DEBUG
 /**
  * @brief デバッグメッセージをシリアルポートに出力するクラス
  *
  * `DebugLogger`
  * クラスは、ハードウェアまたはソフトウェアのシリアルポートにデバッグメッセージを出力するためのメソッドを提供します。
  * シンプルなメッセージやフォーマットされたメッセージの出力がサポートされています。
+ *
+ * デバッグメッセージを出力するためには、`DEBUG` マクロを定義し、Init
+ * メソッドを呼び出してシリアルポートを初期化する必要があります。
  */
 class DebugLogger {
 public:
@@ -83,5 +87,21 @@ private:
  */
 #define LOGF(className, methodName, format, ...)                               \
   DebugLogger::printlnf(className, methodName, format, ##__VA_ARGS__)
+
+#else // DEBUG is not defined
+class DebugLogger {
+public:
+  static inline void init(HardwareSerial &, unsigned long = 19200) {}
+  static inline void init(SoftwareSerial &, unsigned long = 19200) {}
+  static inline void init(uint8_t, uint8_t, unsigned long = 19200) {}
+
+  static inline void println(const char *, const char *, const char *) {}
+  static inline void printlnf(const char *, const char *, const char *, ...) {}
+};
+
+#define LOG(className, methodName, message) (void)0
+#define LOGF(className, methodName, format, ...) (void)0
+
+#endif // DEBUG
 
 #endif // DEBUG_LOGGER_H

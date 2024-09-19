@@ -52,6 +52,7 @@ public:
    */
   ImSender(SoftwareSerial &serial, unsigned long baudrate = 19200);
 
+#ifdef DEBUG
   /**
    * @enum ErrorCode
    * @brief エラーコードの列挙型
@@ -62,6 +63,7 @@ public:
     SUCCESS, /**< データ送信が成功したことを示します。 */
     INVALID_DATA_SIZE /**< データサイズが無効であることを示します。 */
   };
+#endif
 
   /**
    * @brief データを送信するテンプレートメソッド
@@ -77,13 +79,26 @@ public:
    * @note データサイズが1バイトから32バイトの範囲内である必要があります。
    *       それ以外のサイズの場合は `INVALID_DATA_SIZE` が返されます。
    */
-  template <typename T> ErrorCode send(const T &data) {
+  template <typename T>
+#ifdef DEBUG
+  ErrorCode send(const T &data) {
     return send(reinterpret_cast<const uint8_t *>(&data), sizeof(T));
   }
+#else
+  void send(const T &data) {
+    send(reinterpret_cast<const uint8_t *>(&data), sizeof(T));
+  }
+#endif
 
 private:
   Stream &serial; /**< データ送信に使用するシリアル通信ストリーム */
-  ErrorCode send(const uint8_t *data, size_t size);
+  
+#ifdef DEBUG
+  ErrorCode
+#else
+  void
+#endif
+  send(const uint8_t *data, size_t size);
 };
 
 #endif // IM_SENDER_H

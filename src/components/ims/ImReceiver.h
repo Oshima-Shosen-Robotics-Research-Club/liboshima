@@ -59,6 +59,7 @@ public:
    */
   ImReceiver(SoftwareSerial &serial, unsigned long baudrate = 19200);
 
+#ifdef DEBUG
   /**
    * @enum ErrorCode
    * @brief エラーコードの列挙型
@@ -72,8 +73,9 @@ public:
                                        受信文字列の長さが無効であることを示します。
                                      */
     COLON_NOT_FOUND, /**< 文字列内にコロンが見つからないことを示します。 */
-    DATA_LENGTH_INVALID /**< データの長さが無効であることを示します。 */
+    DATA_STRING_INVALID, /**< データ文字列が無効であることを示します。*/
   };
+#endif
 
   /**
    * @brief データが利用可能かどうかをチェックするメソッド
@@ -100,13 +102,38 @@ public:
    *       受信文字列の長さが予期される長さと一致しない場合や、データの
    *       長さが無効である場合は、エラーコードが返されます。
    */
-  template <typename T> ErrorCode receive(T &data) {
+  template <typename T>
+#ifdef DEBUG
+  ErrorCode receive(T &data) {
     return receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
   }
+#else
+  void receive(T &data) {
+    receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
+  }
+#endif
 
 private:
   Stream &serial; /**< データ受信に使用するシリアル通信ストリーム */
+
+#ifdef DEBUG
   ErrorCode receive(uint8_t *data, size_t size);
+#else
+  void receive(uint8_t *data, size_t size);
+#endif
 };
 
 #endif // IM_RECEIVER_H
+
+// バイナリのサイズは大きくなるが、処理が増えるわけではないので、問題ないと考える
+/*
+'0' = 48, '9' = 57, 'A' = 65, 'F' = 70
+*/
+constexpr uint8_t lookup[] = {
+    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16,
+    17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+    34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, // パディング
+    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,                  // 0-9
+    58, 59, 60, 61, 62, 63, 64,                             // パディング
+    10, 11, 12, 13, 14, 15,                                 // A-F
+};
