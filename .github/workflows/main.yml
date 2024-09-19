@@ -1,0 +1,39 @@
+name: Tag on commit message
+
+on:
+  push:
+    branches:
+      - main  # このアクションを実行するブランチを指定（例えばmainブランチ）
+
+jobs:
+  create_tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check for version update commit message
+        id: check_commit
+        run: |
+          # 最後のコミットメッセージを取得
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+
+          # 正規表現でマッチするか確認
+          if [[ "$COMMIT_MESSAGE" =~ ^Update\ library\.json\ version\ to\ ([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            VERSION=${BASH_REMATCH[1]}
+            echo "::set-output name=version::$VERSION"
+          else
+            echo "No matching commit message. Skipping tag creation."
+            exit 0
+          fi
+
+      - name: Create tag
+        if: steps.check_commit.outputs.version != ''
+        run: |
+          VERSION=${{ steps.check_commit.outputs.version }}
+          echo "Creating tag for version $VERSION"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v$VERSION" -m "Tag for version $VERSION"
+          git push origin "v$VERSION"
