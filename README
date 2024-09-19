@@ -10,3 +10,7 @@ src_dir = .pio/libdeps/${PIOENV}/liboshima/examples/実行したいプログラ�
 
 ■PlatformIO Library Registry
 https://registry.platformio.org/libraries/soshirofujimori/liboshima
+
+■こころがけていること
+・様々なプラットフォームで動作するようにすること
+・String型などのメモリを消費する型を使わないこと
