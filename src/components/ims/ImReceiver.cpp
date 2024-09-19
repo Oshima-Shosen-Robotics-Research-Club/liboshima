@@ -21,7 +21,7 @@ bool ImReceiver::available() { return serial.available(); }
 ImReceiver::ErrorCode
 #else
 void
-#endif 
+#endif
 ImReceiver::receive(uint8_t *data, size_t size) {
   DebugLogger::println("ImReceiver", "receive", "Receiving data");
 
@@ -93,6 +93,9 @@ ImReceiver::receive(uint8_t *data, size_t size) {
       pos++;
     }
   }
+
+  // データをデバッグ出力
+  DebugLogger::println("ImReceiver", "receive", "Data received");
 
 #ifdef DEBUG
   return ErrorCode::SUCCESS;
