@@ -1,49 +1,36 @@
-#ifndef DEBUG_LOGGER_H
-#define DEBUG_LOGGER_H
-
-#include <Arduino.h>
-#include <SoftwareSerial.h>
-#include <Stream.h>
+#pragma once
 
 #ifdef DEBUG
+
+#include <stdarg.h>
+#include <stdio.h>
+
 /**
- * @brief デバッグメッセージをシリアルポートに出力するクラス
+ * @brief デバッグメッセージをシリアルポートに出力するテンプレートクラス
  *
- * `DebugLogger`
- * クラスは、ハードウェアまたはソフトウェアのシリアルポートにデバッグメッセージを出力するためのメソッドを提供します。
+ * `DebugLogger` テンプレートクラスは、任意の `Stream`
+ * を使用してデバッグメッセージを出力するメソッドを提供します。
  * シンプルなメッセージやフォーマットされたメッセージの出力がサポートされています。
  *
- * デバッグメッセージを出力するためには、`DEBUG` マクロを定義し、Init
+ * デバッグメッセージを出力するためには、`DEBUG` マクロを定義し、`init`
  * メソッドを呼び出してシリアルポートを初期化する必要があります。
  */
-class DebugLogger {
+template <typename T> class DebugLogger {
 public:
   /**
-   * @brief ハードウェアシリアルポートで `DebugLogger` を初期化します。
+   * @brief 任意の `Stream` で `DebugLogger` を初期化します。
    *
-   * @param serial ログ出力に使用するハードウェアシリアルポート（例: Serial）。
-   * @param baudrate シリアル通信のボーレート（デフォルトは 19200）。
+   * @param serial ログ出力に使用する `Stream` オブジェクト（例: Serial,
+   * SoftwareSerial など）。
+   * @param baudrate シリアル通信速度（ボーレート）。デフォルト値は9600。
    */
-  static void init(HardwareSerial &serial, unsigned long baudrate = 19200);
-
-  /**
-   * @brief ソフトウェアシリアルポートで `DebugLogger` を初期化します。
-   *
-   * @param serial ログ出力に使用するソフトウェアシリアルポート。
-   * @param baudrate シリアル通信のボーレート（デフォルトは 19200）。
-   */
-  static void init(SoftwareSerial &serial, unsigned long baudrate = 19200);
-
-  /**
-   * @brief ピン番号を使用してソフトウェアシリアルポートで `DebugLogger`
-   * を初期化します。
-   *
-   * @param rxPin ソフトウェアシリアルポートの RX ピン番号。
-   * @param txPin ソフトウェアシリアルポートの TX ピン番号。
-   * @param baudrate シリアル通信のボーレート（デフォルトは 19200）。
-   */
-  static void init(uint8_t rxPin, uint8_t txPin,
-                   unsigned long baudrate = 19200);
+  static void init(T &serial, unsigned long baudrate = 9600) {
+    // 既にシリアルポートが初期化されている場合は何もしない
+    if (serialPort) {
+      return;
+    }
+    serialPort = &serial;
+  }
 
   /**
    * @brief シンプルなデバッグメッセージをシリアルポートに出力します。
@@ -53,7 +40,16 @@ public:
    * @param message 出力するデバッグメッセージ。
    */
   static void println(const char *className, const char *methodName,
-                      const char *message);
+                      const char *message) {
+    if (serialPort) {
+      serialPort->print("<");
+      serialPort->print(className);
+      serialPort->print("::");
+      serialPort->print(methodName);
+      serialPort->print("> ");
+      serialPort->println(message);
+    }
+  }
 
   /**
    * @brief フォーマットされたデバッグメッセージをシリアルポートに出力します。
@@ -64,18 +60,31 @@ public:
    * @param ... メッセージをフォーマットするための可変引数。
    */
   static void printlnf(const char *className, const char *methodName,
-                       const char *format, ...);
+                       const char *format, ...) {
+    if (serialPort) {
+      char buffer[256]; // バッファサイズを設定
+      va_list args;
+      va_start(args, format);
+      // フォーマットされた文字列を作成
+      vsnprintf(buffer, sizeof(buffer), format, args);
+      va_end(args);
+      println(className, methodName, buffer); // printlnメソッドを呼び出す
+    }
+  }
 
 private:
   /**
    * @brief ログ出力に使用するシリアルポートへの静的ポインタ。
    */
-  static Stream *serialPort;
+  static T *serialPort;
 };
+
+// 静的メンバー変数の定義
+template <typename T> T *DebugLogger<T>::serialPort = nullptr;
 
 // デバッグメッセージを簡単に出力するためのマクロを定義します。
 #define LOG(className, methodName, message)                                    \
-  DebugLogger::println(className, methodName, message)
+  DebugLogger<Stream>::println(className, methodName, message)
 
 /**
  * @brief フォーマットされたデバッグメッセージを簡単に出力するためのマクロ。
@@ -86,14 +95,12 @@ private:
  * @param ... メッセージをフォーマットするための可変引数。
  */
 #define LOGF(className, methodName, format, ...)                               \
-  DebugLogger::printlnf(className, methodName, format, ##__VA_ARGS__)
+  DebugLogger<Stream>::printlnf(className, methodName, format, ##__VA_ARGS__)
 
 #else // DEBUG is not defined
-class DebugLogger {
+template <typename T> class DebugLogger {
 public:
-  static inline void init(HardwareSerial &, unsigned long = 19200) {}
-  static inline void init(SoftwareSerial &, unsigned long = 19200) {}
-  static inline void init(uint8_t, uint8_t, unsigned long = 19200) {}
+  static inline void init(T &, unsigned long baudrates) {}
 
   static inline void println(const char *, const char *, const char *) {}
   static inline void printlnf(const char *, const char *, const char *, ...) {}
@@ -103,5 +110,3 @@ public:
 #define LOGF(className, methodName, format, ...) (void)0
 
 #endif // DEBUG
-
-#endif // DEBUG_LOGGER_H
