@@ -72,7 +72,7 @@ public:
                                        受信文字列の長さが無効であることを示します。
                                      */
     COLON_NOT_FOUND, /**< 文字列内にコロンが見つからないことを示します。 */
-    DATA_LENGTH_INVALID /**< データの長さが無効であることを示します。 */
+    DATA_STRING_INVALID, /**< データ文字列が無効であることを示します。*/
   };
 
   /**
@@ -100,13 +100,28 @@ public:
    *       受信文字列の長さが予期される長さと一致しない場合や、データの
    *       長さが無効である場合は、エラーコードが返されます。
    */
-  template <typename T> ErrorCode receive(T &data) {
-    return receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
+  template <typename T>
+#ifdef DEBUG
+  ErrorCode
+#else
+  void
+#endif
+  receive(T &data) {
+#ifdef DEBUG
+    return
+#endif
+        receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
   }
 
 private:
   Stream &serial; /**< データ受信に使用するシリアル通信ストリーム */
-  ErrorCode receive(uint8_t *data, size_t size);
+
+#ifdef DEBUG
+  ErrorCode
+#else
+  void
+#endif
+  receive(uint8_t *data, size_t size);
 };
 
 #endif // IM_RECEIVER_H

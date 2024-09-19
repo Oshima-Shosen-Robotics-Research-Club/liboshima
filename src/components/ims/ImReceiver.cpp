@@ -17,14 +17,21 @@ ImReceiver::ImReceiver(SoftwareSerial &serial, unsigned long baudrate)
 bool ImReceiver::available() { return serial.available(); }
 
 // "00,0000,00:00,00,00\r\n" という形式のデータを受信する
-ImReceiver::ErrorCode ImReceiver::receive(uint8_t *data, size_t size) {
+#ifdef DEBUG
+ImReceiver::ErrorCode
+#else
+void
+#endif 
+ImReceiver::receive(uint8_t *data, size_t size) {
   DebugLogger::println("ImReceiver", "receive", "Receiving data");
 
+#ifdef DEBUG
   // データが利用可能でない場合はエラーを返す
   if (!available()) {
     DebugLogger::println("ImReceiver", "receive", "No data available");
     return ErrorCode::NO_DATA_AVAILABLE;
   }
+#endif
 
   // 受信データの読み取り
   // 最大32バイトのデータを受信する
@@ -37,6 +44,7 @@ ImReceiver::ErrorCode ImReceiver::receive(uint8_t *data, size_t size) {
   // 受信文字をデバッグ出力
   DebugLogger::printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
 
+#ifdef DEBUG
   // 受信文字列の長さが予期される長さと一致しない場合はエラーを返す
   if (length != 10 + 1 + size * 2 + size - 1) {
     DebugLogger::println("ImReceiver", "receive",
@@ -48,36 +56,45 @@ ImReceiver::ErrorCode ImReceiver::receive(uint8_t *data, size_t size) {
     DebugLogger::println("ImReceiver", "receive", "Colon not found");
     return ErrorCode::COLON_NOT_FOUND;
   }
+#endif
 
   // データ部分のみを抽出
   char *pos = recvedStr + 11;
 
-  // 16進数のデータを手動で解析
+#ifdef DEBUG
+  // 無効な文字列が含まれている場合はエラーを返す
+  if (!((pos[0] >= '0' && pos[0] <= '9') || (pos[0] >= 'A' && pos[0] <= 'F')) ||
+      !((pos[1] >= '0' && pos[1] <= '9') || (pos[1] >= 'A' && pos[1] <= 'F'))) {
+    DebugLogger::println("ImReceiver", "receive", "Data string invalid");
+    return ErrorCode::DATA_STRING_INVALID;
+  }
+#endif
+
+  // バイナリのサイズは大きくなるが、処理が増えるわけではないので、問題ないと考える
+  /*
+  '0' = 48, '9' = 57, 'A' = 65, 'F' = 70
+  */
+  constexpr uint8_t lookup[] = {
+      0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16,
+      17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+      34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, // パディング
+      0,  1,  2,  3,  4,  5,  6,  7,  8,  9,                  // 0-9
+      58, 59, 60, 61, 62, 63, 64,                             // パディング
+      10, 11, 12, 13, 14, 15,                                 // A-F
+  };
+
   for (size_t i = 0; i < size; i++) {
-    if (*pos >= '0' && *pos <= '9') {
-      data[i] = (*pos - '0') << 4;
-    } else if (*pos >= 'A' && *pos <= 'F') {
-      data[i] = (*pos - 'A' + 10) << 4;
-    } else {
-      DebugLogger::println("ImReceiver", "receive", "Data length invalid");
-      return ErrorCode::DATA_LENGTH_INVALID;
-    }
+    uint8_t high = lookup[(uint8_t)*pos++];
+    uint8_t low = lookup[(uint8_t)*pos++];
 
-    pos++;
-    if (*pos >= '0' && *pos <= '9') {
-      data[i] |= (*pos - '0');
-    } else if (*pos >= 'A' && *pos <= 'F') {
-      data[i] |= (*pos - 'A' + 10);
-    } else {
-      DebugLogger::println("ImReceiver", "receive", "Data length invalid");
-      return ErrorCode::DATA_LENGTH_INVALID;
-    }
+    data[i] = (high << 4) | low;
 
-    pos++;
     if (*pos == ',') {
       pos++;
     }
   }
 
+#ifdef DEBUG
   return ErrorCode::SUCCESS;
+#endif
 }
