@@ -17,9 +17,11 @@ public:
   void begin(unsigned long baudrate);
   uint8_t available();
   char read();
-  uint8_t readBytesUntil(char terminator, char *buffer, size_t length);
+  uint8_t readBytesUntil(char terminator, char *buffer, uint8_t length);
   uint8_t print(const char *str);
+  uint8_t print(int value);
   uint8_t println(const char *str);
+  uint8_t println();
 
 private:
   // 基本シリアルオブジェクトへのポインタ

@@ -55,7 +55,7 @@ char SerialPort::read() {
 }
 
 uint8_t SerialPort::readBytesUntil(char terminator, char *buffer,
-                                   size_t length) {
+                                   uint8_t length) {
   if (serialType == HARDWARE)
     return hwSerial->readBytesUntil(terminator, buffer, length);
   else if (serialType == SOFTWARE)
@@ -75,6 +75,16 @@ uint8_t SerialPort::print(const char *str) {
   return 0;
 }
 
+uint8_t SerialPort::print(int value) {
+  if (serialType == HARDWARE)
+    return hwSerial->print(value);
+  else if (serialType == SOFTWARE)
+    return swSerial->print(value);
+  else if (serialType == FAST)
+    return fSerial->print(value);
+  return 0;
+}
+
 uint8_t SerialPort::println(const char *str) {
   if (serialType == HARDWARE)
     return hwSerial->println(str);
@@ -82,5 +92,15 @@ uint8_t SerialPort::println(const char *str) {
     return swSerial->println(str);
   else if (serialType == FAST)
     return fSerial->println(str);
+  return 0;
+}
+
+uint8_t SerialPort::println() {
+  if (serialType == HARDWARE)
+    return hwSerial->println();
+  else if (serialType == SOFTWARE)
+    return swSerial->println();
+  else if (serialType == FAST)
+    return fSerial->println();
   return 0;
 }
