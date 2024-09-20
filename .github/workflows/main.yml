@@ -1,0 +1,50 @@
+name: Tag on version change
+
+on:
+  push:
+
+jobs:
+  create_tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # フルコミット履歴を取得
+
+      - name: Set up Python (to use jq)
+        uses: actions/setup-python@v4
+
+      - name: Check if version has changed
+        id: check_version
+        run: |
+          # 現在のバージョンを取得
+          CURRENT_VERSION=$(jq -r '.version' library.json)
+          echo "Current version: $CURRENT_VERSION"
+          
+          # library.jsonが最後のコミットで変更されたか確認
+          if git diff HEAD^ HEAD --quiet --exit-code -- library.json; then
+            echo "No changes in library.json. Skipping tag creation."
+            exit 0
+          else
+            echo "library.json has changed."
+            # 前のバージョンと新しいバージョンを比較
+            PREVIOUS_VERSION=$(git show HEAD^:library.json | jq -r '.version')
+            if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+              echo "VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+            else
+              echo "Version has not changed. Skipping tag creation."
+              exit 0
+            fi
+          fi
+
+      - name: Create tag
+        if: env.VERSION != ''
+        run: |
+          VERSION=$VERSION
+          echo "Creating tag for version $VERSION"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v$VERSION" -m "Tag for version $VERSION"
+          git push origin "v$VERSION"
