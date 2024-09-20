@@ -11,9 +11,12 @@
  * このクラスは、テンプレートを用いて様々なデータ型の送信をサポートします。
  */
 
-#pragma once
+#ifndef IM_SENDER_H
+#define IM_SENDER_H
 
-#include "serials/DebugLogger.h"
+#include "DebugLogger.h"
+#include "serials/SerialPort.h"
+#include <SoftwareSerial.h>
 
 // データ送信に適した時間間隔 (ミリ秒単位)
 // この定義は、データ送信間隔の設定や調整に使用される可能性があります。
@@ -28,22 +31,19 @@
  * 機能を提供します。このクラスは `HardwareSerial` または `SoftwareSerial` と
  * 連携し、テンプレートメソッドを使用して様々な型のデータを送信できます。
  */
-template <typename SerialType> class ImSender {
+class ImSender {
 public:
   /**
-   * @brief コンストラクタ
+   * @brief コンストラクタ (HardwareSerial バージョン)
    *
-   * `SerialType` インスタンスを使用して通信を行います。
+   * `HardwareSerial` インスタンスを使用して通信を行います。
    *
-   * @param serial 使用する `SerialType` インスタンスの参照
+   * @param serial 使用する `HardwareSerial` インスタンスの参照
    * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
    */
-  ImSender(SerialType &serial, unsigned long baudrate = 19200)
-      : serial(serial) {
-    serial.begin(baudrate);
-  }
+  ImSender(SerialPort &serial, unsigned long baudrate = 19200);
 
-#if defined(DEBUG)
+#ifdef DEBUG
   /**
    * @enum ErrorCode
    * @brief エラーコードの列挙型
@@ -71,41 +71,25 @@ public:
    *       それ以外のサイズの場合は `INVALID_DATA_SIZE` が返されます。
    */
   template <typename T>
-#if defined(DEBUG)
+#ifdef DEBUG
+  ErrorCode send(const T &data) {
+    return send(reinterpret_cast<const uint8_t *>(&data), sizeof(T));
+  }
+#else
+  void send(const T &data) {
+    send(reinterpret_cast<const uint8_t *>(&data), sizeof(T));
+  }
+#endif
+
+private:
+  SerialPort &serial; /**< データ送信に使用するシリアル通信ストリーム */
+
+#ifdef DEBUG
   ErrorCode
 #else
   void
 #endif
-  send(T &data) {
-    DebugLogger::println("ImSender", "send", "Sending data");
-
-#if defined(DEBUG)
-    // データサイズが1バイト未満または32バイトを超える場合はエラーを返す
-    if (sizeof(T) < 1 || sizeof(T) > 32) {
-      DebugLogger::println("ImSender", "send", "Data size is invalid");
-      return ErrorCode::INVALID_DATA_SIZE;
-    }
-#endif
-
-    // 送信データのプレフィックスを送信
-    serial.print("TXDA ");
-
-    // データをバイトごとに16進数形式で送信
-    for (uint8_t i = 0; i < sizeof(T); i++) {
-      serial.print(((uint8_t *)data)[i] >> 4, HEX);
-      serial.print(((uint8_t *)data)[i] & 0xF, HEX);
-    }
-
-    // 送信終了を示す改行を送信
-    serial.println();
-
-    DebugLogger::println("ImSender", "send", "Data sent");
-
-#if defined(DEBUG)
-    return ErrorCode::SUCCESS;
-#endif
-  }
-
-private:
-  SerialType &serial; /**< データ送信に使用するシリアル通信ストリーム */
+  send(const uint8_t *data, size_t size);
 };
+
+#endif // IM_SENDER_H
