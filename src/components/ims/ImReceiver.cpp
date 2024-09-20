@@ -40,7 +40,9 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   char recvedStr[10 + 1 + 32 * 2 + 31 + 1]; // null文字を含める
   size_t length = serial.readBytesUntil('\r', recvedStr, sizeof(recvedStr) - 1);
   recvedStr[length] = '\0'; // Null-terminate the string
-  serial.read();           // 改行コード'\r\n'を読み飛ばす
+  while (!available())
+    ;
+  serial.read(); // 改行コード'\r\n'を読み飛ばす
 
   // 受信文字をデバッグ出力
   DebugLogger::printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
@@ -48,8 +50,8 @@ ImReceiver::receive(uint8_t *data, size_t size) {
 #if defined(DEBUG)
   // 受信文字列の長さが予期される長さと一致しない場合はエラーを返す
   if (length != 10 + 1 + size * 2 + size - 1) {
-    DebugLogger::println("ImReceiver", "receive",
-                         "Received string length invalid");
+    DebugLogger::printlnf("ImReceiver", "receive",
+                          "Received string length invalid: %d", length);
     return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
   }
 
