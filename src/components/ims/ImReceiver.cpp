@@ -38,8 +38,9 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   // "00,0000,00:01,02,03,04,05,06,07,08,09,0A,0B,0C,0D,0E,0F,10,11,12,13,14,15,16,17,18,19,1A,1B,1C,1D,1E,1F,20"
   // ペイロード = 10、コロン = 1、データ = 32 * 2、カンマ = 32 - 1 = 31
   char recvedStr[10 + 1 + 32 * 2 + 31 + 1]; // null文字を含める
-  size_t length = serial.readBytesUntil('\n', recvedStr, sizeof(recvedStr) - 1);
+  size_t length = serial.readBytesUntil('\r', recvedStr, sizeof(recvedStr) - 1);
   recvedStr[length] = '\0'; // Null-terminate the string
+  serial.read();           // 改行コード'\r\n'を読み飛ばす
 
   // 受信文字をデバッグ出力
   DebugLogger::printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
