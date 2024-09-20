@@ -7,14 +7,18 @@
 SoftwareSerial serial(RX_PIN, TX_PIN);
 ImSender imSender(serial);
 
-void setup() {
+void setup()
+{
   // 送信データを送信する
   int data = 123;
 
-#ifdef DEBUG
-  if (imSender.send(data) == ImSender::ErrorCode::SUCCESS) {
+#if defined(DEBUG)
+  if (imSender.send(data) == ImSender::ErrorCode::SUCCESS)
+  {
     Serial.println("Data sent successfully");
-  } else {
+  }
+  else
+  {
     Serial.println("Failed to send data");
   }
 #else

@@ -1,14 +1,10 @@
 #pragma once
 
-<<<<<<< HEAD:src/serials/DebugLogger.h
-#ifdef DEBUG
+#if defined(DEBUG)
 
 #include <stdarg.h>
 #include <stdio.h>
 
-=======
-#if defined(DEBUG)
->>>>>>> master:src/utils/DebugLogger.h
 /**
  * @brief デバッグメッセージをシリアルポートに出力するテンプレートクラス
  *

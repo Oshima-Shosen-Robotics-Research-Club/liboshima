@@ -28,7 +28,9 @@
  * 機能を提供します。このクラスは `HardwareSerial` または `SoftwareSerial` と
  * 連携し、テンプレートメソッドを使用して様々な型のデータを送信できます。
  */
-template <typename SerialType> class ImSender {
+template <typename SerialType>
+class ImSender
+{
 public:
   /**
    * @brief コンストラクタ
@@ -39,19 +41,21 @@ public:
    * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
    */
   ImSender(SerialType &serial, unsigned long baudrate = 19200)
-      : serial(serial) {
+      : serial(serial)
+  {
     serial.begin(baudrate);
   }
 
-#ifdef DEBUG
+#if defined(DEBUG)
   /**
    * @enum ErrorCode
    * @brief エラーコードの列挙型
    *
    * `ImSender` クラスで発生する可能性のあるエラーコードを定義します。
    */
-  enum class ErrorCode {
-    SUCCESS, /**< データ送信が成功したことを示します。 */
+  enum class ErrorCode
+  {
+    SUCCESS,          /**< データ送信が成功したことを示します。 */
     INVALID_DATA_SIZE /**< データサイズが無効であることを示します。 */
   };
 #endif
@@ -71,17 +75,19 @@ public:
    *       それ以外のサイズの場合は `INVALID_DATA_SIZE` が返されます。
    */
   template <typename T>
-#ifdef DEBUG
+#if defined(DEBUG)
   ErrorCode
 #else
   void
 #endif
-  send(T &data) {
+  send(T &data)
+  {
     DebugLogger::println("ImSender", "send", "Sending data");
 
-#ifdef DEBUG
+#if defined(DEBUG)
     // データサイズが1バイト未満または32バイトを超える場合はエラーを返す
-    if (sizeof(T) < 1 || sizeof(T) > 32) {
+    if (sizeof(T) < 1 || sizeof(T) > 32)
+    {
       DebugLogger::println("ImSender", "send", "Data size is invalid");
       return ErrorCode::INVALID_DATA_SIZE;
     }
@@ -91,7 +97,8 @@ public:
     serial.print("TXDA ");
 
     // データをバイトごとに16進数形式で送信
-    for (uint8_t i = 0; i < sizeof(T); i++) {
+    for (uint8_t i = 0; i < sizeof(T); i++)
+    {
       serial.print(((uint8_t *)data)[i] >> 4, HEX);
       serial.print(((uint8_t *)data)[i] & 0xF, HEX);
     }
@@ -101,7 +108,7 @@ public:
 
     DebugLogger::println("ImSender", "send", "Data sent");
 
-#ifdef DEBUG
+#if defined(DEBUG)
     return ErrorCode::SUCCESS;
 #endif
   }
