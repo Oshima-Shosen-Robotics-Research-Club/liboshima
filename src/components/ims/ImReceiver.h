@@ -58,7 +58,7 @@ public:
    */
   ImReceiver(SoftwareSerial &serial, unsigned long baudrate = 19200);
 
-#ifdef DEBUG
+#if defined(DEBUG)
   /**
    * @enum ErrorCode
    * @brief エラーコードの列挙型
@@ -102,7 +102,7 @@ public:
    *       長さが無効である場合は、エラーコードが返されます。
    */
   template <typename T>
-#ifdef DEBUG
+#if defined(DEBUG)
   ErrorCode receive(T &data) {
     return receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
   }
@@ -115,7 +115,7 @@ public:
 private:
   Stream &serial; /**< データ受信に使用するシリアル通信ストリーム */
 
-#ifdef DEBUG
+#if defined(DEBUG)
   ErrorCode receive(uint8_t *data, size_t size);
 #else
   void receive(uint8_t *data, size_t size);
