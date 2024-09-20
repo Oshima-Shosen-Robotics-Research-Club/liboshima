@@ -61,8 +61,7 @@ public:
    */
   static void printlnf(const char *className, const char *methodName,
                        const char *format, ...) {
-    if (serialPort) {
-      char buffer[256]; // バッファサイズを設定
+    char buffer[100]; // バッファサイズを設定
       va_list args;
       va_start(args, format);
       // フォーマットされた文字列を作成
