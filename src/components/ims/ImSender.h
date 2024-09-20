@@ -20,7 +20,7 @@
 // データ送信に適した時間間隔 (ミリ秒単位)
 // この定義は、データ送信間隔の設定や調整に使用される可能性があります。
 // ユーザー側で調整することで、送信頻度を制御できます。
-#define IM_SEND_INTERVAL 60
+#define IM_SEND_INTERVAL 100
 
 /**
  * @class ImSender
