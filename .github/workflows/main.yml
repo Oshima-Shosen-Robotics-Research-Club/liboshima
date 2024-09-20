@@ -3,7 +3,7 @@ name: Tag on commit message
 on:
   push:
     branches:
-      - main  # このアクションを実行するブランチを指定（例えばmainブランチ）
+      - master  # このアクションを実行するブランチを指定（例えばmainブランチ）
 
 jobs:
   create_tag:
