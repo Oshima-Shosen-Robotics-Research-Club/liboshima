@@ -1,11 +1,10 @@
 #include "FastSerial.h"
 
-// グローバル変数として FastSerial のインスタンスを定義
 #if defined(__AVR_ATmega328P__)
 FastSerial FSerial;
 
 // 静的メンバ変数の定義
-void (*_FastSerialBase::user_onReceive)(void) = NULL;
+void (*FastSerial::user_onReceive)(void) = NULL;
 
 void FastSerial::begin(unsigned long baudrate) {
   // ボーレートの設定
