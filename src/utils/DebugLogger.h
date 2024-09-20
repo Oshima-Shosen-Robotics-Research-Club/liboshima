@@ -5,7 +5,7 @@
 #include <SoftwareSerial.h>
 #include <Stream.h>
 
-#ifdef DEBUG
+#if defined(DEBUG)
 /**
  * @brief デバッグメッセージをシリアルポートに出力するクラス
  *

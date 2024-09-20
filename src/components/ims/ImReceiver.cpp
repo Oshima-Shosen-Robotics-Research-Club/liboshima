@@ -17,7 +17,7 @@ ImReceiver::ImReceiver(SoftwareSerial &serial, unsigned long baudrate)
 bool ImReceiver::available() { return serial.available(); }
 
 // "00,0000,00:00,00,00\r\n" という形式のデータを受信する
-#ifdef DEBUG
+#if defined(DEBUG)
 ImReceiver::ErrorCode
 #else
 void
@@ -25,7 +25,7 @@ void
 ImReceiver::receive(uint8_t *data, size_t size) {
   DebugLogger::println("ImReceiver", "receive", "Receiving data");
 
-#ifdef DEBUG
+#if defined(DEBUG)
   // データが利用可能でない場合はエラーを返す
   if (!available()) {
     DebugLogger::println("ImReceiver", "receive", "No data available");
@@ -44,7 +44,7 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   // 受信文字をデバッグ出力
   DebugLogger::printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
 
-#ifdef DEBUG
+#if defined(DEBUG)
   // 受信文字列の長さが予期される長さと一致しない場合はエラーを返す
   if (length != 10 + 1 + size * 2 + size - 1) {
     DebugLogger::println("ImReceiver", "receive",
@@ -61,7 +61,7 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   // データ部分のみを抽出
   char *pos = recvedStr + 11;
 
-#ifdef DEBUG
+#if defined(DEBUG)
   // 無効な文字列が含まれている場合はエラーを返す
   if (!((pos[0] >= '0' && pos[0] <= '9') || (pos[0] >= 'A' && pos[0] <= 'F')) ||
       !((pos[1] >= '0' && pos[1] <= '9') || (pos[1] >= 'A' && pos[1] <= 'F'))) {
@@ -84,7 +84,7 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   // データをデバッグ出力
   DebugLogger::println("ImReceiver", "receive", "Data received");
 
-#ifdef DEBUG
+#if defined(DEBUG)
   return ErrorCode::SUCCESS;
 #endif
 }

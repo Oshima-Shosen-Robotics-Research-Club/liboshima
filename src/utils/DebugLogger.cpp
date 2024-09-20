@@ -1,6 +1,6 @@
 #include "DebugLogger.h"
 
-#ifdef DEBUG
+#if defined(DEBUG)
 // DebugLoggerクラスの静的メンバーの初期化
 Stream *DebugLogger::serialPort = nullptr;
 
