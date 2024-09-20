@@ -12,8 +12,7 @@
  *       受信することができます。
  */
 
-#ifndef IM_RECEIVER_H
-#define IM_RECEIVER_H
+#pragma once
 
 #include "utils/DebugLogger.h"
 #include <SoftwareSerial.h>
@@ -122,8 +121,6 @@ private:
   void receive(uint8_t *data, size_t size);
 #endif
 };
-
-#endif // IM_RECEIVER_H
 
 // バイナリのサイズは大きくなるが、処理が増えるわけではないので、問題ないと考える
 /*
