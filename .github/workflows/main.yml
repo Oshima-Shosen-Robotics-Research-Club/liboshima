@@ -20,7 +20,7 @@ jobs:
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
           # 正規表現でマッチするか確認
-          if [[ "$COMMIT_MESSAGE" =~ ^Update\ library\.json\ version\ to\ ([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+          if [[ "$COMMIT_MESSAGE" =~ ^Update\ library\ version\ to\ ([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
             VERSION=${BASH_REMATCH[1]}
             echo "::set-output name=version::$VERSION"
           else
