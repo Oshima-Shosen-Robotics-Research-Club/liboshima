@@ -15,7 +15,7 @@ public:
   uint8_t println(const char *str);
   uint8_t println();
   void onReceive(void (*function)(void));
-  static void (*user_onReceive)(void);
+  void (*user_onReceive)(void);
 };
 
 extern FastwareSerial FastSerial;

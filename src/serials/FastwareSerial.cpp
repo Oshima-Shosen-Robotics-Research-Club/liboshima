@@ -5,8 +5,6 @@
 
 FastwareSerial FastSerial;
 
-void (*FastwareSerial::user_onReceive)(void) = NULL;
-
 void FastwareSerial::begin(unsigned long baudrate) {
 #if defined(__AVR_ATmega328P__)
   UBRR0 = (F_CPU / 16 / baudrate - 1);
@@ -85,8 +83,8 @@ void FastwareSerial::onReceive(void (*function)(void)) {
 
 #if defined(__AVR_ATmega328P__)
 ISR(USART_RX_vect) {
-  if (FastwareSerial::user_onReceive) {
-    FastwareSerial::user_onReceive();
+  if (FastSerial.user_onReceive) {
+    FastSerial.user_onReceive();
   }
 }
 #endif
