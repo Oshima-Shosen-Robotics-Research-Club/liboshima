@@ -14,7 +14,7 @@
 #include <utils/Converter.h>
 #include <utils/DebugLogger.h>
 
-inline void setup();
-inline void loop();
+void setup();
+void loop();
 extern SerialPort FSerialPort;
 extern SerialPort HSerialPort;
