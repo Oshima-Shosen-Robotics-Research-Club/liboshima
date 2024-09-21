@@ -6,6 +6,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/** 
+ * シリアル通信を抽象化するクラス
+*/
 class SerialPort {
 public:
   // コンストラクタは異なるシリアルオブジェクトを受け取る
