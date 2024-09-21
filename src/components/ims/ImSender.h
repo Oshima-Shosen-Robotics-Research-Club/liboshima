@@ -14,8 +14,8 @@
 #ifndef IM_SENDER_H
 #define IM_SENDER_H
 
-#include "DebugLogger.h"
 #include "serials/SerialPort.h"
+#include "utils/DebugLogger.h"
 #include <SoftwareSerial.h>
 
 // データ送信に適した時間間隔 (ミリ秒単位)
