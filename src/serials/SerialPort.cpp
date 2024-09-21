@@ -4,7 +4,7 @@
 SerialPort::SerialPort(HardwareSerial &serial) {
   hwSerial = &serial;
   swSerial = nullptr;
-  fSerial = nullptr;
+  fwSerial = nullptr;
   serialType = HARDWARE;
 }
 
@@ -12,7 +12,7 @@ SerialPort::SerialPort(HardwareSerial &serial) {
 SerialPort::SerialPort(SoftwareSerial &serial) {
   hwSerial = nullptr;
   swSerial = &serial;
-  fSerial = nullptr;
+  fwSerial = nullptr;
   serialType = SOFTWARE;
 }
 
@@ -20,7 +20,7 @@ SerialPort::SerialPort(SoftwareSerial &serial) {
 SerialPort::SerialPort(FastwareSerial &serial) {
   hwSerial = nullptr;
   swSerial = nullptr;
-  fSerial = &serial;
+  fwSerial = &serial;
   serialType = FASTWARE;
 }
 
@@ -31,7 +31,7 @@ void SerialPort::begin(unsigned long baudrate) {
   else if (serialType == SOFTWARE)
     swSerial->begin(baudrate);
   else if (serialType == FASTWARE)
-    fSerial->begin(baudrate);
+    fwSerial->begin(baudrate);
 }
 
 uint8_t SerialPort::available() {
@@ -40,7 +40,7 @@ uint8_t SerialPort::available() {
   else if (serialType == SOFTWARE)
     return swSerial->available();
   else if (serialType == FASTWARE)
-    return fSerial->available();
+    return fwSerial->available();
   return 0;
 }
 
@@ -50,7 +50,7 @@ char SerialPort::read() {
   else if (serialType == SOFTWARE)
     return swSerial->read();
   else if (serialType == FASTWARE)
-    return fSerial->read();
+    return fwSerial->read();
   return 0;
 }
 
@@ -61,7 +61,7 @@ uint8_t SerialPort::readBytesUntil(char terminator, char *buffer,
   else if (serialType == SOFTWARE)
     return swSerial->readBytesUntil(terminator, buffer, length);
   else if (serialType == FASTWARE)
-    return fSerial->readBytesUntil(terminator, buffer, length);
+    return fwSerial->readBytesUntil(terminator, buffer, length);
   return 0;
 }
 
@@ -71,7 +71,7 @@ uint8_t SerialPort::print(const char *str) {
   else if (serialType == SOFTWARE)
     return swSerial->print(str);
   else if (serialType == FASTWARE)
-    return fSerial->print(str);
+    return fwSerial->print(str);
   return 0;
 }
 
@@ -81,7 +81,7 @@ uint8_t SerialPort::print(int value) {
   else if (serialType == SOFTWARE)
     return swSerial->print(value);
   else if (serialType == FASTWARE)
-    return fSerial->print(value);
+    return fwSerial->print(value);
   return 0;
 }
 
@@ -91,7 +91,7 @@ uint8_t SerialPort::println(const char *str) {
   else if (serialType == SOFTWARE)
     return swSerial->println(str);
   else if (serialType == FASTWARE)
-    return fSerial->println(str);
+    return fwSerial->println(str);
   return 0;
 }
 
@@ -101,6 +101,6 @@ uint8_t SerialPort::println() {
   else if (serialType == SOFTWARE)
     return swSerial->println();
   else if (serialType == FASTWARE)
-    return fSerial->println();
+    return fwSerial->println();
   return 0;
 }

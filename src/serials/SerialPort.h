@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FastSerial.h"
+#include "FastwareSerial.h"
 #include <HardwareSerial.h>
 #include <SoftwareSerial.h>
 #include <stddef.h>
@@ -30,7 +30,7 @@ private:
   // 基本シリアルオブジェクトへのポインタ
   HardwareSerial *hwSerial;
   SoftwareSerial *swSerial;
-  FastwareSerial *fSerial;
+  FastwareSerial *fwSerial;
 
   // どのシリアルが有効かを示すフラグ
   enum SerialType { NONE, HARDWARE, SOFTWARE, FASTWARE } serialType;
