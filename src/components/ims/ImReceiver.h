@@ -111,10 +111,4 @@ private:
 #else
   void receive(uint8_t *data, size_t size);
 #endif
-
-  // バイナリのサイズは大きくなるが、処理が増えるわけではないので、問題ないと考える
-  /*
-  '0' = 48, '9' = 57, 'A' = 65, 'F' = 70
-  */
-  static const uint8_t lookup[71];
 };

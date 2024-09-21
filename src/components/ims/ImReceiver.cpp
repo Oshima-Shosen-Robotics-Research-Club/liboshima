@@ -1,14 +1,6 @@
 #include "ImReceiver.h"
 #include <SoftwareSerial.h>
-
-const uint8_t ImReceiver::lookup[71] = {
-    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16,
-    17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-    34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, // パディング
-    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,                  // 0-9
-    58, 59, 60, 61, 62, 63, 64,                             // パディング
-    10, 11, 12, 13, 14, 15,                                 // A-F
-};
+#include <utils/Converter.h>
 
 // HardwareSerial の場合
 ImReceiver::ImReceiver(SerialPort &serial, unsigned long baudrate)
@@ -77,10 +69,8 @@ ImReceiver::receive(uint8_t *data, size_t size) {
 #endif
 
   for (size_t i = 0; i < size; i++) {
-    uint8_t high = lookup[(uint8_t)*pos++];
-    uint8_t low = lookup[(uint8_t)*pos++];
-
-    data[i] = (high << 4) | low;
+    Converter::fromHex(pos, 2, &data[i]);
+    pos += 2;
 
     if (*pos == ',') {
       pos++;

@@ -1,4 +1,5 @@
 #include "FastSerial.h"
+#include <utils/Converter.h>
 
 FastSerial FSerial;
 
@@ -61,8 +62,9 @@ uint8_t FastSerial::println() { return print("\r\n"); }
 
 uint8_t FastSerial::print(uint8_t value) {
   uint8_t count = 0;
-  write(lookup[value >> 4] << 4 | lookup[value & 0x0F]);
-  count += 2;
+  char buffer[3]; // 1byte分の16進数表現に必要な2文字 + null文字
+  Converter::toHex(&value, 1, buffer);
+  count += print(buffer);
   return count;
 }
 
