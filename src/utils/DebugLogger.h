@@ -50,8 +50,6 @@ private:
   SerialPort *serialPort;
 };
 
-extern DebugLogger Debug; ///< グローバルインスタンスの宣言
-
 #else // DEBUG is not defined
 class DebugLogger {
 public:
@@ -62,6 +60,6 @@ public:
                 const char *format, ...) {}
 };
 
-extern DebugLogger Debug; ///< グローバルインスタンスの宣言
-
 #endif // DEBUG
+
+extern DebugLogger Debug; ///< グローバルインスタンスの宣言
