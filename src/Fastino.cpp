@@ -9,5 +9,5 @@ int main() {
   return 0;
 }
 
-SerialPort FSerialPort(FSerial);
+SerialPort FSerialPort(FastSerial);
 SerialPort HSerialPort(Serial);
