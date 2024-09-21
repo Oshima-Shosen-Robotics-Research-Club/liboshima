@@ -12,12 +12,12 @@ ImSender::ErrorCode
 void
 #endif
 ImSender::send(const uint8_t *data, size_t size) {
-  Debug.println("ImSender", "send", "Sending data");
+  Logger.println("ImSender", "send", "Sending data");
 
 #ifdef DEBUG
   // データサイズが1バイト未満または32バイトを超える場合はエラーを返す
   if (size < 1 || size > 32) {
-    Debug.println("ImSender", "send", "Data size is invalid");
+    Logger.println("ImSender", "send", "Data size is invalid");
     return ErrorCode::INVALID_DATA_SIZE;
   }
 #endif
@@ -35,7 +35,7 @@ ImSender::send(const uint8_t *data, size_t size) {
   serial.println();
 
   // 送信データをデバッグ出力
-  Debug.println("ImSender", "send", "Data sent");
+  Logger.println("ImSender", "send", "Data sent");
 
 #ifdef DEBUG
   return ErrorCode::SUCCESS;

@@ -2,7 +2,7 @@
 
 #if defined(DEBUG)
 
-DebugLogger Debug; ///< グローバルインスタンスの定義
+DebugLogger Logger; ///< グローバルインスタンスの定義
 SerialPort *DebugLogger::serialPort = nullptr; ///< ポインタの初期化
 
 void DebugLogger::init(SerialPort &serial, unsigned long baudrate) {

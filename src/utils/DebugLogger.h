@@ -62,4 +62,4 @@ public:
 
 #endif // DEBUG
 
-extern DebugLogger Debug; ///< グローバルインスタンスの宣言
+extern DebugLogger Logger; ///< グローバルインスタンスの宣言

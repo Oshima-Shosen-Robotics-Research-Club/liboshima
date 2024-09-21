@@ -17,12 +17,12 @@ ImReceiver::ErrorCode
 void
 #endif
 ImReceiver::receive(uint8_t *data, size_t size) {
-  Debug.println("ImReceiver", "receive", "Receiving data");
+  Logger.println("ImReceiver", "receive", "Receiving data");
 
 #if defined(DEBUG)
   // データが利用可能でない場合はエラーを返す
   if (!available()) {
-    Debug.println("ImReceiver", "receive", "No data available");
+    Logger.println("ImReceiver", "receive", "No data available");
     return ErrorCode::NO_DATA_AVAILABLE;
   }
 #endif
@@ -39,18 +39,18 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   serial.read(); // 改行コード'\r\n'を読み飛ばす
 
   // 受信文字をデバッグ出力
-  Debug.printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
+  Logger.printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
 
 #if defined(DEBUG)
   // 受信文字列の長さが予期される長さと一致しない場合はエラーを返す
   if (length != 10 + 1 + size * 2 + size - 1) {
-    Debug.printlnf("ImReceiver", "receive",
-                   "Received string length invalid: %d", length);
+    Logger.printlnf("ImReceiver", "receive",
+                    "Received string length invalid: %d", length);
     return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
   }
 
   if (recvedStr[10] != ':') {
-    Debug.println("ImReceiver", "receive", "Colon not found");
+    Logger.println("ImReceiver", "receive", "Colon not found");
     return ErrorCode::COLON_NOT_FOUND;
   }
 #endif
@@ -62,7 +62,7 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   // 無効な文字列が含まれている場合はエラーを返す
   if (!((pos[0] >= '0' && pos[0] <= '9') || (pos[0] >= 'A' && pos[0] <= 'F')) ||
       !((pos[1] >= '0' && pos[1] <= '9') || (pos[1] >= 'A' && pos[1] <= 'F'))) {
-    Debug.println("ImReceiver", "receive", "Data string invalid");
+    Logger.println("ImReceiver", "receive", "Data string invalid");
     return ErrorCode::DATA_STRING_INVALID;
   }
 #endif
@@ -77,7 +77,7 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   }
 
   // データをデバッグ出力
-  Debug.println("ImReceiver", "receive", "Data received");
+  Logger.println("ImReceiver", "receive", "Data received");
 
 #if defined(DEBUG)
   return ErrorCode::SUCCESS;
