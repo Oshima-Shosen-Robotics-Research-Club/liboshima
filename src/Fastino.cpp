@@ -1,4 +1,4 @@
-#include <FArduino.h>
+#include <Fastino.h>
 #include <HardwareSerial.h>
 
 int main() {
