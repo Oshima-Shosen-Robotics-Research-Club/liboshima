@@ -1,7 +1,5 @@
 #pragma once
 
-#include <avr/interrupt.h>
-#include <avr/io.h>
 #include <stddef.h>
 #include <stdint.h>
 
