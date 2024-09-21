@@ -9,7 +9,7 @@
 #include <components/servos/HS_485HB.h>
 #include <components/servos/MG90S.h>
 #include <digitalWriteFast.h>
-#include <serials/FastSerial.h>
+#include <serials/FastwareSerial.h>
 #include <serials/SerialPort.h>
 #include <utils/Converter.h>
 #include <utils/DebugLogger.h>
