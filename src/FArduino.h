@@ -16,11 +16,5 @@
 
 inline void setup();
 inline void loop();
-
-int main() {
-  setup();
-  while (true) {
-    loop();
-  }
-  return 0;
-}
+extern SerialPort FSerialPort;
+extern SerialPort HSerialPort;
