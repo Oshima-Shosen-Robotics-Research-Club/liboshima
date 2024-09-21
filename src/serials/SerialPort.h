@@ -6,15 +6,15 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/** 
+/**
  * シリアル通信を抽象化するクラス
-*/
+ */
 class SerialPort {
 public:
   // コンストラクタは異なるシリアルオブジェクトを受け取る
   SerialPort(HardwareSerial &serial);
   SerialPort(SoftwareSerial &serial);
-  SerialPort(FastSerial &serial);
+  SerialPort(FastwareSerial &serial);
 
   // 関数ポインタが使えないため
   void begin(unsigned long baudrate);
@@ -30,8 +30,8 @@ private:
   // 基本シリアルオブジェクトへのポインタ
   HardwareSerial *hwSerial;
   SoftwareSerial *swSerial;
-  FastSerial *fSerial;
+  FastwareSerial *fSerial;
 
   // どのシリアルが有効かを示すフラグ
-  enum SerialType { NONE, HARDWARE, SOFTWARE, FAST } serialType;
+  enum SerialType { NONE, HARDWARE, SOFTWARE, FASTWARE } serialType;
 };

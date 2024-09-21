@@ -1,11 +1,11 @@
 #include "FastSerial.h"
 #include <utils/Converter.h>
 
-FastSerial FSerial;
+FastwareSerial FastSerial;
 
-void (*FastSerial::user_onReceive)(void) = NULL;
+void (*FastwareSerial::user_onReceive)(void) = NULL;
 
-void FastSerial::begin(unsigned long baudrate) {
+void FastwareSerial::begin(unsigned long baudrate) {
 #if defined(__AVR_ATmega328P__)
   UBRR0 = (F_CPU / 16 / baudrate - 1);
   UCSR0B = _BV(RXEN0) | _BV(TXEN0) | _BV(RXCIE0);
@@ -14,13 +14,13 @@ void FastSerial::begin(unsigned long baudrate) {
 #endif
 }
 
-uint8_t FastSerial::available() {
+uint8_t FastwareSerial::available() {
 #if defined(__AVR_ATmega328P__)
   return UCSR0A & _BV(RXC0);
 #endif
 }
 
-char FastSerial::read() {
+char FastwareSerial::read() {
 #if defined(__AVR_ATmega328P__)
   while (!available())
     ;
@@ -28,8 +28,8 @@ char FastSerial::read() {
 #endif
 }
 
-uint8_t FastSerial::readBytesUntil(char terminator, char *buffer,
-                                   uint8_t length) {
+uint8_t FastwareSerial::readBytesUntil(char terminator, char *buffer,
+                                       uint8_t length) {
   uint8_t count = 0;
   while (count < length) {
     while (!available())
@@ -43,7 +43,7 @@ uint8_t FastSerial::readBytesUntil(char terminator, char *buffer,
   return count;
 }
 
-uint8_t FastSerial::write(uint8_t data) {
+uint8_t FastwareSerial::write(uint8_t data) {
 #if defined(__AVR_ATmega328P__)
   while (!(UCSR0A & _BV(UDRE0)))
     ;
@@ -52,7 +52,7 @@ uint8_t FastSerial::write(uint8_t data) {
 #endif
 }
 
-uint8_t FastSerial::print(const char *str) {
+uint8_t FastwareSerial::print(const char *str) {
   uint8_t count = 0;
   while (*str) {
     write(*str++);
@@ -61,15 +61,15 @@ uint8_t FastSerial::print(const char *str) {
   return count;
 }
 
-uint8_t FastSerial::println(const char *str) {
+uint8_t FastwareSerial::println(const char *str) {
   uint8_t count = print(str);
   count += println();
   return count;
 }
 
-uint8_t FastSerial::println() { return print("\r\n"); }
+uint8_t FastwareSerial::println() { return print("\r\n"); }
 
-uint8_t FastSerial::print(uint8_t value) {
+uint8_t FastwareSerial::print(uint8_t value) {
   uint8_t count = 0;
   char buffer[3]; // 1byte分の16進数表現に必要な2文字 + null文字
   Converter::toHex(&value, 1, buffer);
@@ -77,14 +77,14 @@ uint8_t FastSerial::print(uint8_t value) {
   return count;
 }
 
-void FastSerial::onReceive(void (*function)(void)) {
+void FastwareSerial::onReceive(void (*function)(void)) {
   user_onReceive = function;
 }
 
 #if defined(__AVR_ATmega328P__)
 ISR(USART_RX_vect) {
-  if (FastSerial::user_onReceive) {
-    FastSerial::user_onReceive();
+  if (FastwareSerial::user_onReceive) {
+    FastwareSerial::user_onReceive();
   }
 }
 #endif

@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-class FastSerial {
+class FastwareSerial {
 public:
   void begin(unsigned long baudrate);
   uint8_t available();
@@ -20,4 +20,4 @@ public:
   static void (*user_onReceive)(void);
 };
 
-extern FastSerial FSerial;
+extern FastwareSerial FastSerial;
