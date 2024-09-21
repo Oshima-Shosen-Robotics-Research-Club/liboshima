@@ -3,22 +3,29 @@
 
 FastSerial FSerial;
 
-#if defined(__AVR_ATmega328P__)
 void (*FastSerial::user_onReceive)(void) = NULL;
 
 void FastSerial::begin(unsigned long baudrate) {
+#if defined(__AVR_ATmega328P__)
   UBRR0 = (F_CPU / 16 / baudrate - 1);
   UCSR0B = _BV(RXEN0) | _BV(TXEN0) | _BV(RXCIE0);
   UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
   sei();
+#endif
 }
 
-uint8_t FastSerial::available() { return UCSR0A & _BV(RXC0); }
+uint8_t FastSerial::available() {
+#if defined(__AVR_ATmega328P__)
+  return UCSR0A & _BV(RXC0);
+#endif
+}
 
 char FastSerial::read() {
+#if defined(__AVR_ATmega328P__)
   while (!available())
     ;
   return UDR0;
+#endif
 }
 
 uint8_t FastSerial::readBytesUntil(char terminator, char *buffer,
@@ -37,10 +44,12 @@ uint8_t FastSerial::readBytesUntil(char terminator, char *buffer,
 }
 
 uint8_t FastSerial::write(uint8_t data) {
+#if defined(__AVR_ATmega328P__)
   while (!(UCSR0A & _BV(UDRE0)))
     ;
   UDR0 = data;
   return 1;
+#endif
 }
 
 uint8_t FastSerial::print(const char *str) {
@@ -72,6 +81,7 @@ void FastSerial::onReceive(void (*function)(void)) {
   user_onReceive = function;
 }
 
+#if defined(__AVR_ATmega328P__)
 ISR(USART_RX_vect) {
   if (FastSerial::user_onReceive) {
     FastSerial::user_onReceive();
