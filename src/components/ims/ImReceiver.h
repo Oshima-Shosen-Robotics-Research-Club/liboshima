@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include "serials/SerialPort.h"
-#include "utils/DebugLogger.h"
 #include <SoftwareSerial.h>
+#include <serials/SerialPort.h>
+#include <utils/DebugLogger.h>
 
 // タイマーオーバーフローに最適な時間間隔 (ミリ秒単位)
 // この定義は受信タイミングの調整に使用される可能性があります。

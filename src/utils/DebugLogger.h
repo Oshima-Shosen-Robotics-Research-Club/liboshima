@@ -1,7 +1,7 @@
 #pragma once
 
-#include "serials/SerialPort.h"
 #include <Arduino.h>
+#include <serials/SerialPort.h>
 
 #if defined(DEBUG)
 /**
