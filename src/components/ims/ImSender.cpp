@@ -1,10 +1,9 @@
 #include "ImSender.h"
 #include <SoftwareSerial.h>
 
-ImSender::ImSender(SerialPort &serial, unsigned long baudrate)
-    : serial(serial) {
-  serial.begin(baudrate);
-}
+ImSender::ImSender(SerialPort &serial) : serial(serial) {}
+
+void ImSender::begin(unsigned long baudrate) { serial.begin(baudrate); }
 
 // "TXDA 000000\r\n" という形式でデータを送信する
 #ifdef DEBUG

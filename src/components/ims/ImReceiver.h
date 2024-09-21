@@ -45,9 +45,8 @@ public:
    * `HardwareSerial` インスタンスを使用して通信を行います。
    *
    * @param serial 使用する `HardwareSerial` インスタンスの参照
-   * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
    */
-  ImReceiver(SerialPort &serial, unsigned long baudrate = 19200);
+  ImReceiver(SerialPort &serial);
 
 #if defined(DEBUG)
   /**
@@ -66,6 +65,12 @@ public:
     DATA_STRING_INVALID, /**< データ文字列が無効であることを示します。*/
   };
 #endif
+
+  /**
+   * @brief データ受信を開始するメソッド
+   * @param baudrate 通信速度（ボーレート）
+   */
+  void begin(unsigned long baudrate = 19200);
 
   /**
    * @brief データが利用可能かどうかをチェックするメソッド

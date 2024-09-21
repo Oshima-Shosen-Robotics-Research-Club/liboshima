@@ -39,9 +39,8 @@ public:
    * `HardwareSerial` インスタンスを使用して通信を行います。
    *
    * @param serial 使用する `HardwareSerial` インスタンスの参照
-   * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
    */
-  ImSender(SerialPort &serial, unsigned long baudrate = 19200);
+  ImSender(SerialPort &seria);
 
 #ifdef DEBUG
   /**
@@ -55,6 +54,12 @@ public:
     INVALID_DATA_SIZE /**< データサイズが無効であることを示します。 */
   };
 #endif
+
+  /**
+   * @brief データ送信を開始するメソッド
+   * @param baudrate 通信速度（ボーレート）
+   */
+  void begin(unsigned long baudrate = 19200);
 
   /**
    * @brief データを送信するテンプレートメソッド

@@ -3,10 +3,9 @@
 #include <utils/Converter.h>
 
 // HardwareSerial の場合
-ImReceiver::ImReceiver(SerialPort &serial, unsigned long baudrate)
-    : serial(serial) {
-  serial.begin(baudrate);
-}
+ImReceiver::ImReceiver(SerialPort &serial) : serial(serial) {}
+
+void ImReceiver::begin(unsigned long baudrate) { serial.begin(baudrate); }
 
 // データが利用可能かどうかをチェックするメソッド
 bool ImReceiver::available() { return serial.available(); }
