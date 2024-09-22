@@ -2,9 +2,9 @@
 
 #include <Arduino.h>
 
-class NonAdjustable {
+class NonSpeedAdjustable {
 public:
-  NonAdjustable(uint8_t pin1, uint8_t pin2);
+  NonSpeedAdjustable(uint8_t pin1, uint8_t pin2);
   void forward();
   void reverse();
   void stop();
