@@ -27,6 +27,6 @@ jobs:
         for dir in examples/*; do
           if [ -d "$dir" ]; then
             echo "Building project in $dir"
-            platformio ci "$dir" --board ATmega328P --lib="."
+            platformio ci "$dir" --board ATmega328P --lib="." --project-option="lib_ldf_mode=deep+"
           fi
         done
