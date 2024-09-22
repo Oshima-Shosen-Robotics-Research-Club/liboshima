@@ -3,7 +3,7 @@
  * @brief TB67H450モータードライバのクラス定義
  *
  * このファイルには、TB67H450モータードライバを制御するための
- * `TB67H450` クラスが定義されています。このクラスは `MotorDriver` クラスを
+ * `TB67H450` クラスが定義されています。このクラスは `ISpeedAdjustable` クラスを
  * 継承し、モーターの前進、後退、停止、速度設定の機能を提供します。
  *
  * @note このクラスは、PWM信号を使用してモーターを制御します。
@@ -12,7 +12,7 @@
 #ifndef TB67H450_H
 #define TB67H450_H
 
-#include "MotorDriver.h"
+#include "ISpeedAdjustable.h"
 
 /**
  * @class TB67H450
@@ -22,7 +22,7 @@
  * 制御するための機能を提供します。PWM信号を利用してモーターの速度と
  * 方向を制御します。
  */
-class TB67H450 : public MotorDriver {
+class TB67H450 : public ISpeedAdjustable {
 private:
   uint8_t in1; /**< PWM信号を出力するピンの番号1 */
   uint8_t in2; /**< PWM信号を出力するピンの番号2 */
