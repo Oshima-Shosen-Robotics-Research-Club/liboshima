@@ -1,12 +1,22 @@
 #include "SerialPort.h"
 
-// HardwareSerial用コンストラクタ
-SerialPort::SerialPort(HardwareSerial &serial) {
+#if defined(USE_FASTWARE_SERIAL)
+// FastSerial用コンストラクタ
+SerialPort::SerialPort(FastwareSerial &serial) {
+  hwSerial = nullptr;
+  swSerial = nullptr;
+  fwSerial = &serial;
+  serialType = FASTWARE;
+}
+else
+    // HardwareSerial用コンストラクタ
+    SerialPort::SerialPort(HardwareSerial &serial) {
   hwSerial = &serial;
   swSerial = nullptr;
   fwSerial = nullptr;
   serialType = HARDWARE;
 }
+#endif
 
 // SoftwareSerial用コンストラクタ
 SerialPort::SerialPort(SoftwareSerial &serial) {
@@ -14,14 +24,6 @@ SerialPort::SerialPort(SoftwareSerial &serial) {
   swSerial = &serial;
   fwSerial = nullptr;
   serialType = SOFTWARE;
-}
-
-// FastSerial用コンストラクタ
-SerialPort::SerialPort(FastwareSerial &serial) {
-  hwSerial = nullptr;
-  swSerial = nullptr;
-  fwSerial = &serial;
-  serialType = FASTWARE;
 }
 
 // 各関数の実装はシリアルタイプに応じてメンバ関数を呼び出す

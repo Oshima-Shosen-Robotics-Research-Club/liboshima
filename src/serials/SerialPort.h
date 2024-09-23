@@ -1,8 +1,12 @@
 #pragma once
 
+#if defined(USE_FASTWARE_SERIAL)
 #include "FastwareSerial.h"
+#else
 #include <HardwareSerial.h>
+#endif
 #include <SoftwareSerial.h>
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -11,10 +15,13 @@
  */
 class SerialPort {
 public:
-  // コンストラクタは異なるシリアルオブジェクトを受け取る
-  SerialPort(HardwareSerial &serial);
-  SerialPort(SoftwareSerial &serial);
+// コンストラクタは異なるシリアルオブジェクトを受け取る
+#if defined(USE_FASTWARE_SERIAL)
   SerialPort(FastwareSerial &serial);
+#else
+  SerialPort(HardwareSerial &serial);
+#endif
+  SerialPort(SoftwareSerial &serial);
 
   // 関数ポインタが使えないため
   void begin(unsigned long baudrate);
@@ -27,10 +34,16 @@ public:
   uint8_t println();
 
 private:
-  // 基本シリアルオブジェクトへのポインタ
-  HardwareSerial *hwSerial;
+// 基本シリアルオブジェクトへのポインタ
+#if defined(USE_FASTWARE_SERIAL)
+  FastwareSerial *hwSerial; // dummy
   SoftwareSerial *swSerial;
   FastwareSerial *fwSerial;
+#else
+  HardwareSerial *hwSerial;
+  SoftwareSerial *swSerial;
+  HardwareSerial *fwSerial; // dummy
+#endif
 
   // どのシリアルが有効かを示すフラグ
   enum SerialType { NONE, HARDWARE, SOFTWARE, FASTWARE } serialType;
