@@ -10,11 +10,8 @@
 
 #pragma once
 
-#if defined(USE_FASTWARE_SERIAL)
 #include "FastwareSerial.h"
-#else
 #include <HardwareSerial.h>
-#endif
 #include <SoftwareSerial.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -37,9 +34,8 @@ public:
    *
    * @param serial 使用する `FastwareSerial` オブジェクトの参照
    */
-#if defined(USE_FASTWARE_SERIAL)
   SerialPort(FastwareSerial &serial);
-#else
+
   /**
    * @brief HardwareSerial 用のコンストラクタ
    *
@@ -48,7 +44,6 @@ public:
    * @param serial 使用する `HardwareSerial` オブジェクトの参照
    */
   SerialPort(HardwareSerial &serial);
-#endif
 
   /**
    * @brief SoftwareSerial 用のコンストラクタ
@@ -139,14 +134,8 @@ public:
   uint8_t println();
 
 private:
-  // 基本シリアルオブジェクトへのポインタ
-#if defined(USE_FASTWARE_SERIAL)
   FastwareSerial *fwSerial; /**< FastwareSerial オブジェクトのポインタ */
-  FastwareSerial *hwSerial; /**< dummy */
-#else
   HardwareSerial *hwSerial; /**< HardwareSerial オブジェクトのポインタ */
-  HardwareSerial *fwSerial; /**< dummy */
-#endif
   SoftwareSerial *swSerial; /**< SoftwareSerial オブジェクトのポインタ */
 
   /**

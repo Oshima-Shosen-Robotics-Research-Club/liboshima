@@ -1,6 +1,5 @@
 #include "SerialPort.h"
 
-#if defined(USE_FASTWARE_SERIAL)
 // FastSerial用コンストラクタ
 SerialPort::SerialPort(FastwareSerial &serial) {
   hwSerial = nullptr;
@@ -8,15 +7,14 @@ SerialPort::SerialPort(FastwareSerial &serial) {
   fwSerial = &serial;
   serialType = FASTWARE;
 }
-else
-    // HardwareSerial用コンストラクタ
-    SerialPort::SerialPort(HardwareSerial &serial) {
+
+// HardwareSerial用コンストラクタ
+SerialPort::SerialPort(HardwareSerial &serial) {
   hwSerial = &serial;
   swSerial = nullptr;
   fwSerial = nullptr;
   serialType = HARDWARE;
 }
-#endif
 
 // SoftwareSerial用コンストラクタ
 SerialPort::SerialPort(SoftwareSerial &serial) {

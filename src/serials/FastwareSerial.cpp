@@ -80,7 +80,8 @@ void FastwareSerial::onReceive(void (*function)(void)) {
   user_onReceive = function;
 }
 
-#if defined(__AVR_ATmega328P__)
+// please define this macro yourself (todo: fix this system)
+#if defined(__AVR_ATmega328P__) && defined(USE_FASTWARE_SERIAL)
 ISR(USART_RX_vect) {
   if (FastSerial.user_onReceive) {
     FastSerial.user_onReceive();
