@@ -11,7 +11,6 @@
 
 #include "ImReceiver.h"
 #include "ImSender.h"
-#include "serials/SerialPort.h"
 
 /**
  * @class IM920SL

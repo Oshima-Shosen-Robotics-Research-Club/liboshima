@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <SoftwareSerial.h>
 #include <serials/SerialPort.h>
 #include <utils/DebugLogger.h>
 
