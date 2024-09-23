@@ -8,7 +8,7 @@ ImReceiver::ImReceiver(SerialPort &serial) : serial(serial) {}
 void ImReceiver::begin(unsigned long baudrate) { serial.begin(baudrate); }
 
 // データが利用可能かどうかをチェックするメソッド
-bool ImReceiver::available() { return serial.available(); }
+uint8_t ImReceiver::available() { return serial.available(); }
 
 // "00,0000,00:00,00,00\r\n" という形式のデータを受信する
 #if defined(DEBUG)
