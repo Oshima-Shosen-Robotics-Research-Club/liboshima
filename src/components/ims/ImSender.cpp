@@ -1,5 +1,4 @@
 #include "ImSender.h"
-#include <SoftwareSerial.h>
 
 ImSender::ImSender(SerialPort &serial) : serial(serial) {}
 

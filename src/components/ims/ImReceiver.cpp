@@ -1,5 +1,4 @@
 #include "ImReceiver.h"
-#include <SoftwareSerial.h>
 #include <utils/Converter.h>
 
 // HardwareSerial の場合
