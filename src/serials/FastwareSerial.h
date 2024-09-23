@@ -12,6 +12,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define USE_FASTWARE_SERIAL
+
 /**
  * @class FastwareSerial
  * @brief 高速シリアル通信を提供するクラス
