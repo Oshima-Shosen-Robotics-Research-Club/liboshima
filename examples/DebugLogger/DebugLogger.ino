@@ -1,8 +1,11 @@
 #include <utils/DebugLogger.h>
+#include <serials/SerialPort.h>
 
-void setup() { DebugLogger::init(Serial); }
+SerialPort serial(Serial);
+
+void setup() { Logger.init(serial); }
 
 void loop() {
-  DebugLogger::println("main", "loop", "Hello, world!");
+  Logger.println("main", "loop", "Hello, world!");
   delay(1000);
 }

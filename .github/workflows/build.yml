@@ -1,0 +1,32 @@
+name: Compile Examples
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install PlatformIO
+      run: |
+        python -m pip install -U platformio
+
+    - name: Compile all examples
+      run: |
+        for dir in examples/*; do
+          if [ -d "$dir" ]; then
+            echo "Building project in $dir"
+            platformio ci "$dir" --board ATmega328P --lib="." --project-option="lib_ldf_mode=deep+"
+          fi
+        done

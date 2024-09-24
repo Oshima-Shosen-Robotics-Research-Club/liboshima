@@ -1,9 +1,9 @@
 /**
- * @file MotorDriver.h
+ * @file ISpeedAdjustable.h
  * @brief モータードライバの抽象基底クラス定義
  *
- * このファイルには、モータードライバのための抽象基底クラス `MotorDriver` が
- * 定義されています。`MotorDriver` クラスは、モーターの速度設定、前進、
+ * このファイルには、モータードライバのための抽象基底クラス `ISpeedAdjustable`
+ * が 定義されています。`ISpeedAdjustable` クラスは、モーターの速度設定、前進、
  * 後退、停止のためのインターフェースを提供します。このクラスを継承する
  * クラスは、これらのメソッドを実装する必要があります。
  */
@@ -14,14 +14,14 @@
 #include <Arduino.h>
 
 /**
- * @class MotorDriver
+ * @class ISpeedAdjustable
  * @brief モーターを制御するための抽象基底クラス
  *
- * `MotorDriver` クラスは、モーターの速度設定や制御（前進、後退、停止）を
+ * `ISpeedAdjustable` クラスは、モーターの速度設定や制御（前進、後退、停止）を
  * 行うための純粋仮想メソッドを定義した抽象基底クラスです。このクラスを
  * 継承するクラスは、これらのメソッドを実装する必要があります。
  */
-class MotorDriver {
+class ISpeedAdjustable {
 public:
   /**
    * @brief モーターの速度を設定するメソッド

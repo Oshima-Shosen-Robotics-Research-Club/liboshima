@@ -3,7 +3,7 @@
  * @brief BD62193モータードライバのクラス定義
  *
  * このファイルには、BD62193モータードライバを制御するための
- * `BD62193` クラスが定義されています。このクラスは `MotorDriver` クラスを
+ * `BD62193` クラスが定義されています。このクラスは `ISpeedAdjustable` クラスを
  * 継承し、モーターの前進、後退、停止、速度設定の機能を提供します。
  *
  * @note このクラスは、PWM制御をサポートしており、モーターの制御に
@@ -13,7 +13,7 @@
 #ifndef BD62193_H
 #define BD62193_H
 
-#include "MotorDriver.h"
+#include "ISpeedAdjustable.h"
 
 /**
  * @class BD62193
@@ -23,7 +23,7 @@
  * 制御するための機能を提供します。PWMピンを使用するかどうかに
  * 依存して、モーターの前進、後退、停止、速度設定を行います。
  */
-class BD62193 : public MotorDriver {
+class BD62193 : public ISpeedAdjustable {
 private:
   uint8_t inA_PIN;      /**< モーターの入力Aピンの番号 */
   uint8_t inB_PIN;      /**< モーターの入力Bピンの番号 */

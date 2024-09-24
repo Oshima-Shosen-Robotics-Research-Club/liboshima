@@ -1,13 +1,3 @@
-■exampleの実行の仕方
-①platform.iniのlib_depsにこのライブラリを記述
-②platform.iniに
-[platformio]
-src_dir = .pio/libdeps/${PIOENV}/liboshima/examples/実行したいプログラム名
-を記述
-③チェックボタンでビルド
-
-参考: https://asukiaaa.blogspot.com/2021/04/build-an-examlpe-file-on-platformio.html
-
 ■PlatformIO Library Registry
 https://registry.platformio.org/libraries/soshirofujimori/liboshima
 

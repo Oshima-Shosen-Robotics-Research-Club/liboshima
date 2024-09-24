@@ -1,136 +1,133 @@
 /**
  * @file ImReceiver.h
- * @brief IM920SL通信モジュールを用いたデータ受信のためのクラス定義
+ * @brief IM920SL通信モジュールを用いたデータ受信クラスの宣言
  *
- * このファイルには、IM920SL通信モジュールを用いてデータを受信するための
- * `ImReceiver` クラスが定義されています。`ImReceiver`
- * クラスは、`HardwareSerial` または `SoftwareSerial`
- * と連携してデータを受信し、受信したデータを指定した
- * 型に変換する機能を提供します。
- *
- * @note このクラスは、テンプレートメソッドを使用して様々な型のデータを
- *       受信することができます。
+ * このファイルは、IM920SL無線モジュールを使ってデータ受信を行うクラス
+ * `ImReceiver`
+ * の定義を提供します。このクラスを使用してデータの受信および処理が可能です。
  */
 
 #pragma once
 
-#include "utils/DebugLogger.h"
-#include <SoftwareSerial.h>
+#include <serials/SerialPort.h>
+#include <utils/DebugLogger.h>
 
-// タイマーオーバーフローに最適な時間間隔 (ミリ秒単位)
-// この定義は受信タイミングの調整に使用される可能性があります。
-// ユーザーが調整することで、受信間隔を制御できます。
+// タイマーオーバーフロー設定で役に立つ定数（ミリ秒）
 #define IM_RECEIVE_INTERVAL_MILLIS 500
 
-// タイマーオーバーフローに最適な時間間隔 (マイクロ秒単位)
-// この定義は受信タイミングの調整に使用される可能性があります。
-// ユーザーが調整することで、受信間隔を制御できます。
+// タイマーオーバーフロー設定で役に立つ定数（マイクロ秒）
 #define IM_RECEIVE_INTERVAL_MICROS 500000
 
 /**
  * @class ImReceiver
- * @brief IM920SL通信モジュールを用いたデータ受信を行うクラス
+ * @brief IM920SL通信モジュールを用いたデータ受信クラス
  *
- * `ImReceiver` クラスは、IM920SL通信モジュールを使用してデータを受信し、
- * 受信したデータを指定した型に変換するための機能を提供します。このクラスは
- * `HardwareSerial` または `SoftwareSerial` と連携し、テンプレートメソッドを
- * 使用してさまざまな型のデータを受信することができます。
+ * `ImReceiver` クラスは、IM920SL通信モジュールを使ってデータを受信するための
+ * 機能を提供します。`HardwareSerial` や `SoftwareSerial` を使用してデータの
+ * 受信を管理し、テンプレートメソッドによって様々な型のデータを効率的に
+ * 受信することができます。
  */
 class ImReceiver {
 public:
   /**
-   * @brief コンストラクタ (HardwareSerial バージョン)
+   * @brief コンストラクタ (HardwareSerialバージョン)
    *
-   * `HardwareSerial` インスタンスを使用して通信を行います。
+   * このコンストラクタは、指定された `HardwareSerial` インスタンスを用いて
+   * IM920SLモジュールからのデータ受信を行います。
    *
    * @param serial 使用する `HardwareSerial` インスタンスの参照
-   * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
    */
-  ImReceiver(HardwareSerial &serial, unsigned long baudrate = 19200);
-
-  /**
-   * @brief コンストラクタ (SoftwareSerial バージョン)
-   *
-   * `SoftwareSerial` インスタンスを使用して通信を行います。
-   *
-   * @param serial 使用する `SoftwareSerial` インスタンスの参照
-   * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
-   */
-  ImReceiver(SoftwareSerial &serial, unsigned long baudrate = 19200);
+  ImReceiver(SerialPort &serial);
 
 #if defined(DEBUG)
   /**
    * @enum ErrorCode
-   * @brief エラーコードの列挙型
+   * @brief エラーコードの定義
    *
-   * `ImReceiver` クラスで発生する可能性のあるエラーコードを定義します。
+   * この列挙型は、データ受信中に発生する可能性のあるエラーを表します。
    */
   enum class ErrorCode {
     SUCCESS, /**< データ受信が成功したことを示します。 */
-    NO_DATA_AVAILABLE, /**< データが利用可能でないことを示します。 */
+    NO_DATA_AVAILABLE, /**< データが利用できないことを示します。 */
     RECEIVED_STRING_LENGTH_INVALID, /**<
                                        受信文字列の長さが無効であることを示します。
                                      */
-    COLON_NOT_FOUND, /**< 文字列内にコロンが見つからないことを示します。 */
-    DATA_STRING_INVALID, /**< データ文字列が無効であることを示します。*/
+    COLON_NOT_FOUND,                /**< 受信データ内にコロン `:`
+                                       が見つからないことを示します。 */
+    DATA_STRING_INVALID, /**< 受信データ文字列が無効であることを示します。 */
   };
 #endif
 
   /**
-   * @brief データが利用可能かどうかをチェックするメソッド
+   * @brief 通信の初期化を行うメソッド
    *
-   * このメソッドは、受信バッファにデータが利用可能かどうかを確認します。
+   * 指定されたボーレート（通信速度）で、IM920SLモジュールとの通信を開始します。
+   * デフォルトのボーレートは19200bpsです。
    *
-   * @return データが利用可能であれば `true`、そうでなければ `false`
-   * を返します。
+   * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
    */
-  bool available();
+  void begin(unsigned long baudrate = 19200);
 
   /**
-   * @brief データを受信するテンプレートメソッド
+   * @brief 受信可能なデータのバイト数を取得
    *
-   * このメソッドは、テンプレート型 `T` のデータを受信し、指定された型に
-   * 変換します。サポートされる型は `int` 型、`float` 型、構造体などの
-   * 直接値を保持する型に限定されています。
+   * 受信バッファにあるデータのバイト数を返します。主に、データが
+   * 受信可能かどうかを確認するために使用されます。
    *
-   * @tparam T 受信するデータの型
-   * @param data 受信したデータを格納する変数の参照
-   * @return データ受信の結果を示す `ErrorCode`
-   *
-   * @note 受信データはコロン `:` で区切られた形式であると想定しています。
-   *       受信文字列の長さが予期される長さと一致しない場合や、データの
-   *       長さが無効である場合は、エラーコードが返されます。
+   * @return 利用可能なバイト数
    */
-  template <typename T>
+  uint8_t available();
+
 #if defined(DEBUG)
-  ErrorCode receive(T &data) {
+  /**
+   * @brief データを受信して型に変換するテンプレートメソッド
+   *
+   * テンプレート型 `T`
+   * で指定されたデータを受信し、指定した型の変数に格納します。 データは、コロン
+   * `:` で区切られた形式で受信されることを想定しています。
+   *
+   * @tparam T 受信するデータの型（例: `int`、`float`、構造体など）
+   * @param data 受信したデータを格納する変数の参照
+   * @return エラーコード（`ErrorCode`）を返し、受信結果を示します。
+   */
+  template <typename T> ErrorCode receive(T &data) {
     return receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
   }
 #else
-  void receive(T &data) {
+  /**
+   * @brief データを受信して型に変換するテンプレートメソッド
+   *
+   * テンプレート型 `T`
+   * で指定されたデータを受信し、指定した型の変数に格納します。
+   * 受信データは、コロン `:` で区切られた形式を前提としています。
+   *
+   * @tparam T 受信するデータの型（例: `int`、`float`、構造体など）
+   * @param data 受信したデータを格納する変数の参照
+   */
+  template <typename T> void receive(T &data) {
     receive(reinterpret_cast<uint8_t *>(&data), sizeof(T));
   }
 #endif
 
 private:
-  Stream &serial; /**< データ受信に使用するシリアル通信ストリーム */
+  SerialPort &serial; /**< データ受信に使用するシリアル通信ストリーム */
 
 #if defined(DEBUG)
+  /**
+   * @brief データを受信してバッファに格納するメソッド
+   *
+   * @param data 受信したデータを格納するバッファ
+   * @param size 受信するデータのサイズ
+   * @return エラーコード（`ErrorCode`）を返し、受信結果を示します。
+   */
   ErrorCode receive(uint8_t *data, size_t size);
 #else
+  /**
+   * @brief データを受信してバッファに格納するメソッド
+   *
+   * @param data 受信したデータを格納するバッファ
+   * @param size 受信するデータのサイズ
+   */
   void receive(uint8_t *data, size_t size);
 #endif
-};
-
-// バイナリのサイズは大きくなるが、処理が増えるわけではないので、問題ないと考える
-/*
-'0' = 48, '9' = 57, 'A' = 65, 'F' = 70
-*/
-constexpr uint8_t lookup[] = {
-    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16,
-    17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-    34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, // パディング
-    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,                  // 0-9
-    58, 59, 60, 61, 62, 63, 64,                             // パディング
-    10, 11, 12, 13, 14, 15,                                 // A-F
 };

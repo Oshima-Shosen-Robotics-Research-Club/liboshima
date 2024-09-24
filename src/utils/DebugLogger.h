@@ -1,107 +1,107 @@
-#ifndef DEBUG_LOGGER_H
-#define DEBUG_LOGGER_H
+#pragma once
 
 #include <Arduino.h>
-#include <SoftwareSerial.h>
-#include <Stream.h>
+#include <serials/SerialPort.h>
 
 #if defined(DEBUG)
 /**
+ * @class DebugLogger
  * @brief デバッグメッセージをシリアルポートに出力するクラス
  *
  * `DebugLogger`
- * クラスは、ハードウェアまたはソフトウェアのシリアルポートにデバッグメッセージを出力するためのメソッドを提供します。
- * シンプルなメッセージやフォーマットされたメッセージの出力がサポートされています。
+ * クラスは、ハードウェアまたはソフトウェアのシリアルポートを使用して、デバッグメッセージを出力するための機能を提供します。
+ * クラス名やメソッド名を指定してシンプルなログメッセージやフォーマットされたメッセージを出力することができます。
  *
- * デバッグメッセージを出力するためには、`DEBUG` マクロを定義し、Init
- * メソッドを呼び出してシリアルポートを初期化する必要があります。
+ * このクラスのメソッドは `DEBUG` マクロが定義されている場合にのみ機能します。
  */
 class DebugLogger {
 public:
   /**
-   * @brief ハードウェアシリアルポートで `DebugLogger` を初期化します。
+   * @brief シリアルポートで `DebugLogger` を初期化します。
    *
-   * @param serial ログ出力に使用するハードウェアシリアルポート（例: Serial）。
+   * このメソッドは、指定されたシリアルポートとボーレートを使ってログの出力を行う準備をします。
+   *
+   * @param serial ログ出力に使用する `SerialPort` インスタンス（例:
+   * `Serial`）。
    * @param baudrate シリアル通信のボーレート（デフォルトは 19200）。
    */
-  static void init(HardwareSerial &serial, unsigned long baudrate = 19200);
+  void init(SerialPort &serial, unsigned long baudrate = 19200);
 
   /**
-   * @brief ソフトウェアシリアルポートで `DebugLogger` を初期化します。
+   * @brief シンプルなデバッグメッセージを出力します。
    *
-   * @param serial ログ出力に使用するソフトウェアシリアルポート。
-   * @param baudrate シリアル通信のボーレート（デフォルトは 19200）。
-   */
-  static void init(SoftwareSerial &serial, unsigned long baudrate = 19200);
-
-  /**
-   * @brief ピン番号を使用してソフトウェアシリアルポートで `DebugLogger`
-   * を初期化します。
+   * このメソッドは、指定されたクラス名、メソッド名、メッセージをシリアルポートに出力します。
+   * デバッグ用にシンプルなメッセージを提供したい場合に使用します。
    *
-   * @param rxPin ソフトウェアシリアルポートの RX ピン番号。
-   * @param txPin ソフトウェアシリアルポートの TX ピン番号。
-   * @param baudrate シリアル通信のボーレート（デフォルトは 19200）。
-   */
-  static void init(uint8_t rxPin, uint8_t txPin,
-                   unsigned long baudrate = 19200);
-
-  /**
-   * @brief シンプルなデバッグメッセージをシリアルポートに出力します。
-   *
-   * @param className ログが呼び出されるクラスの名前。
-   * @param methodName ログが呼び出されるメソッドの名前。
+   * @param className 呼び出し元クラスの名前。
+   * @param methodName 呼び出し元メソッドの名前。
    * @param message 出力するデバッグメッセージ。
    */
-  static void println(const char *className, const char *methodName,
-                      const char *message);
+  void println(const char *className, const char *methodName,
+               const char *message);
 
   /**
-   * @brief フォーマットされたデバッグメッセージをシリアルポートに出力します。
+   * @brief フォーマットされたデバッグメッセージを出力します。
    *
-   * @param className ログが呼び出されるクラスの名前。
-   * @param methodName ログが呼び出されるメソッドの名前。
-   * @param format メッセージのフォーマット文字列（printf 形式）。
-   * @param ... メッセージをフォーマットするための可変引数。
+   * このメソッドは、指定されたクラス名、メソッド名と共に、可変引数を使用してフォーマットされたメッセージをシリアルポートに出力します。
+   * `printf`
+   * 形式でメッセージを指定できるため、動的な内容を含むメッセージを出力する際に便利です。
+   *
+   * @param className 呼び出し元クラスの名前。
+   * @param methodName 呼び出し元メソッドの名前。
+   * @param format メッセージのフォーマット文字列（`printf` 形式）。
+   * @param ... メッセージのフォーマットに使用する可変引数。
    */
-  static void printlnf(const char *className, const char *methodName,
-                       const char *format, ...);
+  void printlnf(const char *className, const char *methodName,
+                const char *format, ...);
 
 private:
   /**
-   * @brief ログ出力に使用するシリアルポートへの静的ポインタ。
+   * @brief ログの出力に使用するシリアルポートへのポインタ。
    */
-  static Stream *serialPort;
+  SerialPort *serialPort;
 };
-
-// デバッグメッセージを簡単に出力するためのマクロを定義します。
-#define LOG(className, methodName, message)                                    \
-  DebugLogger::println(className, methodName, message)
-
-/**
- * @brief フォーマットされたデバッグメッセージを簡単に出力するためのマクロ。
- *
- * @param className ログが呼び出されるクラスの名前。
- * @param methodName ログが呼び出されるメソッドの名前。
- * @param format メッセージのフォーマット文字列（printf 形式）。
- * @param ... メッセージをフォーマットするための可変引数。
- */
-#define LOGF(className, methodName, format, ...)                               \
-  DebugLogger::printlnf(className, methodName, format, ##__VA_ARGS__)
 
 #else // DEBUG is not defined
+/**
+ * @class DebugLogger
+ * @brief デバッグモードが無効な場合のダミークラス
+ *
+ * `DEBUG`
+ * が定義されていない場合、このクラスは機能しないダミーメソッドを持ち、パフォーマンスへの影響を最小限に抑えます。
+ */
 class DebugLogger {
 public:
-  static inline void init(HardwareSerial &, unsigned long = 19200) {}
-  static inline void init(SoftwareSerial &, unsigned long = 19200) {}
-  static inline void init(uint8_t, uint8_t, unsigned long = 19200) {}
+  /**
+   * @brief ダミーの初期化メソッド
+   *
+   * `DEBUG` が定義されていない場合、このメソッドは何もしません。
+   */
+  void init(SerialPort &serial, unsigned long baudrate = 19200) {}
 
-  static inline void println(const char *, const char *, const char *) {}
-  static inline void printlnf(const char *, const char *, const char *, ...) {}
+  /**
+   * @brief ダミーのメッセージ出力メソッド
+   *
+   * `DEBUG` が定義されていない場合、このメソッドは何もしません。
+   */
+  void println(const char *className, const char *methodName,
+               const char *message) {}
+
+  /**
+   * @brief ダミーのフォーマットメッセージ出力メソッド
+   *
+   * `DEBUG` が定義されていない場合、このメソッドは何もしません。
+   */
+  void printlnf(const char *className, const char *methodName,
+                const char *format, ...) {}
 };
-
-#define LOG(className, methodName, message) (void)0
-#define LOGF(className, methodName, format, ...) (void)0
 
 #endif // DEBUG
 
-#endif // DEBUG_LOGGER_H
+/**
+ * @brief グローバル `DebugLogger` インスタンス
+ *
+ * プロジェクト全体で使用するデフォルトの `DebugLogger` インスタンス。
+ * `DEBUG` が有効な場合にログを出力します。
+ */
+extern DebugLogger Logger;
