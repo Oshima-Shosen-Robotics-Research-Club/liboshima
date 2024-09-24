@@ -7,4 +7,5 @@ https://registry.platformio.org/libraries/soshirofujimori/liboshima
 ・不必要な処理や重い処理を含むライブラリ関数を使わないこと
 
 ■git cloneできない場合
-git config --global http.postBuffer 524288000  
+・git config --global http.postBuffer 524288000  
+・WiFiの代わりにモバイルデータ通信を使う
