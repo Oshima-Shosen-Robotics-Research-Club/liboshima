@@ -40,19 +40,25 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   // 受信文字をデバッグ出力
   Logger.printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
 
-#if defined(DEBUG)
   // 受信文字列の長さが予期される長さと一致しない場合はエラーを返す
   if (length != 10 + 1 + size * 2 + size - 1) {
     Logger.printlnf("ImReceiver", "receive",
                     "Received string length invalid: %d", length);
+#if defined(DEBUG)
     return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
+#else
+    return;
+#endif
   }
 
   if (recvedStr[10] != ':') {
     Logger.println("ImReceiver", "receive", "Colon not found");
+#if defined(DEBUG)
     return ErrorCode::COLON_NOT_FOUND;
-  }
+#else
+    return;
 #endif
+  }
 
   // データ部分のみを抽出
   char *pos = recvedStr + 11;
