@@ -26,8 +26,8 @@ ImSender::send(const uint8_t *data, size_t size) {
 
   // データをバイトごとに16進数形式で送信
   for (uint8_t i = 0; i < size; i++) {
-    serial.print(data[i] >> 4);
-    serial.print(data[i] & 0xF);
+    serial.print(data[i] >> 4, 16);
+    serial.print(data[i] & 0xF, 16);
   }
 
   // 送信終了を示す改行を送信

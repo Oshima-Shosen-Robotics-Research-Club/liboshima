@@ -112,7 +112,7 @@ public:
    * @param value 送信する数値データ
    * @return 送信に成功したバイト数
    */
-  uint8_t print(int value);
+  uint8_t print(int value, uint8_t base = 10);
 
   /**
    * @brief 文字列を送信し、改行を付加します。
