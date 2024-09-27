@@ -9,3 +9,9 @@ https://registry.platformio.org/libraries/soshirofujimori/liboshima
 ■git cloneできない場合
 ・git config --global http.postBuffer 524288000  
 ・WiFiの代わりにモバイルデータ通信を使う
+
+■このリポジトリの変更の仕方
+・https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace をVisual Studio Codeでクローンする。
+・クローンしたフォルダをVisual Studio Codeで開く。
+・libディレクトリに移動する。
+・そこでこのリポジトリをVisual Studio Codeでクローンする。

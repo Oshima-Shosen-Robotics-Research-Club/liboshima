@@ -6,10 +6,12 @@
  * クラスは、複数のシリアル通信実装（`HardwareSerial`、`SoftwareSerial`、
  * `FastwareSerial`）を抽象化して、統一されたインターフェースを提供します。これにより、
  * ハードウェアやソフトウェアのシリアル通信を柔軟に切り替え可能です。
+ * ！注意！：現時点では正常に機能しません。（だれかよろしくお願いします）
  */
 
 #pragma once
 
+// todo: 条件付きインクルードに変更（意図せずに割り込みなどの機能が実装されるのを防ぐ）
 #include "FastwareSerial.h"
 #include <HardwareSerial.h>
 #include <SoftwareSerial.h>
@@ -112,7 +114,7 @@ public:
    * @param value 送信する数値データ
    * @return 送信に成功したバイト数
    */
-  uint8_t print(int value);
+  uint8_t print(int value, uint8_t base = 10);
 
   /**
    * @brief 文字列を送信し、改行を付加します。
