@@ -75,11 +75,11 @@ uint8_t SerialPort::print(const char *str) {
   return 0;
 }
 
-uint8_t SerialPort::print(int value) {
+uint8_t SerialPort::print(int value, uint8_t base) {
   if (serialType == HARDWARE)
-    return hwSerial->print(value);
+    return hwSerial->print(value, base);
   else if (serialType == SOFTWARE)
-    return swSerial->print(value);
+    return swSerial->print(value, base);
   else if (serialType == FASTWARE)
     return fwSerial->print(value);
   return 0;
