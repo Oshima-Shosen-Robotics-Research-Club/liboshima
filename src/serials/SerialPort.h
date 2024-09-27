@@ -6,10 +6,12 @@
  * クラスは、複数のシリアル通信実装（`HardwareSerial`、`SoftwareSerial`、
  * `FastwareSerial`）を抽象化して、統一されたインターフェースを提供します。これにより、
  * ハードウェアやソフトウェアのシリアル通信を柔軟に切り替え可能です。
+ * ！注意！：現時点では正常に機能しません。（だれかよろしくお願いします）
  */
 
 #pragma once
 
+// todo: 条件付きインクルードに変更（意図せずに割り込みなどの機能が実装されるのを防ぐ）
 #include "FastwareSerial.h"
 #include <HardwareSerial.h>
 #include <SoftwareSerial.h>
