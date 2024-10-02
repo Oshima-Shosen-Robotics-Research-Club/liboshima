@@ -31,8 +31,8 @@ struct Controller {
    * モーターのピン状態を管理します。
    */
   struct Motor {
-    uint8_t pin1 : 1;      ///< ピン1の状態（1ビット）
-    uint8_t pin2 : 1;      ///< ピン2の状態（1ビット）
+    uint8_t forward;       ///< 前進ピンの状態
+    uint8_t reverse;       ///< 後進ピンの状態
   } motors[numMotors + 1]; ///< モーターの配列
 
   /**
