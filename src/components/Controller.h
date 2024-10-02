@@ -48,8 +48,8 @@ struct Controller {
    * スティックのX軸とY軸の状態を管理します。
    */
   struct Stick {
-    uint8_t x;             ///< X軸の状態
-    uint8_t y;             ///< Y軸の状態
+    uint8_t x;             ///< X軸の状態（0~255）
+    uint8_t y;             ///< Y軸の状態（0~255）
   } sticks[numSticks + 1]; ///< スティックの配列
 };
 
