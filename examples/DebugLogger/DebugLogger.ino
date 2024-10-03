@@ -1,5 +1,5 @@
-#include <utils/DebugLogger.h>
 #include <serials/SerialPort.h>
+#include <utils/DebugLogger.h>
 
 SerialPort serial(Serial);
 
