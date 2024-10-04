@@ -1,7 +1,9 @@
-name: Tag on version change
+name: Tag on version change (Properties)
 
 on:
   push:
+    paths:
+      - 'library.properties'
 
 jobs:
   create_tag:
@@ -11,28 +13,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # フルコミット履歴を取得
+          fetch-depth: 0
 
-      - name: Set up Python (to use jq)
-        uses: actions/setup-python@v4
+      - name: Set up Shell
+        run: sudo apt-get install -y jq
 
       - name: Check if version has changed
         id: check_version
         run: |
-          # 現在のバージョンを取得
-          CURRENT_VERSION=$(jq -r '.version' library.json)
+          source scripts/version_utils.sh
+
+          CURRENT_VERSION=$(get_version_from_properties)
           echo "Current version: $CURRENT_VERSION"
-          
-          # library.jsonが最後のコミットで変更されたか確認
-          if git diff HEAD^ HEAD --quiet --exit-code -- library.json; then
-            echo "No changes in library.json. Skipping tag creation."
+
+          if git diff HEAD^ HEAD --quiet --exit-code -- library.properties; then
+            echo "No changes in library.properties. Skipping tag creation."
             exit 0
           else
-            echo "library.json has changed."
-            # 前のバージョンと新しいバージョンを比較
-            PREVIOUS_VERSION=$(git show HEAD^:library.json | jq -r '.version')
+            PREVIOUS_VERSION=$(get_version_from_properties HEAD^)
             if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
-              echo "VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+              echo "VERSION=$(echo $CURRENT_VERSION | tr -d '\r\n')" >> $GITHUB_ENV
             else
               echo "Version has not changed. Skipping tag creation."
               exit 0
@@ -42,7 +42,7 @@ jobs:
       - name: Create tag
         if: env.VERSION != ''
         run: |
-          VERSION=$VERSION
+          VERSION=$(echo $VERSION | tr -d '\r\n')
           echo "Creating tag for version $VERSION"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
