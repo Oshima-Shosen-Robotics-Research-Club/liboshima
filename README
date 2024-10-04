@@ -24,7 +24,7 @@ https://www.ardu-badge.com/liboshima
 
 ■git cloneできない場合
 ・git config --global http.postBuffer 524288000  
-・WiFiの代わりにモバイルデータ通信を使う
+・WiFiの代わりにモバイルデータ通信や有線LANを使う
 
 ■このリポジトリの変更の仕方
 ・https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace をVisual Studio Codeでクローンする。
