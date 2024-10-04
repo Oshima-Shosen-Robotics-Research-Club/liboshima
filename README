@@ -1,21 +1,15 @@
 ■PlatformIOでの使い方
 ・platformio.iniに以下を追加する。
-```
 lib_deps = liboshima
 又は
 lib_deps = https://github.com/Oshima-Shosen-Robotics-Research-Club/liboshima
-```
 ・プログラムの中で以下のように使う。(examplesフォルダを参照)
-```
 #include <components/ims/IM920SL.h>
-```
 
 ■Arduino IDEでの使い方
 ・Library Managerから"liboshima"を検索してインストールする。
 ・プログラムの中で以下のように使う。(examplesフォルダを参照)
-```
 #include <liboshima.h>
-```
 
 ■PlatformIO Library Registry
 https://registry.platformio.org/libraries/soshirofujimori/liboshima
