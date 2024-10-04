@@ -31,3 +31,6 @@ https://www.ardu-badge.com/liboshima
 ・クローンしたフォルダをVisual Studio Codeで開く。
 ・libディレクトリに移動する。
 ・そこでこのリポジトリをVisual Studio Codeでクローンする。
+・このリポジトリに変更を加える。
+・このリポジトリの変更をコミットする。
+・このリポジトリの変更をプッシュする。
