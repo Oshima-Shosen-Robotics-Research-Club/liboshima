@@ -18,6 +18,14 @@ jobs:
       - name: Set up Shell
         run: sudo apt-get install -y jq
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
       - name: Check if version has changed
         id: check_version
         run: |
