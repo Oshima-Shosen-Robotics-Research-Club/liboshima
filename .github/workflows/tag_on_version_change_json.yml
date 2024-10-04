@@ -15,13 +15,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python (to use jq)
-        uses: actions/setup-python@v4
+      - name: Set up Shell
+        run: sudo apt-get install -y jq
 
       - name: Check if version has changed
         id: check_version
         run: |
-          source scripts/common.sh
+          source scripts/version_utils.sh
 
           CURRENT_VERSION=$(get_version_from_json)
           echo "Current version: $CURRENT_VERSION"
@@ -30,7 +30,7 @@ jobs:
             echo "No changes in library.json. Skipping tag creation."
             exit 0
           else
-            PREVIOUS_VERSION=$(git show HEAD^:library.json | jq -r '.version')
+            PREVIOUS_VERSION=$(get_version_from_json HEAD^)
             if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
               echo "VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
             else

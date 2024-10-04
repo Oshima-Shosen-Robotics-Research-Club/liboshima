@@ -1,11 +1,19 @@
 #!/bin/bash
 
 get_version_from_json() {
-  jq -r '.version' library.json
+  if [ -z "$1" ]; then
+    jq -r '.version' library.json
+  else
+    git show "$1:library.json" | jq -r '.version'
+  fi
 }
 
 get_version_from_properties() {
-  grep -E '^version=' library.properties | sed 's/version=//'
+  if [ -z "$1" ]; then
+    grep -E '^version=' library.properties | sed 's/version=//'
+  else
+    git show "$1:library.properties" | grep -E '^version=' | sed 's/version=//'
+  fi
 }
 
 get_name_from_json() {

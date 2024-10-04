@@ -14,12 +14,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python (to use jq, grep, and sed)
-        uses: actions/setup-python@v4
+      - name: Set up Shell
+        run: sudo apt-get install -y jq
 
       - name: Run consistency check
         run: |
-          source scripts/common.sh
+          source scripts/version_utils.sh
 
           JSON_VERSION=$(get_version_from_json)
           PROPERTIES_VERSION=$(get_version_from_properties)
