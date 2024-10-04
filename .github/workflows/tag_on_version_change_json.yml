@@ -1,0 +1,50 @@
+name: Tag on version change (JSON)
+
+on:
+  push:
+    paths:
+      - 'library.json'
+
+jobs:
+  create_tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python (to use jq)
+        uses: actions/setup-python@v4
+
+      - name: Check if version has changed
+        id: check_version
+        run: |
+          source scripts/common.sh
+
+          CURRENT_VERSION=$(get_version_from_json)
+          echo "Current version: $CURRENT_VERSION"
+
+          if git diff HEAD^ HEAD --quiet --exit-code -- library.json; then
+            echo "No changes in library.json. Skipping tag creation."
+            exit 0
+          else
+            PREVIOUS_VERSION=$(git show HEAD^:library.json | jq -r '.version')
+            if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+              echo "VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+            else
+              echo "Version has not changed. Skipping tag creation."
+              exit 0
+            fi
+          fi
+
+      - name: Create tag
+        if: env.VERSION != ''
+        run: |
+          VERSION=$VERSION
+          echo "Creating tag for version $VERSION"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v$VERSION" -m "Tag for version $VERSION"
+          git push origin "v$VERSION"

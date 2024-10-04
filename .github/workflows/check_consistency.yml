@@ -1,0 +1,45 @@
+name: Check Consistency Between library.json and library.properties
+
+on:
+  push:
+    paths:
+      - 'library.json'
+      - 'library.properties'
+
+jobs:
+  check_consistency:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python (to use jq, grep, and sed)
+        uses: actions/setup-python@v4
+
+      - name: Run consistency check
+        run: |
+          source scripts/common.sh
+
+          JSON_VERSION=$(get_version_from_json)
+          PROPERTIES_VERSION=$(get_version_from_properties)
+          if [ "$JSON_VERSION" != "$PROPERTIES_VERSION" ]; then
+            echo "Version mismatch: JSON ($JSON_VERSION) vs Properties ($PROPERTIES_VERSION)"
+            exit 1
+          fi
+
+          JSON_NAME=$(get_name_from_json)
+          PROPERTIES_NAME=$(get_name_from_properties)
+          if [ "$JSON_NAME" != "$PROPERTIES_NAME" ]; then
+            echo "Name mismatch: JSON ($JSON_NAME) vs Properties ($PROPERTIES_NAME)"
+            exit 1
+          fi
+
+          JSON_DEPENDS=$(get_dependencies_from_json)
+          PROPERTIES_DEPENDS=$(get_dependencies_from_properties)
+          if [ "$JSON_DEPENDS" != "$PROPERTIES_DEPENDS" ]; then
+            echo "Dependencies mismatch: JSON ($JSON_DEPENDS) vs Properties ($PROPERTIES_DEPENDS)"
+            exit 1
+          fi
+
+          echo "Consistency check passed."
