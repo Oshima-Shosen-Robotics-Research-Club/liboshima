@@ -14,6 +14,9 @@ lib_deps = https://github.com/Oshima-Shosen-Robotics-Research-Club/liboshima
 ■PlatformIO Library Registry
 https://registry.platformio.org/libraries/soshirofujimori/liboshima
 
+■Library Manager
+https://www.ardu-badge.com/liboshima
+
 ■こころがけていること
 ・様々なプラットフォームで動作するようにすること
 ・String型などのメモリを消費する型を使わないこと
