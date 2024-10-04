@@ -21,5 +21,5 @@ get_dependencies_from_json() {
 }
 
 get_dependencies_from_properties() {
-  grep -E '^depends=' library.properties | sed 's/depends=//'
+  grep -E '^depends=' library.properties | sed 's/depends=//' | tr -d ' ' | tr ',' '\n' | sort | tr '\n' ',' | sed 's/,$//'
 }

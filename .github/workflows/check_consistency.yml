@@ -35,7 +35,7 @@ jobs:
             exit 1
           fi
 
-          JSON_DEPENDS=$(get_dependencies_from_json)
+          JSON_DEPENDS=$(get_dependencies_from_json | tr -d ' ' | tr ',' '\n' | sort | tr '\n' ',' | sed 's/,$//')
           PROPERTIES_DEPENDS=$(get_dependencies_from_properties)
           if [ "$JSON_DEPENDS" != "$PROPERTIES_DEPENDS" ]; then
             echo "Dependencies mismatch: JSON ($JSON_DEPENDS) vs Properties ($PROPERTIES_DEPENDS)"
