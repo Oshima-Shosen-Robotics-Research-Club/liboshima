@@ -50,7 +50,7 @@ jobs:
       - name: Publish package
         if: env.VERSION != ''
         env:
-          PLATFORMIO_API_TOKEN: ${{ secrets.PLATFORMIO_API_TOKEN }}
+          PLATFORMIO_AUTH_TOKEN: ${{ secrets.PLATFORMIO_AUTH_TOKEN }}
         run: |
           echo "Publishing package for version $VERSION"
           pio pkg publish --non-interactive
