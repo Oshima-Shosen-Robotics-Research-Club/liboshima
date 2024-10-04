@@ -1,4 +1,4 @@
-name: Tag on version change (JSON)
+name: Publish on version change (JSON)
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'library.json'
 
 jobs:
-  create_tag:
+  publish_package:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,24 +27,23 @@ jobs:
           echo "Current version: $CURRENT_VERSION"
 
           if git diff HEAD^ HEAD --quiet --exit-code -- library.json; then
-            echo "No changes in library.json. Skipping tag creation."
+            echo "No changes in library.json. Skipping package publish."
             exit 0
           else
             PREVIOUS_VERSION=$(get_version_from_json HEAD^)
             if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
               echo "VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
             else
-              echo "Version has not changed. Skipping tag creation."
+              echo "Version has not changed. Skipping package publish."
               exit 0
             fi
           fi
 
-      - name: Create tag
+      - name: Publish package
         if: env.VERSION != ''
+        env:
+          PLATFORMIO_API_TOKEN: ${{ secrets.PLATFORMIO_API_TOKEN }}
         run: |
-          VERSION=$VERSION
-          echo "Creating tag for version $VERSION"
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v$VERSION" -m "Tag for version $VERSION"
-          git push origin "v$VERSION"
+          echo "Publishing package for version $VERSION"
+          echo $PLATFORMIO_API_TOKEN | pio account login --username $PLATFORMIO_API_TOKEN
+          pio pkg publish
