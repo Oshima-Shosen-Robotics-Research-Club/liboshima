@@ -17,7 +17,7 @@ get_name_from_properties() {
 }
 
 get_dependencies_from_json() {
-  jq -r '.dependencies | to_entries[] | "\(.key)=\(.value)"' library.json
+  jq -r '.dependencies | keys[]' library.json | tr '\n' ',' | sed 's/,$//'
 }
 
 get_dependencies_from_properties() {
