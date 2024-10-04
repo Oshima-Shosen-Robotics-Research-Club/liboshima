@@ -1,3 +1,4 @@
+// Arduino IDEの場合は "#include <liboshima.h>" としてください。
 #include <components/motors/NonSpeedAdjustable.h>
 #include <components/motors/speed/BD62193.h>
 #include <components/motors/speed/TB67H450.h>

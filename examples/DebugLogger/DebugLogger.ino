@@ -1,3 +1,4 @@
+// Arduino IDEの場合は "#include <liboshima.h>" としてください。
 #include <serials/SerialPort.h>
 #include <utils/DebugLogger.h>
 

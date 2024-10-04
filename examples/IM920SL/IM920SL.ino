@@ -1,3 +1,4 @@
+// Arduino IDEの場合は "#include <liboshima.h>" としてください。
 #include <SoftwareSerial.h>
 #include <components/ims/IM920SL.h>
 
