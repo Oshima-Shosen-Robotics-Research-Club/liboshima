@@ -25,16 +25,16 @@
  */
 template <uint8_t numMotors = 0, uint8_t numButtons = 0, uint8_t numSticks = 0>
 struct Controller {
-
   /**
-   * @brief モーター構造体
-   *
-   * モーター用のボタンの状態を管理します。
+   * @brief モーターの状態を格納する列挙型
    */
-  struct Motor {
-    uint8_t forward : 1;   ///< 前進ボタンの状態（0または1）
-    uint8_t reverse : 1;   ///< 後進ボタンの状態（0または1）
-  } motors[numMotors + 1]; ///< モーター用ボタンの配列
+  enum class MotorState : uint8_t : 2 {
+    STOP = 0b00,     ///< 停止
+    FORWARD = 0b01,  ///< 前進
+    BACKWARD = 0b10, ///< 後退
+  };
+
+  MotorState motors[numMotors + 1]; ///< モーターの状態を格納する配列
 
   /**
    * @brief ボタンの状態を格納する変数
