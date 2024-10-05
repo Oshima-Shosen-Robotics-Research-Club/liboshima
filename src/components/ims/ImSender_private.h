@@ -1,11 +1,11 @@
 /**
- * @file ImSender.h
+ * @file ImSender_private.h
  * @brief IM920SL通信モジュールを使用したデータ送信クラスの定義
  *
  * このファイルでは、IM920SL無線通信モジュールを使ってデータ送信を行うための
- * `ImSender` クラスを定義しています。`ImSender` クラスは `HardwareSerial`
- * または `SoftwareSerial` を使用して、さまざまなデータ型の送信を行う
- * メソッドを提供します。
+ * `ImSender_private` クラスを定義しています。`ImSender_private` クラスは
+ * `HardwareSerial` または `SoftwareSerial`
+ * を使用して、さまざまなデータ型の送信を行う メソッドを提供します。
  *
  * @note
  * テンプレートメソッドを使用することで、異なるデータ型を送信することが可能です。
@@ -20,14 +20,15 @@
 #define IM_SEND_INTERVAL 100
 
 /**
- * @class ImSender
+ * @class ImSender_private
  * @brief IM920SL通信モジュールを用いたデータ送信を行うクラス
  *
- * `ImSender` クラスは、IM920SL通信モジュールを使用してデータを送信するための
+ * `ImSender_private`
+ * クラスは、IM920SL通信モジュールを使用してデータを送信するための
  * 機能を提供します。このクラスは `HardwareSerial` や `SoftwareSerial`
  * と連携し、 テンプレートメソッドにより様々な型のデータを送信可能です。
  */
-class ImSender {
+class ImSender_private {
 public:
   /**
    * @brief コンストラクタ (HardwareSerialバージョン)
@@ -37,7 +38,7 @@ public:
    *
    * @param serial 使用する `HardwareSerial` インスタンスの参照
    */
-  ImSender(SerialPort &serial);
+  ImSender_private(SerialPort &serial);
 
   /**
    * @brief 通信の初期化を行うメソッド

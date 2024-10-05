@@ -1,12 +1,12 @@
-#include "ImSender.h"
+#include "ImSender_private.h"
 
-ImSender::ImSender(SerialPort &serial) : serial(serial) {}
+ImSender_private::ImSender_private(SerialPort &serial) : serial(serial) {}
 
-void ImSender::begin(unsigned long baudrate) { serial.begin(baudrate); }
+void ImSender_private::begin(unsigned long baudrate) { serial.begin(baudrate); }
 
 // "TXDA 000000\r\n" という形式でデータを送信する
-void ImSender::send(const uint8_t *data, const size_t size) {
-  Logger.println("ImSender", "send", "Sending data");
+void ImSender_private::send(const uint8_t *data, const size_t size) {
+  Logger.println("ImSender_private", "send", "Sending data");
 
   // 送信データのプレフィックスを送信
   serial.print("TXDA ");
@@ -21,5 +21,5 @@ void ImSender::send(const uint8_t *data, const size_t size) {
   serial.println();
 
   // 送信データをデバッグ出力
-  Logger.println("ImSender", "send", "Data sent");
+  Logger.println("ImSender_private", "send", "Data sent");
 }

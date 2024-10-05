@@ -1,27 +1,29 @@
-#include "ImReceiver.h"
+#include "ImReceiver_private.h"
 #include <utils/Converter.h>
 
 // HardwareSerial の場合
-ImReceiver::ImReceiver(SerialPort &serial) : serial(serial) {}
+ImReceiver_private::ImReceiver_private(SerialPort &serial) : serial(serial) {}
 
-void ImReceiver::begin(unsigned long baudrate) { serial.begin(baudrate); }
+void ImReceiver_private::begin(unsigned long baudrate) {
+  serial.begin(baudrate);
+}
 
 // データが利用可能かどうかをチェックするメソッド
-uint8_t ImReceiver::available() { return serial.available(); }
+uint8_t ImReceiver_private::available() { return serial.available(); }
 
 // "00,0000,00:00,00,00\r\n" という形式のデータを受信する
 #if defined(DEBUG)
-ImReceiver::ErrorCode
+ImReceiver_private::ErrorCode
 #else
 void
 #endif
-ImReceiver::receive(uint8_t *data, size_t size) {
-  Logger.println("ImReceiver", "receive", "Receiving data");
+ImReceiver_private::receive(uint8_t *data, size_t size) {
+  Logger.println("ImReceiver_private", "receive", "Receiving data");
 
 #if defined(DEBUG)
   // データが利用可能でない場合はエラーを返す
   if (!available()) {
-    Logger.println("ImReceiver", "receive", "No data available");
+    Logger.println("ImReceiver_private", "receive", "No data available");
     return ErrorCode::NO_DATA_AVAILABLE;
   }
 #endif
@@ -38,11 +40,11 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   serial.read(); // 改行コード'\r\n'を読み飛ばす
 
   // 受信文字をデバッグ出力
-  Logger.printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
+  Logger.printlnf("ImReceiver_private", "receive", "Received: %s", recvedStr);
 
   // 受信文字列の長さが予期される長さと一致しない場合はエラーを返す
   if (length != 10 + 1 + size * 2 + size - 1) {
-    Logger.printlnf("ImReceiver", "receive",
+    Logger.printlnf("ImReceiver_private", "receive",
                     "Received string length invalid: %d", length);
 #if defined(DEBUG)
     return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
@@ -52,7 +54,7 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   }
 
   if (recvedStr[10] != ':') {
-    Logger.println("ImReceiver", "receive", "Colon not found");
+    Logger.println("ImReceiver_private", "receive", "Colon not found");
 #if defined(DEBUG)
     return ErrorCode::COLON_NOT_FOUND;
 #else
@@ -67,7 +69,7 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   // 無効な文字列が含まれている場合はエラーを返す
   if (!((pos[0] >= '0' && pos[0] <= '9') || (pos[0] >= 'A' && pos[0] <= 'F')) ||
       !((pos[1] >= '0' && pos[1] <= '9') || (pos[1] >= 'A' && pos[1] <= 'F'))) {
-    Logger.println("ImReceiver", "receive", "Data string invalid");
+    Logger.println("ImReceiver_private", "receive", "Data string invalid");
     return ErrorCode::DATA_STRING_INVALID;
   }
 #endif
@@ -82,7 +84,7 @@ ImReceiver::receive(uint8_t *data, size_t size) {
   }
 
   // データをデバッグ出力
-  Logger.println("ImReceiver", "receive", "Data received");
+  Logger.println("ImReceiver_private", "receive", "Data received");
 
 #if defined(DEBUG)
   return ErrorCode::SUCCESS;

@@ -1,9 +1,9 @@
 /**
- * @file ImReceiver.h
+ * @file ImReceiver_private.h
  * @brief IM920SL通信モジュールを用いたデータ受信クラスの宣言
  *
  * このファイルは、IM920SL無線モジュールを使ってデータ受信を行うクラス
- * `ImReceiver`
+ * `ImReceiver_private`
  * の定義を提供します。このクラスを使用してデータの受信および処理が可能です。
  */
 
@@ -19,15 +19,16 @@
 #define IM_RECEIVE_INTERVAL_MICROS 500000
 
 /**
- * @class ImReceiver
+ * @class ImReceiver_private
  * @brief IM920SL通信モジュールを用いたデータ受信クラス
  *
- * `ImReceiver` クラスは、IM920SL通信モジュールを使ってデータを受信するための
+ * `ImReceiver_private`
+ * クラスは、IM920SL通信モジュールを使ってデータを受信するための
  * 機能を提供します。`HardwareSerial` や `SoftwareSerial` を使用してデータの
  * 受信を管理し、テンプレートメソッドによって様々な型のデータを効率的に
  * 受信することができます。
  */
-class ImReceiver {
+class ImReceiver_private {
 public:
   /**
    * @brief コンストラクタ (HardwareSerialバージョン)
@@ -37,7 +38,7 @@ public:
    *
    * @param serial 使用する `HardwareSerial` インスタンスの参照
    */
-  ImReceiver(SerialPort &serial);
+  ImReceiver_private(SerialPort &serial);
 
 #if defined(DEBUG)
   /**

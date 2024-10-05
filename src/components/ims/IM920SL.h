@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "ImReceiver.h"
-#include "ImSender.h"
+#include "ImReceiver_private.h"
+#include "ImSender_private.h"
 
 /**
  * @class IM920SL
@@ -18,10 +18,10 @@
  *
  * `IM920SL` クラスは、IM920SLモジュールを使用して無線通信を行います。
  * 主な機能として、通信の初期化、データの送受信、および受信データの管理を行います。
- * このクラスは `ImReceiver` と `ImSender` の機能を継承しており、送受信に
- * 必要なメソッドを提供します。
+ * このクラスは `ImReceiver_private` と `ImSender_private`
+ * の機能を継承しており、送受信に 必要なメソッドを提供します。
  */
-class IM920SL : public ImReceiver, public ImSender {
+class IM920SL : public ImReceiver_private, public ImSender_private {
 public:
   /**
    * @brief IM920SLクラスのコンストラクタ
