@@ -5,28 +5,47 @@
 
 /**
  * @file Controller.h
- * @brief コントローラのクラス定義
+ * @brief コントローラの構造体定義
  *
- * このファイルには、コントローラのクラス定義が含まれています。
+ * このファイルには、コントローラの構造体定義が含まれています。
  * コントローラは、モーター用のボタン、その他のボタン、スティックの状態を管理します。
- * IM920SLクラスで送受信することができます。
+ * IM920SL構造体で送受信することができます。
  */
 
 // アライメントを1バイトに設定
 #pragma pack(push, 1)
 
 /**
- * @brief コントローラクラス
+ * @brief コントローラ構造体
  *
  * @tparam numMotors モーターの数（デフォルトは0）
  * @tparam numButtons ボタンの数（デフォルトは0）
  * @tparam numSticks スティックの数（デフォルトは0）
  *
- * このクラスは、モーター、ボタン、スティックの状態を管理します。
+ * この構造体は、モーター、ボタン、スティックの状態を管理します。
  */
 template <uint8_t numMotors = 0, uint8_t numButtons = 0, uint8_t numSticks = 0>
-class Controller {
+struct Controller {
 public:
+  /**
+   * @brief コントローラの状態を初期化します。
+   */
+  Controller() {
+    // モーターの状態を初期化
+    for (uint8_t i = 0; i < numMotors; i++) {
+      motors[i] = MotorStateEnum::Stop;
+    }
+
+    // ボタンの状態を初期化
+    buttons = 0;
+
+    // スティックの状態を初期化
+    for (uint8_t i = 0; i < numSticks; i++) {
+      sticks[i].x = 0;
+      sticks[i].y = 0;
+    }
+  }
+
   /**
    * @brief MotorState型の配列
    *

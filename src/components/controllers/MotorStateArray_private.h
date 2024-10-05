@@ -40,5 +40,5 @@ public:
 
 private:
   // numMotorsに応じた型を選択する
-  typename SelectStateType<numMotors>::Type state;
+  typename SelectStateType<numMotors>::Type state = 0;
 };
