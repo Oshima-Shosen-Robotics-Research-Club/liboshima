@@ -1,12 +1,13 @@
 #pragma once
 
+#include "MotorStateArray_private.h"
 #include <stdint.h>
 
 /**
  * @file Controller.h
- * @brief コントローラの構造体定義
+ * @brief コントローラのクラス定義
  *
- * このファイルには、コントローラの構造体定義が含まれています。
+ * このファイルには、コントローラのクラス定義が含まれています。
  * コントローラは、モーター用のボタン、その他のボタン、スティックの状態を管理します。
  * IM920SLクラスで送受信することができます。
  */
@@ -15,26 +16,23 @@
 #pragma pack(push, 1)
 
 /**
- * @brief コントローラ構造体
+ * @brief コントローラクラス
  *
  * @tparam numMotors モーターの数（デフォルトは0）
  * @tparam numButtons ボタンの数（デフォルトは0）
  * @tparam numSticks スティックの数（デフォルトは0）
  *
- * この構造体は、モーター、ボタン、スティックの状態を管理します。
+ * このクラスは、モーター、ボタン、スティックの状態を管理します。
  */
 template <uint8_t numMotors = 0, uint8_t numButtons = 0, uint8_t numSticks = 0>
-struct Controller {
+class Controller {
+public:
   /**
-   * @brief モーターの状態を格納する列挙型
+   * @brief MotorState型の配列
+   *
+   * モーターの状態を管理します。
    */
-  enum class MotorState : uint8_t : 2 {
-    STOP = 0b00,     ///< 停止
-    FORWARD = 0b01,  ///< 前進
-    BACKWARD = 0b10, ///< 後退
-  };
-
-  MotorState motors[numMotors + 1]; ///< モーターの状態を格納する配列
+  MotorStateArray_private<numMotors> motors; ///< モーターの状態の配列
 
   /**
    * @brief ボタンの状態を格納する変数
