@@ -2,6 +2,7 @@
 
 #include "MotorStateArray_private.h"
 #include <stdint.h>
+#include <utils/Conditional.h>
 
 /**
  * @file Controller.h
@@ -14,6 +15,8 @@
 
 // アライメントを1バイトに設定
 #pragma pack(push, 1)
+
+typedef uint8_t ZeroSizeType[0];
 
 /**
  * @brief コントローラ構造体
@@ -28,37 +31,19 @@ template <uint8_t numMotors = 0, uint8_t numButtons = 0, uint8_t numSticks = 0>
 struct Controller {
 public:
   /**
-   * @brief コントローラの状態を初期化します。
-   */
-  Controller() {
-    // モーターの状態を初期化
-    for (uint8_t i = 0; i < numMotors; i++) {
-      motors[i] = MotorStateEnum::Stop;
-    }
-
-    // ボタンの状態を初期化
-    buttons = 0;
-
-    // スティックの状態を初期化
-    for (uint8_t i = 0; i < numSticks; i++) {
-      sticks[i].x = 0;
-      sticks[i].y = 0;
-    }
-  }
-
-  /**
    * @brief MotorState型の配列
    *
    * モーターの状態を管理します。
    */
-  MotorStateArray_private<numMotors> motors; ///< モーターの状態の配列
+  typename conditional<numMotors != 0, MotorStateArray_private<numMotors>,
+                       ZeroSizeType>::Type motors; ///< モーターの状態の配列
 
   /**
    * @brief ボタンの状態を格納する変数
    *
    * その他のボタンの状態を管理します。
    */
-  uint32_t buttons : numButtons + 1;
+  typename conditional<numButtons != 0, uint32_t, ZeroSizeType>::Type buttons;
 
   /**
    * @brief スティック構造体
@@ -66,9 +51,9 @@ public:
    * スティックのX軸とY軸の状態を管理します。
    */
   struct Stick {
-    uint8_t x;             ///< X軸の状態（0~255）
-    uint8_t y;             ///< Y軸の状態（0~255）
-  } sticks[numSticks + 1]; ///< スティックの配列
+    uint8_t x = 0;     ///< X軸の状態（0~255）
+    uint8_t y = 0;     ///< Y軸の状態（0~255）
+  } sticks[numSticks]; ///< スティックの状態の配列
 };
 
 #pragma pack(pop)
