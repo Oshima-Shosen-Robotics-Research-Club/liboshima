@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ButtonStateArray_private.h"
-#include "MotorStateArray_private.h"
+#include "ButtonState_private.h"
+#include "MotorState_private.h"
 #include <stdint.h>
-#include <utils/Conditional.h>
+#include <utils/types/Conditional.h>
 
 /**
  * @file Controller.h
@@ -17,7 +17,7 @@
 // アライメントを1バイトに設定
 #pragma pack(push, 1)
 
-typedef uint8_t ZeroSizeType[0];
+using ZeroSizeType = uint8_t[0];
 
 /**
  * @brief コントローラ構造体
@@ -36,7 +36,7 @@ public:
    *
    * モーターの状態を管理します。
    */
-  typename conditional<numMotors != 0, MotorStateArray_private<numMotors>,
+  typename Conditional<numMotors != 0, MotorStateArray_private<numMotors>,
                        ZeroSizeType>::Type motors; ///< モーターの状態の配列
 
   /**
@@ -44,7 +44,7 @@ public:
    *
    * その他のボタンの状態を管理します。
    */
-  typename conditional<numButtons != 0, ButtonStateArray_private<numButtons>,
+  typename Conditional<numButtons != 0, ButtonStateArray_private<numButtons>,
                        ZeroSizeType>::Type buttons; ///< ボタンの状態の配列
 
   /**
