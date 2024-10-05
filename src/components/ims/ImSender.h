@@ -39,19 +39,6 @@ public:
    */
   ImSender(SerialPort &serial);
 
-#ifdef DEBUG
-  /**
-   * @enum ErrorCode
-   * @brief データ送信時のエラーコードの列挙型
-   *
-   * データ送信中に発生する可能性のあるエラーを表します。
-   */
-  enum class ErrorCode {
-    SUCCESS, /**< データ送信が成功したことを示します。 */
-    INVALID_DATA_SIZE /**< 送信するデータのサイズが無効であることを示します。 */
-  };
-#endif
-
   /**
    * @brief 通信の初期化を行うメソッド
    *
@@ -62,25 +49,6 @@ public:
    */
   void begin(unsigned long baudrate = 19200);
 
-#ifdef DEBUG
-  /**
-   * @brief データ送信を行うテンプレートメソッド（デバッグモード）
-   *
-   * テンプレート型 `T` のデータを送信します。サポートされている型は `int` や
-   * `float` 、構造体などの固定長のデータ型です。ポインタを持つ `String` 型
-   * などには対応していません。
-   *
-   * @tparam T 送信するデータの型
-   * @param data 送信するデータ
-   * @return データ送信の結果を示す `ErrorCode`
-   *
-   * @note データのサイズは1バイトから32バイトの範囲内である必要があります。
-   *       それ以外のサイズの場合、`INVALID_DATA_SIZE` が返されます。
-   */
-  template <typename T> ErrorCode send(const T &data) {
-    return send(reinterpret_cast<const uint8_t *>(&data), sizeof(T));
-  }
-#else
   /**
    * @brief データ送信を行うテンプレートメソッド
    *
@@ -92,25 +60,14 @@ public:
    * @param data 送信するデータ
    */
   template <typename T> void send(const T &data) {
+    static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
+                  "Data size must be between 1 and 32 bytes");
     send(reinterpret_cast<const uint8_t *>(&data), sizeof(T));
   }
-#endif
 
 private:
   SerialPort &serial; /**< データ送信に使用するシリアル通信ポート */
 
-#ifdef DEBUG
-  /**
-   * @brief 内部でデータ送信を行うメソッド（デバッグモード）
-   *
-   * このメソッドは、データを送信し、結果としてエラーコードを返します。
-   *
-   * @param data 送信するデータを格納したバッファ
-   * @param size 送信するデータのサイズ
-   * @return 送信結果を示すエラーコード（`ErrorCode`）
-   */
-  ErrorCode
-#else
   /**
    * @brief 内部でデータ送信を行うメソッド
    *
@@ -119,7 +76,5 @@ private:
    * @param data 送信するデータを格納したバッファ
    * @param size 送信するデータのサイズ
    */
-  void
-#endif
-  send(const uint8_t *data, size_t size);
+  void send(const uint8_t *data, size_t size);
 };
