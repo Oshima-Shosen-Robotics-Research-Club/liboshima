@@ -5,7 +5,7 @@ ImSender::ImSender(SerialPort &serial) : serial(serial) {}
 void ImSender::begin(unsigned long baudrate) { serial.begin(baudrate); }
 
 // "TXDA 000000\r\n" という形式でデータを送信する
-void ImSender::send(const uint8_t *data, size_t size) {
+void ImSender::send(const uint8_t *data, const size_t size) {
   Logger.println("ImSender", "send", "Sending data");
 
   // 送信データのプレフィックスを送信

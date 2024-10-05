@@ -76,5 +76,5 @@ private:
    * @param data 送信するデータを格納したバッファ
    * @param size 送信するデータのサイズ
    */
-  void send(const uint8_t *data, size_t size);
+  void send(const uint8_t *data, const size_t size);
 };
