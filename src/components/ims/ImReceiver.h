@@ -42,14 +42,14 @@ public:
         while (!serial.available())
           ;
         c = serial.read();
-        recvedStr[length] = '\0';
+        recvedLine[length] = '\0';
         break;
       }
-      recvedStr[length++] = c;
+      recvedLine[length++] = c;
     }
 
     if (logger)
-      logger->printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
+      logger->printlnf("ImReceiver", "receive", "Received: %s", recvedLine);
 
     if (length != 10 + 1 + sizeof(T) * 2 + sizeof(T) - 1) {
       if (logger)
@@ -58,13 +58,13 @@ public:
       return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
     }
 
-    if (recvedStr[10] != ':') {
+    if (recvedLine[10] != ':') {
       if (logger)
         logger->println("ImReceiver", "receive", "Colon not found");
       return ErrorCode::COLON_NOT_FOUND;
     }
 
-    char *pos = recvedStr + 11;
+    char *pos = recvedLine + 11;
     for (size_t i = 0; i < sizeof(T); i++) {
       Converter::fromHex(pos, 2, reinterpret_cast<uint8_t *>(&data) + i);
       pos += 2;
@@ -81,5 +81,5 @@ public:
 private:
   SerialType &serial;
   LoggerType logger;
-  char recvedStr[0xFF];
+  char recvedLine[0xFF];
 };
