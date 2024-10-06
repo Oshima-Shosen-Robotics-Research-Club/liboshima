@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utils/Converter.h>
-#include <utils/Debuglogger.h>
+#include <utils/DebugLogger.h>
 
 #define IM_RECEIVE_INTERVAL_MILLIS 500
 #define IM_RECEIVE_INTERVAL_MICROS 500000

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utils/Converter.h>
-#include <utils/Debuglogger.h>
+#include <utils/DebugLogger.h>
 
 #define IM_SEND_INTERVAL 55
 
