@@ -17,7 +17,6 @@ public:
     NO_DATA_AVAILABLE,
     RECEIVED_STRING_LENGTH_INVALID,
     COLON_NOT_FOUND,
-    DATA_STRING_INVALID,
   };
 
   template <typename T> ErrorCode receive(T &data) {
