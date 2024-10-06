@@ -7,7 +7,7 @@
 #include <utils/types/ZeroType.h>
 
 /**
- * @file Controller.h
+ * @file ControllerData.h
  * @brief コントローラの構造体定義
  *
  * このファイルには、コントローラの構造体定義が含まれています。
@@ -28,7 +28,7 @@
  * この構造体は、モーター、ボタン、スティックの状態を管理します。
  */
 template <uint8_t numMotors = 0, uint8_t numButtons = 0, uint8_t numSticks = 0>
-struct Controller {
+struct ControllerData {
 public:
   /**
    * @brief MotorState型の配列
