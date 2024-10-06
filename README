@@ -48,3 +48,4 @@ https://www.ardu-badge.com/liboshima
 ・imsenderの定数を名前空間付きアクセスに変更。（例: IM920SL::SEND_INTERVAL_MS）
 ・動作確認
 ・examplesの追加（workflowsでバグを検知できるようにするため）
+・liboshima.hをインクルードするようにする。
