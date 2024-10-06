@@ -1,13 +1,11 @@
 // Arduino IDEの場合は "#include <liboshima.h>" としてください。
-#include <SoftwareSerial.h>
 #include <components/ims/IM920SL.h>
 
 #define RX_PIN 0
 #define TX_PIN 0
 
 SoftwareSerial serial(RX_PIN, TX_PIN);
-SerialPort serialPort(serial);
-IM920SL im(serialPort);
+IM920SL im(serial);
 
 void setup() {}
 
