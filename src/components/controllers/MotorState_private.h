@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <utils/nets/BitWidthArray.h>
+#include <nets/BitWidthArray.h>
 
 /**
  * @brief モーターの状態を表す列挙型

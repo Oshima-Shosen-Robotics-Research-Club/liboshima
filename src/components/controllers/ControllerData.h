@@ -3,8 +3,8 @@
 #include "ButtonState_private.h"
 #include "MotorState_private.h"
 #include <stdint.h>
-#include <utils/types/Conditional.h>
-#include <utils/types/ZeroType.h>
+#include <types/Conditional.h>
+#include <types/ZeroType.h>
 
 /**
  * @file ControllerData.h

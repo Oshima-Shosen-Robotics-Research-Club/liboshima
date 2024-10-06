@@ -2,7 +2,7 @@
 #pragma once
 
 #include "BitWidthElement.h"
-#include "utils/types/TypeSelector.h"
+#include "types/TypeSelector.h"
 #include <stdint.h>
 
 /**
