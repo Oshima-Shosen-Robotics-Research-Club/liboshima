@@ -1,5 +1,4 @@
-// Arduino IDEの場合は "#include <liboshima.h>" としてください。
-#include <components/LedTape.h>
+#include <liboshima.h>
 
 #define NUM_LEDS 30
 #define DATA_PIN 6

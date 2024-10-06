@@ -1,5 +1,5 @@
-// Arduino IDEの場合は "#include <liboshima.h>" としてください。
-#include <components/ims/IM920SL.h>
+#include <SoftwareSerial.h>
+#include <liboshima.h>
 
 #define RX_PIN 0
 #define TX_PIN 0

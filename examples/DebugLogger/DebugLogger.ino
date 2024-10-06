@@ -1,5 +1,4 @@
-// Arduino IDEの場合は "#include <liboshima.h>" としてください。
-#include <utils/DebugLogger.h>
+#include <liboshima.h>
 
 DebugLogger<HardwareSerial> logger(Serial);
 
