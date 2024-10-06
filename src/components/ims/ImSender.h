@@ -1,6 +1,5 @@
 #pragma once
 
-#include <utils/Converter.h>
 #include <utils/DebugLogger.h>
 
 #define IM_SEND_INTERVAL 55
@@ -19,9 +18,8 @@ public:
 
     serial.print("TXDA ");
     for (uint8_t i = 0; i < sizeof(T); i++) {
-      char hex[2];
-      Converter::toHex(reinterpret_cast<const uint8_t *>(&data) + i, 1, hex);
-      serial.print(hex);
+      serial.print(reinterpret_cast<const uint8_t *>(&data)[i] >> 4 & 0xF, HEX);
+      serial.print(reinterpret_cast<const uint8_t *>(&data)[i] & 0xF, HEX);
     }
     serial.println();
 
