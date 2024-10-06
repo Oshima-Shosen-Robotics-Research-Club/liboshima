@@ -33,12 +33,20 @@ public:
       return ErrorCode::NO_DATA_AVAILABLE;
     }
 
-    size_t length =
-        serial.readBytesUntil('\r', recvedStr, sizeof(recvedStr) - 1);
-    recvedStr[length] = '\0';
-    while (!serial.available())
-      ;
-    serial.read();
+    size_t length = 0;
+    char c;
+    while (true) {
+      while (!serial.available())
+        ;
+      c = serial.read();
+      if (c == '\r') {
+        while (!serial.available())
+          ;
+        c = serial.read();
+        break;
+      }
+      recvedStr[length++] = c;
+    }
 
     if (logger)
       logger->printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
