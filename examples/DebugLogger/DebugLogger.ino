@@ -1,12 +1,11 @@
 // Arduino IDEの場合は "#include <liboshima.h>" としてください。
-#include <serials/SerialPort.h>
 #include <utils/DebugLogger.h>
 
-SerialPort serial(Serial);
+DebugLogger<HardwareSerial> logger(Serial);
 
-void setup() { Logger.init(serial); }
+void setup() { logger.init(serial); }
 
 void loop() {
-  Logger.println("main", "loop", "Hello, world!");
+  logger.println("main", "loop", "Hello, world!");
   delay(1000);
 }

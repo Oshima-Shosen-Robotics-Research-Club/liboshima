@@ -17,6 +17,5 @@
 #include "components/motors/speed/BD62193.h"
 #include "components/motors/speed/ISpeedAdjustable.h"
 #include "components/motors/speed/TB67H450.h"
-#include "serials/SerialPort.h"
 #include "utils/Converter.h"
 #include "utils/DebugLogger.h"
