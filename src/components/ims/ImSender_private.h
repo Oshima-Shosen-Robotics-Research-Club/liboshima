@@ -17,7 +17,7 @@
 #include <utils/DebugLogger.h>
 
 // タイマーオーバーフロー設定で役に立つ定数（ミリ秒）
-#define IM_SEND_INTERVAL 60
+#define IM_SEND_INTERVAL 55
 
 /**
  * @class ImSender_private
