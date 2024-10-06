@@ -43,6 +43,7 @@ public:
         while (!serial.available())
           ;
         c = serial.read();
+        recvedStr[length] = '\0';
         break;
       }
       recvedStr[length++] = c;
