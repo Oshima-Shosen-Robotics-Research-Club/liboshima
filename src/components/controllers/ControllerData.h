@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ButtonState_private.h"
-#include "MotorState_private.h"
+#include "ButtonStateArray.h"
+#include "MotorStateArray.h"
 #include <stdint.h>
 #include <types/Conditional.h>
 #include <types/ZeroType.h>
@@ -36,7 +36,7 @@ public:
    * モーターの状態を管理します。
    */
   typename Conditional<numMotors == 0, ZeroSizeType,
-                       MotorStateArray_private<numMotors>>::Type
+                       MotorStateArray<numMotors>>::Type
       motors; ///< モーターの状態の配列
 
   /**
@@ -45,7 +45,7 @@ public:
    * その他のボタンの状態を管理します。
    */
   typename Conditional<numButtons == 0, ZeroSizeType,
-                       ButtonStateArray_private<numButtons>>::Type
+                       ButtonStateArray<numButtons>>::Type
       buttons; ///< ボタンの状態の配列
 
   /**

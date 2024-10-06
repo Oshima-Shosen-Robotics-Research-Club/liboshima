@@ -7,9 +7,9 @@
 #define IM_RECEIVE_INTERVAL_MICROS 500000
 
 template <typename SerialType, typename LoggerType = DebugLogger<SerialType> *>
-class ImReceiver_private {
+class ImReceiver {
 public:
-  ImReceiver_private(SerialType &serial, LoggerType logger = nullptr)
+  ImReceiver(SerialType &serial, LoggerType logger = nullptr)
       : serial(serial), logger(logger) {}
 
   enum class ErrorCode {
@@ -25,11 +25,11 @@ public:
                   "Data size must be between 1 and 32 bytes");
 
     if (logger)
-      logger->println("ImReceiver_private", "receive", "Receiving data");
+      logger->println("ImReceiver", "receive", "Receiving data");
 
     if (!serial.available()) {
       if (logger)
-        logger->println("ImReceiver_private", "receive", "No data available");
+        logger->println("ImReceiver", "receive", "No data available");
       return ErrorCode::NO_DATA_AVAILABLE;
     }
 
@@ -42,19 +42,18 @@ public:
     serial.read();
 
     if (logger)
-      logger->printlnf("ImReceiver_private", "receive", "Received: %s",
-                       recvedStr);
+      logger->printlnf("ImReceiver", "receive", "Received: %s", recvedStr);
 
     if (length != 10 + 1 + sizeof(T) * 2 + sizeof(T) - 1) {
       if (logger)
-        logger->printlnf("ImReceiver_private", "receive",
+        logger->printlnf("ImReceiver", "receive",
                          "Received string length invalid: %d", length);
       return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
     }
 
     if (recvedStr[10] != ':') {
       if (logger)
-        logger->println("ImReceiver_private", "receive", "Colon not found");
+        logger->println("ImReceiver", "receive", "Colon not found");
       return ErrorCode::COLON_NOT_FOUND;
     }
 
@@ -68,7 +67,7 @@ public:
     }
 
     if (logger)
-      logger->println("ImReceiver_private", "receive", "Data received");
+      logger->println("ImReceiver", "receive", "Data received");
     return ErrorCode::SUCCESS;
   }
 

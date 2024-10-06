@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdint.h>
 #include <nets/BitWidthArray.h>
+#include <stdint.h>
 
 /**
  * @brief モーターの状態を表す列挙型
@@ -16,4 +16,4 @@ enum class MotorStateEnum : uint8_t {
  * @brief モーターの状態を管理する配列クラス
  */
 template <uint8_t numMotors>
-using MotorStateArray_private = BitWidthArray<MotorStateEnum, 2, numMotors>;
+using MotorStateArray = BitWidthArray<MotorStateEnum, 2, numMotors>;

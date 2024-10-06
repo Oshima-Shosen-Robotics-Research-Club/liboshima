@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdint.h>
 #include <nets/BitWidthArray.h>
+#include <stdint.h>
 
 /**
  * @brief ボタンの状態を表す列挙型
@@ -15,4 +15,4 @@ enum class ButtonStateEnum : uint8_t {
  * @brief ボタンの状態を管理する配列クラス
  */
 template <uint8_t numButtons>
-using ButtonStateArray_private = BitWidthArray<ButtonStateEnum, 1, numButtons>;
+using ButtonStateArray = BitWidthArray<ButtonStateEnum, 1, numButtons>;
