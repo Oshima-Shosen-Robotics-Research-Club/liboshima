@@ -33,7 +33,6 @@ public:
       return ErrorCode::NO_DATA_AVAILABLE;
     }
 
-    char recvedStr[10 + 1 + 32 * 2 + 31 + 1];
     size_t length =
         serial.readBytesUntil('\r', recvedStr, sizeof(recvedStr) - 1);
     recvedStr[length] = '\0';
@@ -74,4 +73,5 @@ public:
 private:
   SerialType &serial;
   LoggerType logger;
+  char recvedStr[0xFF];
 };
