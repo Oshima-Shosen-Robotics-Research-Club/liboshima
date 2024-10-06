@@ -2,7 +2,7 @@
 
 DebugLogger<HardwareSerial> logger(Serial);
 
-void setup() { logger.init(serial); }
+void setup() { logger.begin(); }
 
 void loop() {
   logger.println("main", "loop", "Hello, world!");
