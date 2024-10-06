@@ -9,7 +9,7 @@
  */
 
 #include "components/LedTape.h"
-#include "components/controllers/Controller.h"
+#include "components/controllers/ControllerData.h"
 #include "components/ims/IM920SL.h"
 #include "components/ims/ImReceiver_private.h"
 #include "components/ims/ImSender_private.h"
