@@ -1,47 +1,55 @@
 /**
- * @file Im920SL.h
- * @brief IM920SLモジュールを使用した無線通信クラスのヘッダファイル
+ * @file IM920SL.h
  *
- * このファイルは、IM920SL無線モジュールを使って通信を行うためのクラス
- * `IM920SL` を提供します。このクラスを使用してデータの送受信や通信の初期化を
- * 行うことができます。
+ * @brief IM920SLモジュールを使用してデータの送受信を行うためのクラス定義
+ *
+ * このファイルには、IM920SLモジュールを使用してデータの送受信を行うための
+ * `IM920SL` クラスが定義されています。
+ * このクラスは、IM920SLモジュールを使用してデータの送受信を行うための
+ * 機能を提供します。
  */
-
 #pragma once
 
 #include "ImReceiver.h"
 #include "ImSender.h"
 
 /**
- * @class IM920SL
- * @brief IM920SLモジュールを使用して無線通信を行うクラス
+ * @brief IM920SLクラス
  *
- * `IM920SL` クラスは、IM920SLモジュールを使用して無線通信を行います。
- * 主な機能として、通信の初期化、データの送受信、および受信データの管理を行います。
- * このクラスは `ImReceiver` と `ImSender` の機能を継承しており、送受信に
- * 必要なメソッドを提供します。
+ * このクラスは、IM920SLモジュールを使用してデータの送受信を行うためのクラスです。
+ * SerialTypeとLoggerTypeをテンプレート引数として受け取ります。
+ *
+ * @tparam SerialType シリアル通信の型
+ * @tparam LoggerType ロガーの型（デフォルトはDebugLogger<SerialType>*）
  */
-class IM920SL : public ImReceiver, public ImSender {
+template <typename SerialType, typename LoggerType = DebugLogger<SerialType> *>
+class IM920SL : public ImReceiver<SerialType, LoggerType>,
+                public ImSender<SerialType, LoggerType> {
 public:
   /**
-   * @brief IM920SLクラスのコンストラクタ
+   * @brief コンストラクタ
    *
-   * IM920SL通信モジュールを使用するために、指定したシリアルポートを
-   * 使用してクラスを初期化します。
-   * @param serial
-   * 使用するシリアルポートの参照。IM920SLモジュールと通信するために使用します。
+   * @param serial シリアル通信オブジェクト
+   * @param logger ロガーオブジェクト（デフォルトはnullptr）
    */
-  IM920SL(SerialPort &serial);
+  IM920SL(SerialType &serial, LoggerType logger = nullptr)
+      : ImReceiver<SerialType, LoggerType>(serial, logger),
+        ImSender<SerialType, LoggerType>(serial, logger), serial(serial) {}
 
   /**
-   * @brief 通信を開始するメソッド
+   * @brief シリアル通信を開始する
    *
-   * 指定した通信速度（ボーレート）でIM920SLモジュールとの通信を開始します。
-   * デフォルトのボーレートは19200bpsです。
-   * @param baudrate 通信速度（ボーレート）。デフォルト値は19200。
+   * @param baudrate ボーレート（デフォルトは19200）
    */
-  void begin(unsigned long baudrate = 19200);
+  void begin(unsigned long baudrate = 19200) { serial.begin(baudrate); }
+
+  /**
+   * @brief 利用可能なデータのバイト数を取得する
+   *
+   * @return 利用可能なデータのバイト数
+   */
+  uint8_t available() { return serial.available(); }
 
 private:
-  SerialPort &serial; /**< IM920SLモジュールと通信するためのシリアルポート */
+  SerialType &serial; ///< シリアル通信オブジェクトの参照
 };
