@@ -2,7 +2,7 @@
 
 #include <utils/DebugLogger.h>
 
-#define IM_SEND_INTERVAL 55
+#define IM_SEND_INTERVAL 60
 
 /**
  * @brief IM920SL送信クラス
