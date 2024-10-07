@@ -1,7 +1,7 @@
 /**
  * @file ImReceiver.h
  * @brief IM920SL受信クラス
- * 
+ *
  * このファイルには、IM920SLモジュールからデータを受信するための `ImReceiver`
  * クラスが定義されています。
  * SerialTypeとLoggerTypeをテンプレート引数として受け取ります。
@@ -74,7 +74,7 @@ public:
       if (c == '\r') {
         while (!serial.available())
           ;
-        c = serial.read();
+        serial.read();
         recvedLine[length] = '\0';
         break;
       }
