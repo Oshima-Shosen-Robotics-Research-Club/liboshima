@@ -11,8 +11,7 @@
 #include <utils/Converter.h>
 #include <utils/DebugLogger.h>
 
-#define IM_RECEIVE_INTERVAL_MILLIS 500
-#define IM_RECEIVE_INTERVAL_MICROS 500000
+#define IM_RECEIVE_TIMEOUT 1000 ///< 受信タイムアウト時間（ミリ秒）
 
 /**
  * @brief エラーコードを表す列挙型
