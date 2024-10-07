@@ -111,6 +111,17 @@ public:
     return ReceiveErrorCode::SUCCESS;
   }
 
+  // 指定の型のデータを受信するまで受信する
+  template <typename T>
+  ReceiveErrorCode receiveUntil(T &data, bool exitOnNoData = false) {
+    ReceiveErrorCode result;
+    do {
+      result = receive(data);
+    } while ((result != ReceiveErrorCode::SUCCESS) ||
+             (exitOnNoData && (result == ReceiveErrorCode::NO_DATA_AVAILABLE)));
+    return result;
+  }
+
 private:
   SerialType &serial;    ///< シリアル通信オブジェクトの参照
   LoggerType logger;     ///< ロガーオブジェクト
