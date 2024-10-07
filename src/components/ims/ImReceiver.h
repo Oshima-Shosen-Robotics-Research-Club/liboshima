@@ -15,6 +15,16 @@
 #define IM_RECEIVE_INTERVAL_MICROS 500000
 
 /**
+ * @brief エラーコードを表す列挙型
+ */
+enum class ReceiveErrorCode {
+  SUCCESS,                        ///< 成功
+  NO_DATA_AVAILABLE,              ///< データが利用できない
+  RECEIVED_STRING_LENGTH_INVALID, ///< 受信した文字列の長さが無効
+  COLON_NOT_FOUND,                ///< コロンが見つからない
+};
+
+/**
  * @brief IM920SL受信クラス
  *
  * このクラスは、IM920SLモジュールからデータを受信するためのクラスです。
@@ -36,23 +46,13 @@ public:
       : serial(serial), logger(logger) {}
 
   /**
-   * @brief エラーコードを表す列挙型
-   */
-  enum class ErrorCode {
-    SUCCESS,                        ///< 成功
-    NO_DATA_AVAILABLE,              ///< データが利用できない
-    RECEIVED_STRING_LENGTH_INVALID, ///< 受信した文字列の長さが無効
-    COLON_NOT_FOUND,                ///< コロンが見つからない
-  };
-
-  /**
    * @brief データを受信するテンプレート関数
    *
    * @tparam T 受信するデータの型
    * @param data 受信したデータを格納する変数
-   * @return ErrorCode エラーコード
+   * @return ReceiveErrorCode エラーコード
    */
-  template <typename T> ErrorCode receive(T &data) {
+  template <typename T> ReceiveErrorCode receive(T &data) {
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
                   "Data size must be between 1 and 32 bytes");
 
@@ -62,7 +62,7 @@ public:
     if (!serial.available()) {
       if (logger)
         logger->println("ImReceiver", "receive", "No data available");
-      return ErrorCode::NO_DATA_AVAILABLE;
+      return ReceiveErrorCode::NO_DATA_AVAILABLE;
     }
 
     size_t length = 0;
@@ -88,13 +88,13 @@ public:
       if (logger)
         logger->printlnf("ImReceiver", "receive",
                          "Received string length invalid: %d", length);
-      return ErrorCode::RECEIVED_STRING_LENGTH_INVALID;
+      return ReceiveErrorCode::RECEIVED_STRING_LENGTH_INVALID;
     }
 
     if (recvedLine[10] != ':') {
       if (logger)
         logger->println("ImReceiver", "receive", "Colon not found");
-      return ErrorCode::COLON_NOT_FOUND;
+      return ReceiveErrorCode::COLON_NOT_FOUND;
     }
 
     char *pos = recvedLine + 11;
@@ -108,7 +108,7 @@ public:
 
     if (logger)
       logger->println("ImReceiver", "receive", "Data received");
-    return ErrorCode::SUCCESS;
+    return ReceiveErrorCode::SUCCESS;
   }
 
 private:
