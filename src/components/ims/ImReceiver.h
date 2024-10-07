@@ -116,8 +116,10 @@ public:
     ReceiveErrorCode result;
     do {
       result = receive(data);
-    } while ((result != ReceiveErrorCode::SUCCESS) ||
-             (exitOnNoData && (result == ReceiveErrorCode::NO_DATA_AVAILABLE)));
+      if (exitOnNoData && result == ReceiveErrorCode::NO_DATA_AVAILABLE) {
+        break;
+      }
+    } while (result != ReceiveErrorCode::SUCCESS);
     return result;
   }
 
