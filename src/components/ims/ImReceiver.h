@@ -11,8 +11,7 @@
 #include <utils/Converter.h>
 #include <utils/DebugLogger.h>
 
-#define IM_RECEIVE_INTERVAL_MILLIS 500
-#define IM_RECEIVE_INTERVAL_MICROS 500000
+#define IM_RECEIVE_TIMEOUT 1000 ///< 受信タイムアウト時間（ミリ秒）
 
 /**
  * @brief エラーコードを表す列挙型
@@ -109,6 +108,19 @@ public:
     if (logger)
       logger->println("ImReceiver", "receive", "Data received");
     return ReceiveErrorCode::SUCCESS;
+  }
+
+  // 指定の型のデータを受信するまで受信する
+  template <typename T>
+  ReceiveErrorCode receiveUntil(T &data, bool exitOnNoData = false) {
+    ReceiveErrorCode result;
+    do {
+      result = receive(data);
+      if (exitOnNoData && result == ReceiveErrorCode::NO_DATA_AVAILABLE) {
+        break;
+      }
+    } while (result != ReceiveErrorCode::SUCCESS);
+    return result;
   }
 
 private:

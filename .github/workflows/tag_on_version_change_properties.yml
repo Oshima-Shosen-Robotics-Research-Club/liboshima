@@ -2,6 +2,8 @@ name: Tag on version change (Properties)
 
 on:
   push:
+    branches:
+      - stable
     paths:
       - 'library.properties'
 
