@@ -14,8 +14,7 @@ const uint8_t Converter::valueLookup[] = {
 // バイトデータを16進数表現に変換する関数
 void Converter::toHex(const uint8_t *data, size_t length, char *output) {
   for (size_t i = 0; i < length; ++i) {
-    uint8_t byte = data[i];
-    output[i * 2] = hexLookup[byte >> 4];       // 上位4ビットを取得
+    output[i * 2] = hexLookup[data[i] >> 4 & 0x0F];       // 上位4ビットを取得
     output[i * 2 + 1] = hexLookup[byte & 0x0F]; // 下位4ビットを取得
   }
 }
