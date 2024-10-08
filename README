@@ -40,10 +40,5 @@ https://www.ardu-badge.com/liboshima
 ・このリポジトリの変更をプッシュする。
 
 ■todo
-・serialportの削除。
-・Im920slのserialのテンプレート化。
-・ライブラリのクラスでloggerを使う場合は明示的に設定するようにする。（例: IM920SL::attachLogger(logger);）
 ・imsenderの定数を名前空間付きアクセスに変更。（例: IM920SL::SEND_INTERVAL_MS）
-・動作確認
-・examplesの追加（workflowsでバグを検知できるようにするため）
-・liboshima.hをインクルードするようにする。
+・ImSenderやImReceiverのシリアル通信とDebugLoggerのシリアル通信を同じにできないようにする。
