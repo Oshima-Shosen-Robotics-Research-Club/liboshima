@@ -49,54 +49,59 @@ public:
    *
    * @tparam T 受信するデータの型
    * @param data 受信したデータを格納する変数
-   * @return ReceiveErrorCode エラーコード
+   * @param wait データが到着するまで待機するかどうか（デフォルトはfalse）
+   * @return bool 受信に成功した場合はtrue、それ以外はfalse
    */
-  template <typename T> ReceiveErrorCode receive(T &data) {
+  template <typename T> bool receive(T &data, bool wait = false) {
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
                   "Data size must be between 1 and 32 bytes");
 
-    if (logger)
-      logger->println("ImReceiver", "receive", "Receiving data");
+    printLog("Start receiving data");
 
-    if (!serial.available()) {
-      if (logger)
-        logger->println("ImReceiver", "receive", "No data available");
-      return ReceiveErrorCode::NO_DATA_AVAILABLE;
+    // コロン以前の文字列を読み捨てる
+    printLog("Discard data before colon");
+    while (true) {
+      if (serial.available()) {
+        printLog("Data available");
+        if (serial.read() == ':') {
+          printLog("Colon found");
+          break;
+        }
+      } else {
+        if (wait) {
+          printLog("Wait for data");
+          while (!serial.available())
+            ;
+        } else {
+          printLog("No data available");
+          return false;
+        }
+      }
     }
 
-    size_t length = 0;
-    char c;
-    while (true) {
+    // コロン以降のデータを読み込む
+    printLog("Read data after colon");
+    uint8_t lineLength = sizeof(T) * 2 + sizeof(T) - 1 + 2;
+    char afterColon[lineLength + 1];
+    for (uint8_t index = 0; index < lineLength; index++) {
+      printLog("Read data");
       while (!serial.available())
         ;
-      c = serial.read();
+      char c = serial.read();
       if (c == '\r') {
+        printLog("Carriage return found");
         while (!serial.available())
           ;
         serial.read();
-        recvedLine[length] = '\0';
+        afterColon[index] = '\0';
         break;
       }
-      recvedLine[length++] = c;
+      afterColon[index++] = c;
     }
 
-    if (logger)
-      logger->printlnf("ImReceiver", "receive", "Received: %s", recvedLine);
-
-    if (length != 10 + 1 + sizeof(T) * 2 + sizeof(T) - 1) {
-      if (logger)
-        logger->printlnf("ImReceiver", "receive",
-                         "Received string length invalid: %d", length);
-      return ReceiveErrorCode::RECEIVED_STRING_LENGTH_INVALID;
-    }
-
-    if (recvedLine[10] != ':') {
-      if (logger)
-        logger->println("ImReceiver", "receive", "Colon not found");
-      return ReceiveErrorCode::COLON_NOT_FOUND;
-    }
-
-    char *pos = recvedLine + 11;
+    // 受信したデータを変換する
+    printLog("Convert data");
+    char *pos = afterColon;
     for (size_t i = 0; i < sizeof(T); i++) {
       Converter::fromHex(pos, 2, reinterpret_cast<uint8_t *>(&data) + i);
       pos += 2;
@@ -105,26 +110,15 @@ public:
       }
     }
 
-    if (logger)
-      logger->println("ImReceiver", "receive", "Data received");
-    return ReceiveErrorCode::SUCCESS;
-  }
-
-  // 指定の型のデータを受信するまで受信する
-  template <typename T>
-  ReceiveErrorCode receiveUntil(T &data, bool exitOnNoData = false) {
-    ReceiveErrorCode result;
-    do {
-      result = receive(data);
-      if (exitOnNoData && result == ReceiveErrorCode::NO_DATA_AVAILABLE) {
-        break;
-      }
-    } while (result != ReceiveErrorCode::SUCCESS);
-    return result;
+    printLog("Data received");
+    return true;
   }
 
 private:
-  SerialType &serial;    ///< シリアル通信オブジェクトの参照
-  LoggerType logger;     ///< ロガーオブジェクト
-  char recvedLine[0xFF]; ///< 受信した文字列を格納するバッファ
+  SerialType &serial; ///< シリアル通信オブジェクトの参照
+  LoggerType logger;  ///< ロガーオブジェクト
+  void printLog(const char *message) {
+    if (logger)
+      logger->println("ImReceiver", "receive", message);
+  }
 };
