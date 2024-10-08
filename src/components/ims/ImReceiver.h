@@ -122,7 +122,10 @@ private:
   }
   void printLogf(const char *format, ...) {
     if (logger) {
-      logger->printlnf("ImReceiver", "receive", format, ...);
+      va_list args;
+      va_start(args, format);
+      logger->printlnf("ImReceiver", "receive", format, args);
+      va_end(args);
     }
   }
 };
