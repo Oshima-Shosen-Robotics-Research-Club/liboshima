@@ -62,7 +62,7 @@ public:
     printLog("Discard data before colon");
     while (true) {
       if (serial.available()) {
-        printLog("Data available");
+        printLogf("Number of available data: %d", serial.available());
         if (serial.read() == ':') {
           printLog("Colon found");
           break;
@@ -119,5 +119,10 @@ private:
   void printLog(const char *message) {
     if (logger)
       logger->println("ImReceiver", "receive", message);
+  }
+  void printLogf(const char *format, ...) {
+    if (logger) {
+      logger->printlnf("ImReceiver", "receive", format, ...);
+    }
   }
 };
