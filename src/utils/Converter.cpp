@@ -15,7 +15,7 @@ const uint8_t Converter::valueLookup[] = {
 void Converter::toHex(const uint8_t *data, size_t length, char *output) {
   for (size_t i = 0; i < length; ++i) {
     output[i * 2] = hexLookup[data[i] >> 4 & 0x0F];       // 上位4ビットを取得
-    output[i * 2 + 1] = hexLookup[byte & 0x0F]; // 下位4ビットを取得
+    output[i * 2 + 1] = hexLookup[data[i] & 0x0F]; // 下位4ビットを取得
   }
 }
 
