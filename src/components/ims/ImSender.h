@@ -37,12 +37,14 @@ public:
     if (logger)
       logger->println("ImSender", "send", "Sending data");
 
+    // DO NOT INSERT LOGGER CODE HERE
     serial.print("TXDA ");
     for (uint8_t i = 0; i < sizeof(T); i++) {
       serial.print(reinterpret_cast<const uint8_t *>(&data)[i] >> 4 & 0xF, HEX);
       serial.print(reinterpret_cast<const uint8_t *>(&data)[i] & 0xF, HEX);
     }
     serial.println();
+    // DO NOT INSERT LOGGER CODE HERE
 
     if (logger)
       logger->println("ImSender", "send", "Data sent");
