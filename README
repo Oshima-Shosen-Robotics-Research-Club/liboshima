@@ -4,7 +4,7 @@ lib_deps = liboshima
 又は
 lib_deps = https://github.com/Oshima-Shosen-Robotics-Research-Club/liboshima
 ・プログラムの中で以下のように使う。(examplesフォルダを参照)
-#include <components/ims/IM920SL.h>
+#include <libohima.h>
 
 ■Arduino IDEでの使い方
 ・Library Managerから"liboshima"を検索してインストールする。
