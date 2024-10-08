@@ -81,9 +81,8 @@ public:
 
     // コロン以降のデータを読み込む
     printLog("Read data after colon");
-    uint8_t lineLength = sizeof(T) * 2 + sizeof(T) - 1 + 2;
-    char afterColon[lineLength + 1];
-    for (uint8_t index = 0; index < lineLength; index++) {
+    char afterColon[(sizeof(T) * 2) + (sizeof(T) - 1) + 1];
+    for (uint8_t index = 0; index < sizeof(afterColon); index++) {
       printLog("Read data");
       while (!serial.available())
         ;
@@ -96,7 +95,7 @@ public:
         afterColon[index] = '\0';
         break;
       }
-      afterColon[index++] = c;
+      afterColon[index] = c;
     }
 
     // 受信したデータを変換する
