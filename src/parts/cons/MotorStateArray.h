@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <nets/BitWidthArray.h>
 #include <stdint.h>
+#include <types/nets/BitWidthArray.h>
 
 /**
  * @brief モーターの状態を表す列挙型
