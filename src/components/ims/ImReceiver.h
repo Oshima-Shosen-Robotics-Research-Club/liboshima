@@ -50,7 +50,7 @@ public:
    * @tparam T 受信するデータの型
    * @param data 受信したデータを格納する変数
    * @param wait データが到着するまで待機するかどうか（デフォルトはfalse）
-   * @return bool 受信に成功した場合はtrue、それ以外はfalse
+   * @return bool コロンの受信に成功した場合はtrue、それ以外はfalse
    */
   template <typename T> bool receive(T &data, bool wait = false) {
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
