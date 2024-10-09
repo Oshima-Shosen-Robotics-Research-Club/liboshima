@@ -90,6 +90,46 @@ public:
             buffer); // フォーマットされたメッセージを出力
   }
 
+  /**
+   * @brief クラス名、メソッド名、およびメッセージを出力するメソッド（待機）
+   *
+   * シリアルポートが利用可能になるまで待機し、デバッグメッセージを出力します。
+   *
+   * @param className クラス名を示す文字列
+   * @param methodName メソッド名を示す文字列
+   * @param message デバッグメッセージを示す文字列
+   */
+  void printlnWait(const char *className, const char *methodName,
+                   const char *message) {
+    while (!serial.availableForWrite())
+      ;
+    println(className, methodName, message);
+  }
+
+  /**
+   * @brief フォーマットされた文字列を出力するメソッド（待機）
+   *
+   * シリアルポートが利用可能になるまで待機し、フォーマットされたメッセージを出力します。
+   *
+   * @param className クラス名を示す文字列
+   * @param methodName メソッド名を示す文字列
+   * @param format 出力するメッセージのフォーマット文字列（printf形式）
+   * @param ... フォーマット文字列に埋め込む可変引数
+   */
+  void printlnfWait(const char *className, const char *methodName,
+                    const char *format, ...) {
+    while (!serial.availableForWrite())
+      ;
+    char buffer[100]; // 出力メッセージを格納するバッファサイズ
+    va_list args;
+    va_start(args, format); // 可変引数の初期化
+    // フォーマットされた文字列を作成
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args); // 可変引数の解放
+    // フォーマットされたメッセージを出力
+    println(className, methodName, buffer);
+  }
+
 private:
   /// デバッグメッセージを出力するシリアルポートへの参照
   SerialType &serial;
