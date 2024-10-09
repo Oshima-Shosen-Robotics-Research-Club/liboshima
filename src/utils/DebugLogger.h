@@ -82,10 +82,15 @@ public:
     if (logLevel > level) {
       return;
     }
+
     if (wait == DebugLogger::WaitMode::WAIT) {
       while (!serial.availableForWrite())
         ;
+    } else if (wait == DebugLogger::WaitMode::NO_WAIT &&
+               !serial.availableForWrite()) {
+      return;
     }
+    
     serial.print("<");
     serial.print(className);
     serial.print("::");
