@@ -15,6 +15,19 @@
 #include <stdint.h>
 #include <stdio.h>
 
+namespace DebugLogger {
+enum class LogLevel : uint8_t {
+  INFO, ///< 情報メッセージ
+  WARN, ///< 警告メッセージ
+  ERROR ///< エラーメッセージ
+};
+
+enum class WaitMode : uint8_t {
+  WAIT,   ///< データが利用可能になるまで待機
+  NO_WAIT ///< データが利用できない場合は即座に終了
+};
+} // namespace DebugLogger
+
 /**
  * @class DebugLogger
  * @brief デバッグメッセージをシリアルポートに出力するテンプレートクラス
@@ -36,8 +49,11 @@ public:
    * クラスのインスタンスを生成し、指定されたシリアルポートへの参照を保持します。
    *
    * @param serial デバッグメッセージを出力するシリアルポートへの参照
+   * @param logLevel ログレベル（デフォルトはINFO）
    */
-  DebugLogger(SerialType &serial) : serial(serial) {}
+  DebugLogger(SerialType &serial,
+              DebugLogger::LogLevel logLevel = DebugLogger::LogLevel::INFO)
+      : serial(serial), logLevel(logLevel) {}
 
   /**
    * @brief シリアルポートを初期化するメソッド
@@ -57,9 +73,19 @@ public:
    * @param className クラス名を示す文字列
    * @param methodName メソッド名を示す文字列
    * @param message デバッグメッセージを示す文字列
+   * @param level ログレベル
+   * @param wait データが利用可能になるまで待機するかどうか（デフォルトはWAIT）
    */
   void println(const char *className, const char *methodName,
-               const char *message) {
+               const char *message, DebugLogger::LogLevel level,
+               DebugLogger::WaitMode wait = DebugLogger::WaitMode::WAIT) {
+    if (logLevel > level) {
+      return;
+    }
+    if (wait == DebugLogger::WaitMode::WAIT) {
+      while (!serial.availableForWrite())
+        ;
+    }
     serial.print("<");
     serial.print(className);
     serial.print("::");
@@ -76,50 +102,13 @@ public:
    * @param className クラス名を示す文字列
    * @param methodName メソッド名を示す文字列
    * @param format 出力するメッセージのフォーマット文字列（printf形式）
-   * @param ... フォーマット文字列に埋め込む可変引数
+   * @param level ログレベル
+   * @param wait データが利用可能になるまで待機するかどうか（デフォルトはWAIT）
+   * @param ... フォーマットする可変引数
    */
   void printlnf(const char *className, const char *methodName,
-                const char *format, ...) {
-    char buffer[100]; // 出力メッセージを格納するバッファサイズ
-    va_list args;
-    va_start(args, format); // 可変引数の初期化
-    vsnprintf(buffer, sizeof(buffer), format,
-              args); // フォーマットされた文字列を作成
-    va_end(args);    // 可変引数の解放
-    println(className, methodName,
-            buffer); // フォーマットされたメッセージを出力
-  }
-
-  /**
-   * @brief クラス名、メソッド名、およびメッセージを出力するメソッド（待機）
-   *
-   * シリアルポートが利用可能になるまで待機し、デバッグメッセージを出力します。
-   *
-   * @param className クラス名を示す文字列
-   * @param methodName メソッド名を示す文字列
-   * @param message デバッグメッセージを示す文字列
-   */
-  void printlnWait(const char *className, const char *methodName,
-                   const char *message) {
-    while (!serial.availableForWrite())
-      ;
-    println(className, methodName, message);
-  }
-
-  /**
-   * @brief フォーマットされた文字列を出力するメソッド（待機）
-   *
-   * シリアルポートが利用可能になるまで待機し、フォーマットされたメッセージを出力します。
-   *
-   * @param className クラス名を示す文字列
-   * @param methodName メソッド名を示す文字列
-   * @param format 出力するメッセージのフォーマット文字列（printf形式）
-   * @param ... フォーマット文字列に埋め込む可変引数
-   */
-  void printlnfWait(const char *className, const char *methodName,
-                    const char *format, ...) {
-    while (!serial.availableForWrite())
-      ;
+                const char *format, DebugLogger::LogLevel level,
+                DebugLogger::WaitMode wait = DebugLogger::WaitMode::WAIT, ...) {
     char buffer[100]; // 出力メッセージを格納するバッファサイズ
     va_list args;
     va_start(args, format); // 可変引数の初期化
@@ -127,10 +116,11 @@ public:
     vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args); // 可変引数の解放
     // フォーマットされたメッセージを出力
-    println(className, methodName, buffer);
+    println(className, methodName, buffer, level, wait);
   }
 
 private:
   /// デバッグメッセージを出力するシリアルポートへの参照
   SerialType &serial;
+  DebugLogger::LogLevel logLevel; ///< ログレベル
 };
