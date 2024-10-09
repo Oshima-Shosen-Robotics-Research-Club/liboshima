@@ -35,9 +35,9 @@ public:
    * `DebugLogger`
    * クラスのインスタンスを生成し、指定されたシリアルポートへの参照を保持します。
    *
-   * @param serialPort デバッグメッセージを出力するシリアルポートへの参照
+   * @param serial デバッグメッセージを出力するシリアルポートへの参照
    */
-  DebugLogger(SerialType &serialPort) : serialPort(serialPort) {}
+  DebugLogger(SerialType &serial) : serial(serial) {}
 
   /**
    * @brief シリアルポートを初期化するメソッド
@@ -47,7 +47,7 @@ public:
    *
    * @param baudrate シリアル通信のボーレート（デフォルトは19200）
    */
-  void begin(unsigned long baudrate = 19200) { serialPort.begin(baudrate); }
+  void begin(unsigned long baudrate = 19200) { serial.begin(baudrate); }
 
   /**
    * @brief クラス名、メソッド名、およびメッセージを出力するメソッド
@@ -60,12 +60,12 @@ public:
    */
   void println(const char *className, const char *methodName,
                const char *message) {
-    serialPort.print("<");
-    serialPort.print(className);
-    serialPort.print("::");
-    serialPort.print(methodName);
-    serialPort.print("> ");
-    serialPort.println(message); // メッセージを出力
+    serial.print("<");
+    serial.print(className);
+    serial.print("::");
+    serial.print(methodName);
+    serial.print("> ");
+    serial.println(message); // メッセージを出力
   }
 
   /**
@@ -92,5 +92,5 @@ public:
 
 private:
   /// デバッグメッセージを出力するシリアルポートへの参照
-  SerialType &serialPort;
+  SerialType &serial;
 };
