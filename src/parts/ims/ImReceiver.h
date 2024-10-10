@@ -123,14 +123,14 @@ private:
   LoggerType logger;  ///< ロガーオブジェクト
   inline void printLog(DebugLogger<void>::LogLevel level,
                        const char *methodName, const char *message) {
-    if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value) {
+    if constexpr (!IsSame<decltype(logger), DebugLogger<void> *>::value) {
       logger->println(level, DebugLogger<void>::WaitMode::WAIT, "ImReceiver",
                       methodName, message);
     }
   }
-  void printLogf(DebugLogger<void>::LogLevel level,
-                        const char *methodName, const char *format, ...) {
-    if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value) {
+  void printLogf(DebugLogger<void>::LogLevel level, const char *methodName,
+                 const char *format, ...) {
+    if constexpr (!IsSame<decltype(logger), DebugLogger<void> *>::value) {
       va_list args;
       va_start(args, format);
       logger->printlnf(level, DebugLogger<void>::WaitMode::WAIT, "ImReceiver",
