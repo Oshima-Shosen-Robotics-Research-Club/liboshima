@@ -74,3 +74,5 @@ private:
   SerialType &serial; ///< シリアル通信オブジェクトの参照
   LoggerType logger;  ///< ロガーオブジェクト
 };
+
+template <> class ImSender<void> : public ImSenderBase {};
