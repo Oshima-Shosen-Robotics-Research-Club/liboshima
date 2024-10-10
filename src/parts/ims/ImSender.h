@@ -5,6 +5,7 @@
 #define IM_SEND_INTERVAL 60
 
 class ImSenderBase {
+public:
   enum class Mode : uint8_t {
     WAIT,   ///< データが利用可能になるまで待機
     NO_WAIT ///< データが利用できない場合は即座に終了
