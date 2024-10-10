@@ -46,10 +46,7 @@ public:
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
                   "Data size must be between 1 and 32 bytes");
 
-    if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value)
-      logger->println(DebugLogger<void>::LogLevel::INFO,
-                      DebugLogger<void>::WaitMode::WAIT, "ImSender", "send",
-                      "Sending data");
+    printLog(DebugLogger<void>::LogLevel::INFO, "send", "Sending data");
 
     constexpr uint8_t size = 5 + (sizeof(T) * 2);
     if (static_cast<uint8_t>(serial.availableForWrite()) < size) {
@@ -72,15 +69,19 @@ public:
     }
     serial.println();
 
-    if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value)
-      logger->println(DebugLogger<void>::LogLevel::INFO,
-                      DebugLogger<void>::WaitMode::WAIT, "ImSender", "send",
-                      "Data sent");
+    printLog(DebugLogger<void>::LogLevel::INFO, "send", "Data sent");
   }
 
 private:
   SerialType &serial; ///< シリアル通信オブジェクトの参照
   LoggerType logger;  ///< ロガーオブジェクト
+  inline void printLog(DebugLogger<void>::LogLevel level,
+                       const char *methodName, const char *message) {
+    if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value) {
+      logger->println(level, DebugLogger<void>::WaitMode::WAIT, "ImSender",
+                      methodName, message);
+    }
+  }
 };
 
 template <> class ImSender<void> : public ImSenderBase {};
