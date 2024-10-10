@@ -5,14 +5,11 @@
 
 #define IM_SEND_INTERVAL 60
 
-class ImSenderBase {
-public:
-  enum class WaitMode : uint8_t {
+enum class ImSenderMode : uint8_t {
     BUFFER_FULL,  ///< バッファがいっぱいの場合は即座に終了
     CAREER_SENSE, ///< キャリアセンスを検出するまで待機
     NO_WAIT       ///< データが利用できない場合は即座に終了
   };
-};
 
 /**
  * @brief IM920SL送信クラス
@@ -41,25 +38,25 @@ public:
    * @tparam T 送信するデータの型
    * @param data 送信するデータ
    */
-  template <typename T> void send(const T &data, WaitMode waitmode) {
+  template <typename T> void send(const T &data, ImSenderMode waitmode) {
 
     static_assert(
         sizeof(T) >= 1 && sizeof(T) <= 32,
         "送信する型のサイズは1バイト以上32バイト以下である必要があります");
 
-    printLog(DebugLogger<void>::LogLevel::INFO, "send", "Sending data");
+    printLog(DebugLoggerLevel::INFO, "send", "Sending data");
 
     constexpr uint8_t size = 5 + (sizeof(T) * 2);
     if (static_cast<uint8_t>(serial.availableForWrite()) < size) {
-      if (waitmode == WaitMode::NO_WAIT) {
+      if (waitmode == ImSenderMode::NO_WAIT) {
         return;
-      } else if (waitmode == WaitMode::BUFFER_FULL) {
+      } else if (waitmode == ImSenderMode::BUFFER_FULL) {
         while (static_cast<uint8_t>(serial.availableForWrite()) < size)
           ;
       }
     }
 
-    if (waitmode == WaitMode::CAREER_SENSE) {
+    if (waitmode == ImSenderMode::CAREER_SENSE) {
       delay(IM_SEND_INTERVAL);
     }
 
@@ -70,17 +67,17 @@ public:
     }
     serial.println();
 
-    printLog(DebugLogger<void>::LogLevel::INFO, "send", "Data sent");
+    printLog(DebugLoggerLevel::INFO, "send", "Data sent");
   }
 
 private:
   SerialType &serial; ///< シリアル通信オブジェクトの参照
-  LoggerType logger;  ///< ロガーオブジェクト
-  inline void printLog(DebugLogger<void>::LogLevel level,
-                       const char *methodName, const char *message) {
+  LoggerType *logger; ///< ロガーオブジェクト
+  inline void printLog(DebugLoggerLevel level, const char *methodName,
+                       const char *message) {
     if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value) {
-      logger->println(level, DebugLogger<void>::WaitMode::WAIT, "ImSender",
-                      methodName, message);
+      logger->println(level, DebugLoggerMode::WAIT, "ImSender", methodName,
+                      message);
     }
   }
 };
