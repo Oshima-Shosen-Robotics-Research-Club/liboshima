@@ -52,8 +52,7 @@ public:
                       "Sending data");
 
     constexpr uint8_t size = 5 + (sizeof(T) * 2);
-    if (static_cast<uint8_t>(serial.availableForWrite() < size) <
-        5 + (sizeof(T) * 2)) {
+    if (static_cast<uint8_t>(serial.availableForWrite()) < size) {
       if (Waitmode == WaitMode::BUFFER_FULL) {
         while (static_cast<uint8_t>(serial.availableForWrite()) < size)
           ;
