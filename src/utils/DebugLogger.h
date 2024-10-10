@@ -119,15 +119,4 @@ private:
   LogLevel logLevel; ///< ログレベル
 };
 
-template <> class DebugLogger<void> : public DebugLoggerBase {
-public:
-  DebugLogger() {}
-
-  void begin(unsigned long baudrate = 19200) {}
-
-  void println(LogLevel level, WaitMode wait, const char *className,
-               const char *methodName, const char *message) {}
-
-  void printlnf(LogLevel level, WaitMode wait, const char *className,
-                const char *methodName, const char *format, ...) {}
-};
+template <> class DebugLogger<void> : public DebugLoggerBase {};
