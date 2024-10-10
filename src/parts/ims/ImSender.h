@@ -6,10 +6,10 @@
 #define IM_SEND_INTERVAL 60
 
 enum class ImSenderMode : uint8_t {
-    BUFFER_FULL,  ///< バッファがいっぱいの場合は即座に終了
-    CAREER_SENSE, ///< キャリアセンスを検出するまで待機
-    NO_WAIT       ///< データが利用できない場合は即座に終了
-  };
+  BUFFER_FULL,  ///< バッファがいっぱいの場合は即座に終了
+  CAREER_SENSE, ///< キャリアセンスを検出するまで待機
+  NO_WAIT       ///< データが利用できない場合は即座に終了
+};
 
 /**
  * @brief IM920SL送信クラス
@@ -20,8 +20,8 @@ enum class ImSenderMode : uint8_t {
  * @tparam SerialType シリアル通信の型
  * @tparam LoggerType ロガーの型（デフォルトはDebugLogger<SerialType>*）
  */
-template <typename SerialType, typename LoggerType = DebugLogger<void> *>
-class ImSender : public ImSenderBase {
+template <typename SerialType, typename LoggerType>
+class ImSender {
 public:
   /**
    * @brief コンストラクタ
@@ -29,7 +29,7 @@ public:
    * @param serial シリアル通信オブジェクト
    * @param logger ロガーオブジェクト（デフォルトはnullptr）
    */
-  ImSender(SerialType &serial, LoggerType logger = nullptr)
+  ImSender(SerialType &serial, LoggerType *logger = nullptr)
       : serial(serial), logger(logger) {}
 
   /**

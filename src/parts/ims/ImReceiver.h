@@ -15,9 +15,9 @@
 #define IM_RECEIVE_TIMEOUT 1000 ///< 受信タイムアウト時間（ミリ秒）
 
 enum class ImReceiverMode : uint8_t {
-    WAIT,   ///< データが利用可能になるまで待機
-    NO_WAIT ///< データが利用できない場合は即座に終了
-  };
+  WAIT,   ///< データが利用可能になるまで待機
+  NO_WAIT ///< データが利用できない場合は即座に終了
+};
 
 /**
  * @brief IM920SL受信クラス
@@ -28,8 +28,7 @@ enum class ImReceiverMode : uint8_t {
  * @tparam SerialType シリアル通信の型
  * @tparam LoggerType ロガーの型（デフォルトはDebugLogger<void>*）
  */
-template <typename SerialType, typename LoggerType = DebugLogger<void> *>
-class ImReceiver : public ImReceiverBase {
+template <typename SerialType, typename LoggerType> class ImReceiver {
 public:
   /**
    * @brief コンストラクタ
@@ -37,7 +36,7 @@ public:
    * @param serial シリアル通信オブジェクト
    * @param logger ロガーオブジェクト（デフォルトはnullptr）
    */
-  ImReceiver(SerialType &serial, LoggerType logger = nullptr)
+  ImReceiver(SerialType &serial, LoggerType *logger = nullptr)
       : serial(serial), logger(logger) {}
 
   /**
@@ -48,8 +47,8 @@ public:
    * @param wait データが到着するまで待機するかどうか（デフォルトはfalse）
    * @return bool コロンの受信に成功した場合はtrue、それ以外はfalse
    */
-  template <typename T> bool receive(T &data, Mode mode) {
-    
+  template <typename T> bool receive(T &data, ImReceiverMode mode) {
+
     static_assert(
         sizeof(T) >= 1 && sizeof(T) <= 32,
         "受信する型のサイズは1バイト以上32バイト以下である必要があります");
@@ -113,6 +112,8 @@ public:
 
 private:
   SerialType &serial; ///< シリアル通信オブジェクトの参照
+  LoggerType *logger; ///< ロガーオブジェクト
+
   inline void printLog(DebugLoggerLevel level, const char *methodName,
                        const char *message) {
     if constexpr (!IsSame<LoggerType, void>::value) {
