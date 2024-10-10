@@ -41,7 +41,7 @@ public:
    * @tparam T 送信するデータの型
    * @param data 送信するデータ
    */
-  template <typename T> void send(const T &data, WaitMode Waitmode) {
+  template <typename T> void send(const T &data, WaitMode waitmode) {
 
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
                   "Data size must be between 1 and 32 bytes");
@@ -50,15 +50,16 @@ public:
 
     constexpr uint8_t size = 5 + (sizeof(T) * 2);
     if (static_cast<uint8_t>(serial.availableForWrite()) < size) {
-      if (Waitmode == WaitMode::BUFFER_FULL) {
+      if (waitmode == WaitMode::NO_WAIT) {
+        return;
+      } else
+      if (waitmode == WaitMode::BUFFER_FULL) {
         while (static_cast<uint8_t>(serial.availableForWrite()) < size)
           ;
-      } else {
-        return;
       }
     }
 
-    if (Waitmode == WaitMode::CAREER_SENSE) {
+    if (waitmode == WaitMode::CAREER_SENSE) {
       delay(IM_SEND_INTERVAL);
     }
 
