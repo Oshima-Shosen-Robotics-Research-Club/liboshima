@@ -4,6 +4,13 @@
 
 #define IM_SEND_INTERVAL 60
 
+class ImSenderBase {
+  enum class Mode : uint8_t {
+    WAIT,   ///< データが利用可能になるまで待機
+    NO_WAIT ///< データが利用できない場合は即座に終了
+  };
+};
+
 /**
  * @brief IM920SL送信クラス
  *
@@ -13,8 +20,8 @@
  * @tparam SerialType シリアル通信の型
  * @tparam LoggerType ロガーの型（デフォルトはDebugLogger<SerialType>*）
  */
-template <typename SerialType, typename LoggerType = DebugLogger<SerialType> *>
-class ImSender {
+template <typename SerialType, typename LoggerType = DebugLogger<void> *>
+class ImSender : public ImSenderBase {
 public:
   /**
    * @brief コンストラクタ
@@ -31,23 +38,36 @@ public:
    * @tparam T 送信するデータの型
    * @param data 送信するデータ
    */
-  template <typename T> void send(const T &data) {
+  template <typename T> void send(const T &data, Mode mode) {
+
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
                   "Data size must be between 1 and 32 bytes");
-    if (logger)
-      logger->println("ImSender", "send", "Sending data");
 
-    // DO NOT INSERT LOGGER CODE HERE
+    if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value)
+      logger->println(DebugLogger<void>::LogLevel::INFO,
+                      DebugLogger<void>::WaitMode::WAIT, "ImSender", "send",
+                      "Sending data");
+
+    if (serial.availableForWrite() < 5 + (sizeof(T) * 2)) {
+      if (mode == Mode::WAIT) {
+        while (serial.availableForWrite() < 5 + (sizeof(T) * 2))
+          ;
+      } else {
+        return;
+      }
+    }
+
     serial.print("TXDA ");
     for (uint8_t i = 0; i < sizeof(T); i++) {
       serial.print(reinterpret_cast<const uint8_t *>(&data)[i] >> 4 & 0xF, HEX);
       serial.print(reinterpret_cast<const uint8_t *>(&data)[i] & 0xF, HEX);
     }
     serial.println();
-    // DO NOT INSERT LOGGER CODE HERE
 
-    if (logger)
-      logger->println("ImSender", "send", "Data sent");
+    if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value)
+      logger->println(DebugLogger<void>::LogLevel::INFO,
+                      DebugLogger<void>::WaitMode::WAIT, "ImSender", "send",
+                      "Data sent");
   }
 
 private:
