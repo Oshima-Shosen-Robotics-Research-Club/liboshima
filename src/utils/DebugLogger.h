@@ -1,13 +1,3 @@
-/**
- * @file DebugLogger.h
- * @brief シリアルポートにデバッグメッセージを出力するテンプレートクラス
- *
- * このファイルは、デバッグ用のメッセージをシリアルポートに出力するための
- * `DebugLogger` テンプレートクラスを提供します。
- * 任意のシリアルポートクラスをテンプレートパラメータとして受け取り、可変長引数を使用して
- * フォーマットされたメッセージを出力することが可能です。
- */
-
 #pragma once
 
 #include <stdarg.h>
@@ -15,18 +5,22 @@
 #include <stdint.h>
 #include <stdio.h>
 
-namespace DebugLogger {
+/// ログレベルを定義する列挙型を持つ共通ベースクラス
+class DebugLoggerBase {
+public:
+  /// ログレベルを定義する列挙型
 enum class LogLevel : uint8_t {
   INFO, ///< 情報メッセージ
   WARN, ///< 警告メッセージ
   ERROR ///< エラーメッセージ
 };
 
+  /// 待機モードを定義する列挙型
 enum class WaitMode : uint8_t {
   WAIT,   ///< データが利用可能になるまで待機
   NO_WAIT ///< データが利用できない場合は即座に終了
 };
-} // namespace DebugLogger
+};
 
 /**
  * @class DebugLogger
@@ -34,13 +28,12 @@ enum class WaitMode : uint8_t {
  *
  * `SerialType` 型のオブジェクトにデバッグメッセージを出力するためのクラスです。
  * 典型的には、Arduinoや組み込みシステムのシリアルポート（例えば
- * `Serial`）を使用して、
- * クラス名、メソッド名、およびメッセージをシリアルポートに送信します。
+ * `Serial`）を使用して、クラス名、メソッド名、およびメッセージをシリアルポートに送信します。
  *
  * @tparam SerialType
  * シリアルポートクラスの型を指定します。例：`HardwareSerial`（Arduinoの場合）
  */
-template <typename SerialType> class DebugLogger {
+template <typename SerialType> class DebugLogger : public DebugLoggerBase {
 public:
   /**
    * @brief コンストラクタ
@@ -51,8 +44,7 @@ public:
    * @param serial デバッグメッセージを出力するシリアルポートへの参照
    * @param logLevel ログレベル（デフォルトはINFO）
    */
-  DebugLogger(SerialType &serial,
-              DebugLogger::LogLevel logLevel = DebugLogger::LogLevel::INFO)
+  DebugLogger(SerialType &serial, LogLevel logLevel = LogLevel::INFO)
       : serial(serial), logLevel(logLevel) {}
 
   /**
@@ -76,18 +68,17 @@ public:
    * @param level ログレベル
    * @param wait データが利用可能になるまで待機するかどうか（デフォルトはWAIT）
    */
-  void println(const char *className, const char *methodName,
-               const char *message, DebugLogger::LogLevel level,
-               DebugLogger::WaitMode wait = DebugLogger::WaitMode::WAIT) {
+  void println(LogLevel level, WaitMode wait = WaitMode::WAIT,
+               const char *className, const char *methodName,
+               const char *message) {
     if (logLevel > level) {
       return;
     }
 
-    if (wait == DebugLogger::WaitMode::WAIT) {
+    if (wait == WaitMode::WAIT) {
       while (!serial.availableForWrite())
         ;
-    } else if (wait == DebugLogger::WaitMode::NO_WAIT &&
-               !serial.availableForWrite()) {
+    } else if (wait == WaitMode::NO_WAIT && !serial.availableForWrite()) {
       return;
     }
     
@@ -111,9 +102,9 @@ public:
    * @param wait データが利用可能になるまで待機するかどうか（デフォルトはWAIT）
    * @param ... フォーマットする可変引数
    */
-  void printlnf(const char *className, const char *methodName,
-                const char *format, DebugLogger::LogLevel level,
-                DebugLogger::WaitMode wait = DebugLogger::WaitMode::WAIT, ...) {
+  void printlnf(LogLevel level, WaitMode wait = WaitMode::WAIT,
+                const char *className, const char *methodName,
+                const char *format, ...) {
     char buffer[100]; // 出力メッセージを格納するバッファサイズ
     va_list args;
     va_start(args, format); // 可変引数の初期化
@@ -127,5 +118,5 @@ public:
 private:
   /// デバッグメッセージを出力するシリアルポートへの参照
   SerialType &serial;
-  DebugLogger::LogLevel logLevel; ///< ログレベル
+  LogLevel logLevel; ///< ログレベル
 };
