@@ -8,19 +8,18 @@
  */
 #pragma once
 
+#include <types/IsSame.h>
 #include <utils/Converter.h>
 #include <utils/DebugLogger.h>
 
 #define IM_RECEIVE_TIMEOUT 1000 ///< 受信タイムアウト時間（ミリ秒）
 
-/**
- * @brief エラーコードを表す列挙型
- */
-enum class ReceiveErrorCode {
-  SUCCESS,                        ///< 成功
-  NO_DATA_AVAILABLE,              ///< データが利用できない
-  RECEIVED_STRING_LENGTH_INVALID, ///< 受信した文字列の長さが無効
-  COLON_NOT_FOUND,                ///< コロンが見つからない
+class ImReceiverBase {
+public:
+  enum class Mode : uint8_t {
+    WAIT,   ///< データが利用可能になるまで待機
+    NO_WAIT ///< データが利用できない場合は即座に終了
+  };
 };
 
 /**
@@ -30,10 +29,10 @@ enum class ReceiveErrorCode {
  * SerialTypeとLoggerTypeをテンプレート引数として受け取ります。
  *
  * @tparam SerialType シリアル通信の型
- * @tparam LoggerType ロガーの型（デフォルトはDebugLogger<SerialType>*）
+ * @tparam LoggerType ロガーの型（デフォルトはDebugLogger<void>*）
  */
-template <typename SerialType, typename LoggerType = DebugLogger<SerialType> *>
-class ImReceiver {
+template <typename SerialType, typename LoggerType = DebugLogger<void> *>
+class ImReceiver : public ImReceiverBase {
 public:
   /**
    * @brief コンストラクタ
@@ -52,43 +51,49 @@ public:
    * @param wait データが到着するまで待機するかどうか（デフォルトはfalse）
    * @return bool コロンの受信に成功した場合はtrue、それ以外はfalse
    */
-  template <typename T> bool receive(T &data, bool wait = false) {
+  template <typename T> bool receive(T &data, Mode mode) {
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
                   "Data size must be between 1 and 32 bytes");
 
-    printLog("Start receiving data");
+    printLog(DebugLogger<void>::LogLevel::INFO, "receive", "Receiving data");
 
     // コロン以前の文字列を読み捨てる
-    printLog("Discard data before colon");
+    printLog(DebugLogger<void>::LogLevel::INFO, __PRETTY_FUNCTION__,
+             "Read data before colon");
     while (true) {
       if (serial.available()) {
-        printLogf("Number of available data: %d", serial.available());
+        printLogf(DebugLogger<void>::LogLevel::INFO, "receive",
+                  "Number of available data: %d", serial.available());
         if (serial.read() == ':') {
-          printLog("Colon found");
+          printLog(DebugLogger<void>::LogLevel::INFO, "receive", "Colon found");
           break;
         }
       } else {
-        if (wait) {
-          printLog("Wait for data");
+        if (mode == Mode::WAIT) {
+          printLog(DebugLogger<void>::LogLevel::INFO, "receive",
+                   "Waiting for data");
           while (!serial.available())
             ;
         } else {
-          printLog("No data available");
+          printLog(DebugLogger<void>::LogLevel::ERROR, "receive",
+                   "No data available");
           return false;
         }
       }
     }
 
     // コロン以降のデータを読み込む
-    printLog("Read data after colon");
+    printLog(DebugLogger<void>::LogLevel::INFO, "receive",
+             "Read data after colon");
     char afterColon[(sizeof(T) * 2) + (sizeof(T) - 1) + 1];
     for (uint8_t index = 0; index < sizeof(afterColon); index++) {
-      printLog("Read data");
+      printLog(DebugLogger<void>::LogLevel::INFO, "receive", "Read data");
       while (!serial.available())
         ;
       char c = serial.read();
       if (c == '\r') {
-        printLog("Carriage return found");
+        printLog(DebugLogger<void>::LogLevel::INFO, "receive",
+                 "Carriage return found");
         while (!serial.available())
           ;
         serial.read();
@@ -99,7 +104,7 @@ public:
     }
 
     // 受信したデータを変換する
-    printLog("Convert data");
+    printLog(DebugLogger<void>::LogLevel::INFO, "receive", "Convert data");
     char *pos = afterColon;
     for (size_t i = 0; i < sizeof(T); i++) {
       Converter::fromHex(pos, 2, reinterpret_cast<uint8_t *>(&data) + i);
@@ -109,23 +114,30 @@ public:
       }
     }
 
-    printLog("Data received");
+    printLog(DebugLogger<void>::LogLevel::INFO, "receive", "Data received");
     return true;
   }
 
 private:
   SerialType &serial; ///< シリアル通信オブジェクトの参照
   LoggerType logger;  ///< ロガーオブジェクト
-  void printLog(const char *message) {
-    if (logger)
-      logger->println("ImReceiver", "receive", message);
+  inline void printLog(DebugLogger<void>::LogLevel level,
+                       const char *methodName, const char *message) {
+    if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value) {
+      logger->println(level, DebugLogger<void>::WaitMode::WAIT, "ImReceiver",
+                      methodName, message);
+    }
   }
-  void printLogf(const char *format, ...) {
-    if (logger) {
+  inline void printLogf(DebugLogger<void>::LogLevel level,
+                        const char *methodName, const char *format, ...) {
+    if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value) {
       va_list args;
       va_start(args, format);
-      logger->printlnf("ImReceiver", "receive", format, args);
+      logger->printlnf(level, DebugLogger<void>::WaitMode::WAIT, "ImReceiver",
+                       methodName, format, args);
       va_end(args);
     }
   }
 };
+
+template <> class ImReceiver<void> : public ImReceiverBase {};
