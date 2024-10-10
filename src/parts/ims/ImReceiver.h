@@ -52,9 +52,10 @@ public:
    * @return bool コロンの受信に成功した場合はtrue、それ以外はfalse
    */
   template <typename T> bool receive(T &data, Mode mode) {
-    static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
-                  "Data size must be between 1 and 32 bytes");
-
+    
+    static_assert(
+        sizeof(T) >= 1 && sizeof(T) <= 32,
+        "受信する型のサイズは1バイト以上32バイト以下である必要があります");
     printLog(DebugLogger<void>::LogLevel::INFO, "receive", "Receiving data");
 
     // コロン以前の文字列を読み捨てる

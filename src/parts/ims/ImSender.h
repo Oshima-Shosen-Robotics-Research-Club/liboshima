@@ -43,8 +43,9 @@ public:
    */
   template <typename T> void send(const T &data, WaitMode waitmode) {
 
-    static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
-                  "Data size must be between 1 and 32 bytes");
+    static_assert(
+        sizeof(T) >= 1 && sizeof(T) <= 32,
+        "送信する型のサイズは1バイト以上32バイト以下である必要があります");
 
     printLog(DebugLogger<void>::LogLevel::INFO, "send", "Sending data");
 
@@ -52,8 +53,7 @@ public:
     if (static_cast<uint8_t>(serial.availableForWrite()) < size) {
       if (waitmode == WaitMode::NO_WAIT) {
         return;
-      } else
-      if (waitmode == WaitMode::BUFFER_FULL) {
+      } else if (waitmode == WaitMode::BUFFER_FULL) {
         while (static_cast<uint8_t>(serial.availableForWrite()) < size)
           ;
       }
