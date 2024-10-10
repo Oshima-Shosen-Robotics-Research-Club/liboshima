@@ -22,7 +22,7 @@
  * @tparam SerialType シリアル通信の型
  * @tparam LoggerType ロガーの型（デフォルトはDebugLogger<SerialType>*）
  */
-template <typename SerialType, typename LoggerType = DebugLogger<SerialType> *>
+template <typename SerialType, typename LoggerType = void>
 class IM920SL : public ImReceiver<SerialType, LoggerType>,
                 public ImSender<SerialType, LoggerType> {
 public:
@@ -32,10 +32,10 @@ public:
    * @param serial シリアル通信オブジェクト
    * @param logger ロガーオブジェクト（デフォルトはnullptr）
    */
-  IM920SL(SerialType &serial, LoggerType logger = nullptr)
+  IM920SL(SerialType &serial, LoggerType *logger = nullptr)
       : ImReceiver<SerialType, LoggerType>(serial, logger),
         ImSender<SerialType, LoggerType>(serial, logger), serial(serial) {
-    static_assert(IsSame<DebugLogger<SerialType>, LoggerType>::value,
+    static_assert(!IsSame<DebugLogger<SerialType>, LoggerType>::value,
                   "シリアル通信がロガーと競合しています");
   }
 
