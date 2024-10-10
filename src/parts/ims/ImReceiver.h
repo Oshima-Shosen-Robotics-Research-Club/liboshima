@@ -128,7 +128,7 @@ private:
                       methodName, message);
     }
   }
-  inline void printLogf(DebugLogger<void>::LogLevel level,
+  void printLogf(DebugLogger<void>::LogLevel level,
                         const char *methodName, const char *format, ...) {
     if constexpr (IsSame<decltype(logger), DebugLogger<void> *>::value) {
       va_list args;
