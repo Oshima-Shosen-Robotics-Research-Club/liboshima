@@ -110,7 +110,7 @@ public:
     vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args); // 可変引数の解放
     // フォーマットされたメッセージを出力
-    println(className, methodName, buffer, level, wait);
+    println(level, wait, className, methodName, buffer);
   }
 
 private:
