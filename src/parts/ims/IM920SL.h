@@ -34,7 +34,10 @@ public:
    */
   IM920SL(SerialType &serial, LoggerType logger = nullptr)
       : ImReceiver<SerialType, LoggerType>(serial, logger),
-        ImSender<SerialType, LoggerType>(serial, logger), serial(serial) {}
+        ImSender<SerialType, LoggerType>(serial, logger), serial(serial) {
+    static_assert(IsSame<DebugLogger<SerialType>, LoggerType>::value,
+                  "シリアル通信がロガーと競合しています");
+  }
 
   /**
    * @brief シリアル通信を開始する

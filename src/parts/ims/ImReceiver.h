@@ -41,10 +41,7 @@ public:
    * @param logger ロガーオブジェクト（デフォルトはnullptr）
    */
   ImReceiver(SerialType &serial, LoggerType logger = nullptr)
-      : serial(serial), logger(logger) {
-    static_assert(IsSame<DebugLogger<SerialType>, LoggerType>::value,
-                  "シリアル通信がロガーと競合しています");
-  }
+      : serial(serial), logger(logger) {}
 
   /**
    * @brief データを受信するテンプレート関数
