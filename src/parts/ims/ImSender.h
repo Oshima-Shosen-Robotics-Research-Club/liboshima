@@ -1,14 +1,16 @@
 #pragma once
 
+#include <Arduino.h>
 #include <utils/DebugLogger.h>
 
 #define IM_SEND_INTERVAL 60
 
 class ImSenderBase {
 public:
-  enum class Mode : uint8_t {
-    WAIT,   ///< データが利用可能になるまで待機
-    NO_WAIT ///< データが利用できない場合は即座に終了
+  enum class WaitMode : uint8_t {
+    BUFFER_FULL,  ///< バッファがいっぱいの場合は即座に終了
+    CAREER_SENSE, ///< キャリアセンスを検出するまで待機
+    NO_WAIT       ///< データが利用できない場合は即座に終了
   };
 };
 
@@ -39,7 +41,7 @@ public:
    * @tparam T 送信するデータの型
    * @param data 送信するデータ
    */
-  template <typename T> void send(const T &data, Mode mode) {
+  template <typename T> void send(const T &data, WaitMode Waitmode) {
 
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
                   "Data size must be between 1 and 32 bytes");
@@ -49,13 +51,19 @@ public:
                       DebugLogger<void>::WaitMode::WAIT, "ImSender", "send",
                       "Sending data");
 
-    if (serial.availableForWrite() < 5 + (sizeof(T) * 2)) {
-      if (mode == Mode::WAIT) {
-        while (serial.availableForWrite() < 5 + (sizeof(T) * 2))
+    constexpr uint8_t size = 5 + (sizeof(T) * 2);
+    if (static_cast<uint8_t>(serial.availableForWrite() < size) <
+        5 + (sizeof(T) * 2)) {
+      if (Waitmode == WaitMode::BUFFER_FULL) {
+        while (static_cast<uint8_t>(serial.availableForWrite()) < size)
           ;
       } else {
         return;
       }
+    }
+
+    if (Waitmode == WaitMode::CAREER_SENSE) {
+      delay(IM_SEND_INTERVAL);
     }
 
     serial.print("TXDA ");
