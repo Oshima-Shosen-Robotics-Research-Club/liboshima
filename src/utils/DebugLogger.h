@@ -9,17 +9,17 @@
 class DebugLoggerBase {
 public:
   /// ログレベルを定義する列挙型
-enum class LogLevel : uint8_t {
-  INFO, ///< 情報メッセージ
-  WARN, ///< 警告メッセージ
-  ERROR ///< エラーメッセージ
-};
+  enum class LogLevel : uint8_t {
+    INFO, ///< 情報メッセージ
+    WARN, ///< 警告メッセージ
+    ERROR ///< エラーメッセージ
+  };
 
   /// 待機モードを定義する列挙型
-enum class WaitMode : uint8_t {
-  WAIT,   ///< データが利用可能になるまで待機
-  NO_WAIT ///< データが利用できない場合は即座に終了
-};
+  enum class WaitMode : uint8_t {
+    WAIT,   ///< データが利用可能になるまで待機
+    NO_WAIT ///< データが利用できない場合は即座に終了
+  };
 };
 
 /**
@@ -68,9 +68,8 @@ public:
    * @param level ログレベル
    * @param wait データが利用可能になるまで待機するかどうか（デフォルトはWAIT）
    */
-  void println(LogLevel level, WaitMode wait = WaitMode::WAIT,
-               const char *className, const char *methodName,
-               const char *message) {
+  void println(LogLevel level, WaitMode wait, const char *className,
+               const char *methodName, const char *message) {
     if (logLevel > level) {
       return;
     }
@@ -81,7 +80,7 @@ public:
     } else if (wait == WaitMode::NO_WAIT && !serial.availableForWrite()) {
       return;
     }
-    
+
     serial.print("<");
     serial.print(className);
     serial.print("::");
@@ -102,9 +101,8 @@ public:
    * @param wait データが利用可能になるまで待機するかどうか（デフォルトはWAIT）
    * @param ... フォーマットする可変引数
    */
-  void printlnf(LogLevel level, WaitMode wait = WaitMode::WAIT,
-                const char *className, const char *methodName,
-                const char *format, ...) {
+  void printlnf(LogLevel level, WaitMode wait, const char *className,
+                const char *methodName, const char *format, ...) {
     char buffer[100]; // 出力メッセージを格納するバッファサイズ
     va_list args;
     va_start(args, format); // 可変引数の初期化
@@ -119,4 +117,17 @@ private:
   /// デバッグメッセージを出力するシリアルポートへの参照
   SerialType &serial;
   LogLevel logLevel; ///< ログレベル
+};
+
+template <> class DebugLogger<void> : public DebugLoggerBase {
+public:
+  DebugLogger() {}
+
+  void begin(unsigned long baudrate = 19200) {}
+
+  void println(LogLevel level, WaitMode wait, const char *className,
+               const char *methodName, const char *message) {}
+
+  void printlnf(LogLevel level, WaitMode wait, const char *className,
+                const char *methodName, const char *format, ...) {}
 };
