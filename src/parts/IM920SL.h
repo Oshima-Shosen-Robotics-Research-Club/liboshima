@@ -74,16 +74,13 @@ public:
     printLog(DebugLoggerLevel::INFO, "send", "Sending data");
 
     constexpr uint8_t size = 5 + (sizeof(T) * 2);
-    if (static_cast<uint8_t>(serial.availableForWrite()) < size) {
-      if (waitmode == ImSenderMode::NO_WAIT) {
+    if (waitmode == ImSenderMode::NO_WAIT) {
+      if (static_cast<uint8_t>(serial.availableForWrite()) < size)
         return;
-      } else if (waitmode == ImSenderMode::BUFFER_FULL) {
-        while (static_cast<uint8_t>(serial.availableForWrite()) < size)
-          ;
-      }
-    }
-
-    if (waitmode == ImSenderMode::CAREER_SENSE) {
+    } else if (waitmode == ImSenderMode::BUFFER_FULL) {
+      while (static_cast<uint8_t>(serial.availableForWrite()) < size)
+        ;
+    } else if (waitmode == ImSenderMode::CAREER_SENSE) {
       delay(IM_SEND_INTERVAL);
     }
 
@@ -110,7 +107,7 @@ public:
     static_assert(
         sizeof(T) >= 1 && sizeof(T) <= 32,
         "受信する型のサイズは1バイト以上32バイト以下である必要があります");
-        
+
     printLog(DebugLoggerLevel::INFO, "receive", "Receiving data");
 
     // コロン以前の文字列を読み捨てる
