@@ -132,5 +132,3 @@ private:
     }
   }
 };
-
-template <> class ImReceiver<void> : public ImReceiverBase {};

@@ -81,5 +81,3 @@ private:
     }
   }
 };
-
-template <> class ImSender<void> : public ImSenderBase {};
