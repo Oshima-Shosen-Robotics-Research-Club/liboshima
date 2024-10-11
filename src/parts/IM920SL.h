@@ -11,10 +11,10 @@
 #pragma once
 
 #include <Arduino.h>
+#include <DebugLogger.h>
 #include <MsTimer2.h>
+#include <fasts/Converter.h>
 #include <types/IsSame.h>
-#include <utils/Converter.h>
-#include <utils/DebugLogger.h>
 
 enum class ImSenderMode : uint8_t {
   BUFFER_FULL,  ///< バッファがいっぱいの場合は即座に終了

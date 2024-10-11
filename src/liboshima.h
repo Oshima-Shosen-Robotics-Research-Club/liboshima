@@ -8,6 +8,8 @@
  * 例：#include <parts\ims\IM920SL.h>はArduino IDEではできない。
  */
 
+#include "DebugLogger.h"
+#include "fasts/Converter.h"
 #include "parts/Button.h"
 #include "parts/IM920SL.h"
 #include "parts/Led.h"
@@ -16,5 +18,3 @@
 #include "parts/motors/NonSpeedAdjustable.h"
 #include "parts/motors/speed/BD62193.h"
 #include "parts/motors/speed/TB67H450.h"
-#include "utils/Converter.h"
-#include "utils/DebugLogger.h"

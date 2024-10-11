@@ -1,6 +1,6 @@
 #include "FastwareSerial.h"
 #include <avr/interrupt.h>
-#include <utils/Converter.h>
+#include <fasts/Converter.h>
 
 FastwareSerial FastSerial;
 
