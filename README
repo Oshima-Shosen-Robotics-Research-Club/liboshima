@@ -47,3 +47,5 @@ https://www.ardu-badge.com/liboshima
 ・コメントを更新する。
 ・1行関数はhで実装しinline展開する。
 ・BitWidthをelemBitSizeに変更。
+・BitArrayのインデックスをstatic assertで検索。
+・exampleの更新と追加。
