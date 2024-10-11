@@ -91,7 +91,7 @@ public:
    * @param interval
    * データ受信が確認されなかった場合にタイマーが発火する間隔（ミリ秒単位、デフォルトは1000ms）
    */
-  void attachDataNotReceived(void (*callback)(),
+  void onDataNotReceived(void (*callback)(),
                              unsigned long interval = 1000) {
     // MsTimer2を使用して、指定の間隔でコールバックを実行する設定
     MsTimer2::set(interval, callback);
@@ -107,7 +107,7 @@ public:
    *
    * @param callback コールバック関数のポインタ
    */
-  void attachDataReceived(void (*callback)()) {
+  void onDataReceived(void (*callback)()) {
     onColonReceived = callback; // コロンが受信された時のコールバックを保存
   }
 
