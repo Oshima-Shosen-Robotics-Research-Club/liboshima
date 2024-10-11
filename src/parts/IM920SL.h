@@ -59,11 +59,14 @@ public:
    */
   void beginSerial(unsigned long baudrate = 19200) { serial.begin(baudrate); }
 
-  void beginTimer(void (*callback)(), uint8_t interval = 1000) {
+  void attachColonNotReceived(void (*callback)(),
+                              unsigned long interval = 1000) {
     MsTimer2::set(interval, callback);
     MsTimer2::start();
-    usesTimer = true;
+    onColonNotReceived = callback;
   }
+
+  void attachColonReceived(void (*callback)()) { onColonReceived = callback; }
 
   /**
    * @brief データを送信するテンプレート関数
@@ -106,9 +109,8 @@ public:
    * @tparam T 受信するデータの型
    * @param data 受信したデータを格納する変数
    * @param wait データが到着するまで待機するかどうか（デフォルトはfalse）
-   * @return bool コロンの受信に成功した場合はtrue、それ以外はfalse
    */
-  template <typename T> bool receive(T &data, ImReceiverMode mode) {
+  template <typename T> void receive(T &data, ImReceiverMode mode) {
 
     static_assert(
         sizeof(T) >= 1 && sizeof(T) <= 32,
@@ -133,14 +135,17 @@ public:
             ;
         } else {
           printLog(DebugLoggerLevel::ERROR, "receive", "No data available");
-          return false;
+          return;
         }
       }
     }
 
     // コロンを受信したらタイマーをリスタートする
-    if (usesTimer) {
+    if (onColonNotReceived) {
       MsTimer2::start();
+    }
+    if (onColonReceived) {
+      onColonReceived();
     }
 
     // コロン以降のデータを読み込む
@@ -174,13 +179,16 @@ public:
     }
 
     printLog(DebugLoggerLevel::INFO, "receive", "Data received");
-    return true;
+    return;
   }
 
 private:
   SerialType &serial; ///< シリアル通信オブジェクトの参照
   LoggerType *logger; ///< ロガーオブジェクト
-  bool usesTimer = false;
+  void (*onColonNotReceived)() =
+      nullptr; ///< コロンが受信されなかったときに実行される関数
+  void (*onColonReceived)() =
+      nullptr; ///< コロンが受信されたときに実行される関数
 
   inline void printLog(DebugLoggerLevel level, const char *methodName,
                        const char *message) {
