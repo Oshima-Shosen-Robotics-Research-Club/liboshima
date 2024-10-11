@@ -12,6 +12,6 @@ void setup() {}
 void loop() {
   // ImSender.inoから送信されたデータを受信する
   int data;
-  im.send(data, ImSender<void>::WaitMode::CAREER_SENSE);
-  im.receive(data, ImReceiver<void>::Mode::WAIT);
+  im.send(data, ImSenderMode::CAREER_SENSE);
+  im.receive(data, ImReceiverMode::WAIT);
 }
