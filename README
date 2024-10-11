@@ -25,6 +25,7 @@ https://www.ardu-badge.com/liboshima
 ・スコープの広い物には、名前空間やクラス名でアクセスするようにすること
 （例: IM920SL::SEND_INTERVAL_MS（defineを使わない））
 （例外: FastSerial（ArduinoのSerialに似せるため））
+・インライン展開すべきクラスは、ヘッダファイルに実装すること
 
 ■git cloneできない場合
 ・git config --global http.postBuffer 524288000  
