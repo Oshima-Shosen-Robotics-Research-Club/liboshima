@@ -11,8 +11,8 @@
 #pragma once
 
 #include "BitWidthElement.h"
-#include "types/TypeSelector.h"
 #include <stdint.h>
+#include <types/TypeSelector.h>
 
 /**
  * @brief 要素のビット幅を指定できる配列クラス
