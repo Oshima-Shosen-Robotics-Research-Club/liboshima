@@ -5,13 +5,13 @@
 #define TX_PIN 0
 
 SoftwareSerial serial(RX_PIN, TX_PIN);
-IM920SL im(serial);
+IM920SL<SoftwareSerial> im(serial);
 
 void setup() {}
 
 void loop() {
   // ImSender.inoから送信されたデータを受信する
   int data;
-  im.send(data);
-  im.receive(data);
+  im.send(data, ImSenderMode::CAREER_SENSE);
+  im.receive(data, ImReceiverMode::WAIT);
 }

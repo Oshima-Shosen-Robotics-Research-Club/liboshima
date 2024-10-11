@@ -4,7 +4,7 @@ lib_deps = liboshima
 又は
 lib_deps = https://github.com/Oshima-Shosen-Robotics-Research-Club/liboshima
 ・プログラムの中で以下のように使う。(examplesフォルダを参照)
-#include <components/ims/IM920SL.h>
+#include <libohima.h>
 
 ■Arduino IDEでの使い方
 ・Library Managerから"liboshima"を検索してインストールする。
@@ -40,11 +40,8 @@ https://www.ardu-badge.com/liboshima
 ・このリポジトリの変更をプッシュする。
 
 ■todo
-・serialportの削除。
-・Im920slのserialのテンプレート化。
-・ライブラリのクラスでloggerを使う場合は明示的に設定するようにする。（例: IM920SL::attachLogger(logger);）
-・imsenderの定数を名前空間付きアクセスに変更。（例: IM920SL::SEND_INTERVAL_MS）
-・動作確認
-・examplesの追加（workflowsでバグを検知できるようにするため）
-・liboshima.hをインクルードするようにする。
-・BitArrayのインデックスをstatic assertで検索。
+・developブランチのiniの#develop指定をstableブランチには反映させないようにする。
+・converterのポインタ渡しを参照渡しに変更する。
+・コメントを更新する。
+・1行関数はhで実装しinline展開する。
+・exampleの追加。

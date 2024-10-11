@@ -5,14 +5,16 @@
  * @brief Arduino IDE用のヘッダーファイル
  *
  * Arduino IDEではサブディレクトリが認識されないから。
- * 例：#include <components\ims\IM920SL.h>はArduino IDEではできない。
+ * 例：#include <parts\ims\IM920SL.h>はArduino IDEではできない。
  */
 
-#include "components/LedTape.h"
-#include "components/controllers/ControllerData.h"
-#include "components/ims/IM920SL.h"
-#include "components/motors/NonSpeedAdjustable.h"
-#include "components/motors/speed/BD62193.h"
-#include "components/motors/speed/TB67H450.h"
+#include "parts/Button.h"
+#include "parts/IM920SL.h"
+#include "parts/Led.h"
+#include "parts/LedTape.h"
+#include "parts/cons/ControllerData.h"
+#include "parts/motors/NonSpeedAdjustable.h"
+#include "parts/motors/speed/BD62193.h"
+#include "parts/motors/speed/TB67H450.h"
 #include "utils/Converter.h"
 #include "utils/DebugLogger.h"

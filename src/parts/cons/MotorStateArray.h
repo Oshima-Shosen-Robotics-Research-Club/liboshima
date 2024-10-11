@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <nets/BitWidthArray.h>
 #include <stdint.h>
+#include <types/nets/BitWidthArray.h>
 
 /**
  * @brief モーターの状態を表す列挙型
@@ -18,9 +18,9 @@
  * 各状態は2ビットで表現され、以下の3つの状態があります。
  */
 enum class MotorStateEnum : uint8_t {
-  Stop = 0b00,    ///< モーターが停止している状態
-  Forward = 0b01, ///< モーターが前進している状態
-  Reverse = 0b10, ///< モーターが後退している状態
+  STOP = 0b00,    ///< モーターが停止している状態
+  FORWARD = 0b01, ///< モーターが前進している状態
+  REVERSE = 0b10, ///< モーターが後退している状態
 };
 
 /**

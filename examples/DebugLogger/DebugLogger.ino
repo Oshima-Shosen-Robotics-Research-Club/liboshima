@@ -5,6 +5,7 @@ DebugLogger<HardwareSerial> logger(Serial);
 void setup() { logger.begin(); }
 
 void loop() {
-  logger.println("main", "loop", "Hello, world!");
+  logger.println(DebugLoggerLevel::INFO, DebugLoggerMode::NO_WAIT, "Main",
+                 "loop", "Hello, world!");
   delay(1000);
 }

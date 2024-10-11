@@ -17,7 +17,8 @@
   "license": "MIT",
   "dependencies": {
     "fastled/FastLED": "*",
-    "watterott/digitalWriteFast": "*"
+    "watterott/digitalWriteFast": "*",
+    "paulstoffregen/MsTimer2": "*"
   },
   "frameworks": "arduino",
   "platforms": "*"

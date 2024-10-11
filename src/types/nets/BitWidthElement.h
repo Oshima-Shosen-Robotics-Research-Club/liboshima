@@ -21,7 +21,7 @@
  * @tparam EnumType 列挙型。要素に格納される値の型を指定します。
  * @tparam BitWidth 各要素が占有するビット数。
  */
-template <typename ArrayType, typename EnumType, uint8_t BitWidth>
+template <typename ArrayType, typename EnumType, uint8_t elemBitSize>
 class BitWidthElement {
 public:
   /**
@@ -46,10 +46,10 @@ public:
    */
   BitWidthElement &operator=(EnumType value) {
     // 対象ビット範囲をクリア
-    arrayRef &=
-        ~(static_cast<ArrayType>((1 << BitWidth) - 1) << (index * BitWidth));
+    arrayRef &= ~(static_cast<ArrayType>((1 << elemBitSize) - 1)
+                  << (index * elemBitSize));
     // 新しい値をセット
-    arrayRef |= static_cast<ArrayType>(value) << (index * BitWidth);
+    arrayRef |= static_cast<ArrayType>(value) << (index * elemBitSize);
     return *this;
   }
 
@@ -61,8 +61,8 @@ public:
    * @return EnumType ビット幅に対応する列挙型の値を返します。
    */
   operator EnumType() const {
-    return static_cast<EnumType>((arrayRef >> (index * BitWidth)) &
-                                 ((1 << BitWidth) - 1));
+    return static_cast<EnumType>((arrayRef >> (index * elemBitSize)) &
+                                 ((1 << elemBitSize) - 1));
   }
 
 private:
