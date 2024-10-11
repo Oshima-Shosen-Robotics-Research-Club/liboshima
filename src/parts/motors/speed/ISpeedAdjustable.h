@@ -3,13 +3,12 @@
  * @brief モータードライバの抽象基底クラス定義
  *
  * このファイルには、モータードライバのための抽象基底クラス `ISpeedAdjustable`
- * が 定義されています。`ISpeedAdjustable` クラスは、モーターの速度設定、前進、
+ * が定義されています。`ISpeedAdjustable` クラスは、モーターの速度設定、前進、
  * 後退、停止のためのインターフェースを提供します。このクラスを継承する
  * クラスは、これらのメソッドを実装する必要があります。
  */
 
-#ifndef MOTOR_DRIVER_H
-#define MOTOR_DRIVER_H
+#pragma once
 
 #include <Arduino.h>
 
@@ -27,9 +26,9 @@ public:
    * @brief モーターの速度を設定するメソッド
    *
    * このメソッドは、モーターの速度を指定した割合で設定します。速度は
-   * 0.0（停止）から1.0（最大速度）までの範囲で設定できます。
+   * -1.0（最大逆転速度）から1.0（最大速度）までの範囲で設定できます。
    *
-   * @param rate モーターの速度割合（0.0〜1.0）
+   * @param rate モーターの速度割合（-1.0〜1.0）
    */
   virtual void setSpeed(float rate) = 0;
 
@@ -54,5 +53,3 @@ public:
    */
   virtual void stop() = 0;
 };
-
-#endif // MOTOR_DRIVER_H

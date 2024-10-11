@@ -32,27 +32,27 @@ template <uint8_t numMotors = 0, uint8_t numButtons = 0, uint8_t numSticks = 0>
 struct ControllerData {
 public:
   /**
-   * @brief MotorState型の配列
+   * @brief モーターの状態を管理する配列
    *
-   * モーターの状態を管理します。
    * `numMotors` が0の場合、サイズ0の配列（`ZeroSizeType`）が使用されます。
+   * それ以外の場合、`MotorStateArray<numMotors>` 型の配列が使用されます。
    */
   typename Conditional<numMotors == 0, ZeroSizeType,
                        MotorStateArray<numMotors>>::Type
       motors; ///< モーターの状態の配列
 
   /**
-   * @brief ボタンの状態を格納する変数
+   * @brief ボタンの状態を管理する配列
    *
-   * その他のボタンの状態を管理します。
    * `numButtons` が0の場合、サイズ0の配列（`ZeroSizeType`）が使用されます。
+   * それ以外の場合、`ButtonStateArray<numButtons>` 型の配列が使用されます。
    */
   typename Conditional<numButtons == 0, ZeroSizeType,
                        ButtonStateArray<numButtons>>::Type
       buttons; ///< ボタンの状態の配列
 
   /**
-   * @brief スティック構造体
+   * @brief スティックの状態を管理する構造体
    *
    * スティックのX軸とY軸の状態を管理します。
    * 配列のサイズは、`numSticks` に基づいて決定されます。

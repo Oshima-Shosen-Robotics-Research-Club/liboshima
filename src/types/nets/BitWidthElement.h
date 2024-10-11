@@ -19,7 +19,7 @@
  *
  * @tparam ArrayType 配列全体を格納する型（通常は整数型）。
  * @tparam EnumType 列挙型。要素に格納される値の型を指定します。
- * @tparam BitWidth 各要素が占有するビット数。
+ * @tparam elemBitSize 各要素が占有するビット数。
  */
 template <typename ArrayType, typename EnumType, uint8_t elemBitSize>
 class BitWidthElement {

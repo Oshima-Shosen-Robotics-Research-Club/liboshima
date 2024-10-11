@@ -20,7 +20,7 @@
 enum class MotorStateEnum : uint8_t {
   STOP = 0b00,    ///< モーターが停止している状態
   FORWARD = 0b01, ///< モーターが前進している状態
-  REVERSE = 0b10, ///< モーターが後退している状態
+  REVERSE = 0b10  ///< モーターが後退している状態
 };
 
 /**
@@ -34,7 +34,7 @@ enum class MotorStateEnum : uint8_t {
  * // 4つのモーターの状態を管理するための配列を作成
  * MotorStateArray<4> motorStates;
  * // モーター1を前進させる
- * motorStates[0] = MotorStateEnum::Forward;
+ * motorStates[0] = MotorStateEnum::FORWARD;
  * @endcode
  *
  * @tparam numMotors 管理するモーターの数（1以上の値でなければならない）
