@@ -2,7 +2,13 @@ name: Compile Examples
 
 on:
   push:
+    paths:
+      - '**/*.cpp'
+      - '**/*.h'
   pull_request:
+    paths:
+      - '**/*.cpp'
+      - '**/*.h'
   workflow_dispatch:
 
 jobs:
