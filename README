@@ -40,8 +40,7 @@ https://www.ardu-badge.com/liboshima
 ・このリポジトリの変更をプッシュする。
 
 ■todo
-・imsenderの定数を名前空間付きアクセスに変更。（例: IM920SL::SEND_INTERVAL_MS）
-・ImSenderやImReceiverのシリアル通信とDebugLoggerのシリアル通信を同じにできないようにする。
+・IM920SLにonReceiveTimeOutを追加。
 ・developブランチのiniの#develop指定をstableブランチには反映させないようにする。
 ・converterのポインタ渡しを参照渡しに変更する。
 ・コメントを更新する。
