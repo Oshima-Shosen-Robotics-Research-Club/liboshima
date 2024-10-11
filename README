@@ -45,3 +45,4 @@ https://www.ardu-badge.com/liboshima
 ・developブランチのiniの#develop指定をstableブランチには反映させないようにする。
 ・converterのポインタ渡しを参照渡しに変更する。
 ・コメントを更新する。
+・1行関数はhで実装しinline展開する。
