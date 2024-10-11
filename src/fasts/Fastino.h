@@ -17,7 +17,7 @@
  * この関数は、必要な設定を行い、メインループに入る前に
  * 必要なコンポーネントを初期化します。
  */
-inline void setup();
+void setup();
 
 /**
  * @brief アプリケーションのメインループ。
@@ -26,7 +26,7 @@ inline void setup();
  * ロジックを含んでいます。アプリケーションのコア機能を
  * 処理します。
  */
-inline void loop();
+void loop();
 
 /**
  * @brief メイン関数。
