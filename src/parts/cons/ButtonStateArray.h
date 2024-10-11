@@ -16,12 +16,12 @@
  * @brief ボタンの状態を表す列挙型
  *
  * この列挙型は、ボタンが押されているか離されているかを表します。
- * 各状態は1ビットで表現され、`Released` および `Pressed`
+ * 各状態は1ビットで表現され、`RELEASED` および `PRESSED`
  * の2つの状態を持ちます。
  */
 enum class ButtonStateEnum : uint8_t {
-  Released = 0b0, ///< ボタンが離されている状態
-  Pressed = 0b1   ///< ボタンが押されている状態
+  RELEASED = 0b0, ///< ボタンが離されている状態
+  PRESSED = 0b1   ///< ボタンが押されている状態
 };
 
 /**
@@ -36,7 +36,7 @@ enum class ButtonStateEnum : uint8_t {
  * // 5つのボタンの状態を管理するための配列を作成
  * ButtonStateArray<5> buttonStates;
  * // ボタン1の状態を設定
- * buttonStates[0] = ButtonStateEnum::Pressed;
+ * buttonStates[0] = ButtonStateEnum::PRESSED;
  * @endcode
  *
  * @tparam numButtons 管理するボタンの数（1以上の値でなければならない）
