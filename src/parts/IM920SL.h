@@ -19,13 +19,13 @@
 
 // 送信モードを定義する列挙型
 /**
- * @enum ImSendeMode
+ * @enum ImSendMode
  * @brief データ送信時の動作モードを指定する列挙型
  *
  * IM920SLモジュールを用いてデータを送信する際に、どのように動作させるかを決定します。
  * これにより、データ送信がバッファの状態やキャリアセンスに応じて異なる動作を取ることができます。
  */
-enum class ImSendeMode : uint8_t {
+enum class ImSendMode : uint8_t {
   BUFFER_FULL, ///< バッファがいっぱいになるまで待機して送信
   CAREER_SENSE, ///< キャリアセンスを検出するまで待機して送信
   NO_WAIT       ///< データが利用できない場合は即座に終了
@@ -121,7 +121,7 @@ public:
    * @param data 送信するデータ
    * @param waitmode 送信モードを指定する（ImSenderMode）
    */
-  template <typename T> void send(const T &data, ImSendeMode waitmode) {
+  template <typename T> void send(const T &data, ImSendMode waitmode) {
     // 送信するデータのサイズが1バイト以上32バイト以下であることを確認
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
                   "送信するデータのサイズは1～32バイトでなければなりません");
@@ -133,15 +133,15 @@ public:
     constexpr uint8_t size = 5 + (sizeof(T) * 2);
 
     // 指定された送信モードに従い、バッファやキャリアセンスの状態を確認
-    if (waitmode == ImSendeMode::NO_WAIT) {
+    if (waitmode == ImSendMode::NO_WAIT) {
       // データが利用できない場合は即座に終了
       if (static_cast<uint8_t>(serial.availableForWrite()) < size)
         return;
-    } else if (waitmode == ImSendeMode::BUFFER_FULL) {
+    } else if (waitmode == ImSendMode::BUFFER_FULL) {
       // バッファがいっぱいになるまで待機
       while (static_cast<uint8_t>(serial.availableForWrite()) < size)
         ;
-    } else if (waitmode == ImSendeMode::CAREER_SENSE) {
+    } else if (waitmode == ImSendMode::CAREER_SENSE) {
       // キャリアセンスを検出するまで待機
       delay(60);
     }
