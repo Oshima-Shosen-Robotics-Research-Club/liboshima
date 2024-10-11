@@ -13,5 +13,5 @@ void loop() {
 
   // データを送信する
   // モード: CAREER_SENSE
-  im.send(data, ImSenderMode::CAREER_SENSE);
+  im.send(data, ImSendeMode::CAREER_SENSE);
 }
