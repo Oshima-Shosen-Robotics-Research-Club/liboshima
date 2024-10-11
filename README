@@ -40,7 +40,6 @@ https://www.ardu-badge.com/liboshima
 ・このリポジトリの変更をプッシュする。
 
 ■todo
-・IM920SLにonReceiveTimeOutを追加。
 ・developブランチのiniの#develop指定をstableブランチには反映させないようにする。
 ・converterのポインタ渡しを参照渡しに変更する。
 ・コメントを更新する。
