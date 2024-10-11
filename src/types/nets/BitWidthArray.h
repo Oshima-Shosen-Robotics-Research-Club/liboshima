@@ -26,13 +26,13 @@
  * 各要素のビット幅を指定します。例えば、8ビットなら1要素は1バイト。
  * @tparam numElements 配列の要素数を指定します。
  */
-template <typename EnumType, uint8_t BitWidth, uint8_t numElements>
+template <typename EnumType, uint8_t elemBitSize, uint8_t numElements>
 class BitWidthArray {
 public:
   /// 配列を格納するための整数型を決定
-  using Type = typename TypeSelector<numElements * BitWidth>::Type;
+  using Type = typename TypeSelector<numElements * elemBitSize>::Type;
   /// 各要素を管理するための型
-  using ElementType = BitWidthElement<Type, EnumType, BitWidth>;
+  using ElementType = BitWidthElement<Type, EnumType, elemBitSize>;
 
   /**
    * @brief 配列の特定のインデックスにアクセスするための演算子
