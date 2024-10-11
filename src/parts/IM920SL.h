@@ -16,8 +16,6 @@
 #include <utils/Converter.h>
 #include <utils/DebugLogger.h>
 
-#define IM_SEND_INTERVAL 60
-
 enum class ImSenderMode : uint8_t {
   BUFFER_FULL,  ///< バッファがいっぱいの場合は即座に終了
   CAREER_SENSE, ///< キャリアセンスを検出するまで待機
@@ -90,7 +88,7 @@ public:
       while (static_cast<uint8_t>(serial.availableForWrite()) < size)
         ;
     } else if (waitmode == ImSenderMode::CAREER_SENSE) {
-      delay(IM_SEND_INTERVAL);
+      delay(60);
     }
 
     serial.print("TXDA ");
