@@ -11,12 +11,12 @@
 #pragma once
 
 #include <Arduino.h>
+#include <MsTimer2.h>
 #include <types/IsSame.h>
 #include <utils/Converter.h>
 #include <utils/DebugLogger.h>
 
 #define IM_SEND_INTERVAL 60
-#define IM_RECEIVE_TIMEOUT 1000 ///< 受信タイムアウト時間（ミリ秒）
 
 enum class ImSenderMode : uint8_t {
   BUFFER_FULL,  ///< バッファがいっぱいの場合は即座に終了
@@ -57,7 +57,13 @@ public:
    *
    * @param baudrate ボーレート（デフォルトは19200）
    */
-  void begin(unsigned long baudrate = 19200) { serial.begin(baudrate); }
+  void beginSerial(unsigned long baudrate = 19200) { serial.begin(baudrate); }
+
+  void beginTimer(void (*callback)(), uint8_t interval = 1000) {
+    MsTimer2::set(interval, callback);
+    MsTimer2::start();
+    usesTimer = true;
+  }
 
   /**
    * @brief データを送信するテンプレート関数
@@ -132,6 +138,11 @@ public:
       }
     }
 
+    // コロンを受信したらタイマーをリスタートする
+    if (usesTimer) {
+      MsTimer2::start();
+    }
+
     // コロン以降のデータを読み込む
     printLog(DebugLoggerLevel::INFO, "receive", "Read data after colon");
     char afterColon[(sizeof(T) * 2) + (sizeof(T) - 1) + 1];
@@ -169,6 +180,7 @@ public:
 private:
   SerialType &serial; ///< シリアル通信オブジェクトの参照
   LoggerType *logger; ///< ロガーオブジェクト
+  bool usesTimer = false;
 
   inline void printLog(DebugLoggerLevel level, const char *methodName,
                        const char *message) {
