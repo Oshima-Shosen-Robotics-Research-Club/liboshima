@@ -59,14 +59,14 @@ public:
    */
   void beginSerial(unsigned long baudrate = 19200) { serial.begin(baudrate); }
 
-  void attachColonNotReceived(void (*callback)(),
-                              unsigned long interval = 1000) {
+  void attachDataNotReceived(void (*callback)(),
+                             unsigned long interval = 1000) {
     MsTimer2::set(interval, callback);
     MsTimer2::start();
     onColonNotReceived = callback;
   }
 
-  void attachColonReceived(void (*callback)()) { onColonReceived = callback; }
+  void attachDataReceived(void (*callback)()) { onColonReceived = callback; }
 
   /**
    * @brief データを送信するテンプレート関数
