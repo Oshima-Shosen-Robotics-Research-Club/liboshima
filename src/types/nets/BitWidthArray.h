@@ -42,7 +42,12 @@ public:
    * @param index アクセスする要素のインデックス（0から `numElements-1` まで）。
    * @return ElementType 指定されたビット幅を持つ要素のラッパーオブジェクト
    */
-  ElementType operator[](uint8_t index) { return ElementType(array, index); }
+  ElementType operator[](uint8_t index) {
+    static_assert(
+        sizeof(Type) < elemBitSize * numElements,
+        "この配列は要素を格納するために十分なビット幅を持っていません");
+    return ElementType(array, index);
+  }
 
 private:
   /// 配列データを格納する変数。すべての要素が一つの整数として格納されます。
