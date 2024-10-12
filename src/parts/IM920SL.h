@@ -91,8 +91,7 @@ public:
    * @param interval
    * データ受信が確認されなかった場合にタイマーが発火する間隔（ミリ秒単位、デフォルトは1000ms）
    */
-  void onDataNotReceived(void (*callback)(),
-                             unsigned long interval = 1000) {
+  void onDataNotReceived(void (*callback)(), unsigned long interval = 1000) {
     // MsTimer2を使用して、指定の間隔でコールバックを実行する設定
     MsTimer2::set(interval, callback);
     MsTimer2::start();
