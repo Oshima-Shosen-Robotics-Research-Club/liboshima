@@ -51,7 +51,7 @@ enum class ImReceiveMode : uint8_t {
  * IM920SLはシリアル通信を介してデータを送信・受信する無線モジュールであり、このクラスを通じてその操作が可能です。
  *
  * @tparam SerialType シリアル通信に用いる型（例：HardwareSerial）
- * @tparam LoggerType ロガーの型（デフォルトはDebugLogger<SerialType>*）
+ * @tparam LoggerType ロガーの型（デフォルトはvoid）
  */
 template <typename SerialType, typename LoggerType = void> class IM920SL {
 public:
