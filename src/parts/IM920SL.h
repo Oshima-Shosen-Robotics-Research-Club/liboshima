@@ -167,7 +167,7 @@ public:
    * @param data 受信したデータを格納する変数
    * @param mode 受信モードを指定する（ImReceiverMode）
    */
-  template <typename T> void receive(T &data, ImReceiveMode mode) {
+  template <typename T> void receive(T *data, ImReceiveMode mode) {
     // 受信するデータのサイズが1バイト以上32バイト以下であることを確認
     static_assert(sizeof(T) >= 1 && sizeof(T) <= 32,
                   "受信するデータのサイズは1～32バイトでなければなりません");
@@ -207,7 +207,7 @@ public:
 
     // コロン以降のデータを読み込む
     printLog(DebugLoggerLevel::INFO, "receive", "Reading data after colon");
-    char afterColon[(sizeof(T) * 2) + (sizeof(T) - 1) + 1];
+    static char afterColon[100]; // 大きいので念のためstatic
     for (uint8_t index = 0; index < sizeof(afterColon); index++) {
       printLog(DebugLoggerLevel::INFO, "receive", "Reading data");
       while (!serial.available())
@@ -224,11 +224,17 @@ public:
       afterColon[index] = c;
     }
 
+    // dataがnullptrの場合は、受信データを読み捨てる
+    if (!data) {
+      printLog(DebugLoggerLevel::WARN, "receive", "Data is null");
+      return;
+    }
+
     // 受信データの変換処理
     printLog(DebugLoggerLevel::INFO, "receive", "Converting data");
     char *pos = afterColon;
     for (size_t i = 0; i < sizeof(T); i++) {
-      Converter::fromHex(pos, 2, reinterpret_cast<uint8_t *>(&data) + i);
+      Converter::fromHex(pos, 2, reinterpret_cast<uint8_t *>(data) + i);
       pos += 2;
       if (*pos == ',') {
         pos++;
