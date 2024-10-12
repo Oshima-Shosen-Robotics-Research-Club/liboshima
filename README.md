@@ -59,19 +59,19 @@
 
 ### developブランチ
 
-- 新しい機能や修正を開発するためのブランチです。
-- このブランチでの変更は、動作確認がされるまで`stable`ブランチにはマージされません。
-- もし`platformio.ini`で`develop`ブランチを指定するには、以下のようにします。
+- 新しい機能や修正を開発するためのブランチである。
+- このブランチでの変更は、動作確認がされるまで`stable`ブランチにはマージされない。
+- もし`platformio.ini`で`develop`ブランチを指定するには、以下のようにする。
     ```
     lib_deps = https://github.com/Oshima-Shosen-Robotics-Research-Club/liboshima#develop
     ```
 
 ### stableブランチ
 
-- 安定版のコードが含まれるブランチです。
-- 直接コミットすることはなく、マージを行うだけのブランチです。
-- 十分にテストされた変更のみがこのブランチにマージされます。
-- もし`platformio.ini`で`stable`ブランチを指定するには、以下のようにします。
+- 安定版のコードが含まれるブランチですある。
+- 直接コミットすることはなく、マージのみ行う。
+- 十分に動作確認された変更のみがこのブランチにマージされる。
+- もし`platformio.ini`で`stable`ブランチを指定するには、以下のようにする。
     ```
     lib_deps = https://github.com/Oshima-Shosen-Robotics-Research-Club/liboshima#stable
     ```
