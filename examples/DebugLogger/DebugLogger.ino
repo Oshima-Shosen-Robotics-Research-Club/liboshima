@@ -1,6 +1,7 @@
 #include <liboshima.h> // 必要なライブラリをインクルード
 
 // HardwareSerialを使用してDebugLoggerのインスタンスを作成
+// ArduinoIDEの場合、<>内を書かないとエラーが発生する
 DebugLogger<HardwareSerial> logger(Serial);
 
 void setup() {

@@ -7,7 +7,9 @@
 
 // SoftwareSerialのインスタンスを作成
 SoftwareSerial softSerial(RX_PIN, TX_PIN);
+
 // HardwareSerialを使用してIM920SLのインスタンスを作成
+// ArduinoIDEの場合、<>内を書かないとエラーが発生する
 IM920SL<HardwareSerial> im(Serial);
 
 void setup() {
