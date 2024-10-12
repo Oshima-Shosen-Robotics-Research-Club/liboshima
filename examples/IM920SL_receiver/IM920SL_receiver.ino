@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h> // 必要なライブラリをインクルード
-#include <liboshima.h> // 必要なライブラリをインクルード
+#include <liboshima.h>      // 必要なライブラリをインクルード
 
 // RXピンとTXピンの定義
 #define RX_PIN 0
@@ -17,11 +17,11 @@ void setup() {
 void loop() {
   // 受信するデータを格納する変数
   int data;
-  
+
   // データを受信する
   // モード: WAIT
-  im.receive(data, ImReceiveMode::WAIT);
-  
+  im.receive<int>(&data, ImReceiveMode::WAIT);
+
   // 受信したデータを16進数で表示
   softSerial.print(data, HEX); // "1234"
 }
