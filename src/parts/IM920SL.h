@@ -27,7 +27,7 @@
  */
 enum class ImSendMode : uint8_t {
   BUFFER_FULL, ///< バッファがいっぱいになるまで待機して送信
-  CAREER_SENSE, ///< キャリアセンスを検出するまで待機して送信
+  CAREER_SENSE, ///< キャリアセンスを考慮して送信
   NO_WAIT       ///< データが利用できない場合は即座に終了
 };
 
