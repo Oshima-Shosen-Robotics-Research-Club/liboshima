@@ -55,6 +55,27 @@
 - このリポジトリの変更をコミットする。
 - このリポジトリの変更をプッシュする。
 
+## ブランチの使い方
+
+### developブランチ
+
+- 新しい機能や修正を開発するためのブランチです。
+- このブランチでの変更は、動作確認がされるまで`stable`ブランチにはマージされません。
+- もし`platformio.ini`で`develop`ブランチを指定するには、以下のようにします。
+    ```
+    lib_deps = https://github.com/Oshima-Shosen-Robotics-Research-Club/liboshima#develop
+    ```
+
+### stableブランチ
+
+- 安定版のコードが含まれるブランチです。
+- 直接コミットすることはなく、マージを行うだけのブランチです。
+- 十分にテストされた変更のみがこのブランチにマージされます。
+- もし`platformio.ini`で`stable`ブランチを指定するには、以下のようにします。
+    ```
+    lib_deps = https://github.com/Oshima-Shosen-Robotics-Research-Club/liboshima#stable
+    ```
+
 ## todo
 
 - `develop`ブランチのiniの`#develop`指定を`stable`ブランチには反映させないようにする。
