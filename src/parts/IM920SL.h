@@ -78,6 +78,7 @@ public:
    * 指定されたボーレートでシリアル通信を開始します。ボーレートが指定されない場合、デフォルト値として19200が使用されます。
    *
    * @param baudrate 通信ボーレート（デフォルトは19200bps）
+   * @note コンストラクタでは実行できません。
    */
   void beginSerial(unsigned long baudrate = 19200) { serial.begin(baudrate); }
 
