@@ -3,7 +3,7 @@ name: Tag on version change (Properties)
 on:
   push:
     branches:
-      - stable
+      - develop
     paths:
       - 'library.properties'
 
