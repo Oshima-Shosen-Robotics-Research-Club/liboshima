@@ -197,10 +197,12 @@ public:
       }
     }
 
-    // コロンが受信された場合、タイマーをリスタート
+    // コロンが受信されなかった時に呼び出される関数が登録されている場合、タイマーをリスタート
     if (onColonNotReceived) {
       MsTimer2::start();
     }
+
+    // コロンが受信された時に呼び出される関数が登録されている場合、呼び出す
     if (onColonReceived) {
       onColonReceived();
     }
