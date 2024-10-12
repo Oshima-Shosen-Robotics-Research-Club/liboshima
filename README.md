@@ -23,7 +23,7 @@
 
 ## PlatformIO Library Registry
 
-[https://registry.platformio.org/libraries/soshirofujimori/liboshima](https://registry.platformio.org/libraries/soshirofujimori/liboshima)
+[https://registry.platformio.org/libraries/oshima-shosen-robotics-research-club/liboshima](https://registry.platformio.org/libraries/oshima-shosen-robotics-research-club/liboshima)
 
 ## Library Manager
 
