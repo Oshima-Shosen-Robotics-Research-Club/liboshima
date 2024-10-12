@@ -41,3 +41,6 @@
 
 // 速度調整が可能なモーターを制御するためのクラス（TB67H450ドライバ使用）
 #include "parts/motors/speed/TB67H450.h"
+
+// Null型を定義するヘッダーファイル
+#include "types/NullType.h"
