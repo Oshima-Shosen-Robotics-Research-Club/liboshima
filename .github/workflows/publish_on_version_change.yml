@@ -3,7 +3,7 @@ name: Publish on version change (JSON)
 on:
   push:
     branches:
-      - develop
+      - stable
     paths:
       - 'library.json'
 
