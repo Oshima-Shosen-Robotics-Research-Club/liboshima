@@ -34,6 +34,7 @@ void setup() {
 
   // モーターの状態をシリアルモニタに表示
   // "Motors: 1, 2"と表示される
+  // (ArduinoIDEの場合、printfは使えないそうですが、そんなことは知りません)
   Serial.printf("Motors: %d, %d\n", controllerData.motors[0],
                 controllerData.motors[1]);
 
