@@ -1,5 +1,5 @@
 /**
- * @file ZeroType.h
+ * @file ZeroSizeType.h
  * @brief サイズ0の配列型の定義
  *
  * このファイルは、特定の用途で使われるサイズ0の配列型 `ZeroSizeType`

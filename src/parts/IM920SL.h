@@ -118,7 +118,7 @@ public:
    *
    * @tparam T 送信するデータの型
    * @param data 送信するデータ
-   * @param waitmode 送信モードを指定する（ImSenderMode）
+   * @param waitmode 送信モードを指定する（ImSendMode）
    */
   template <typename T> void send(const T &data, ImSendMode waitmode) {
     // 送信するデータのサイズが1バイト以上32バイト以下であることを確認
@@ -165,7 +165,7 @@ public:
    *
    * @tparam T 受信するデータの型
    * @param data 受信したデータを格納する変数
-   * @param mode 受信モードを指定する（ImReceiverMode）
+   * @param mode 受信モードを指定する（ImReceiveMode）
    */
   template <typename T> void receive(T *data, ImReceiveMode mode) {
     // 受信するデータのサイズが1バイト以上32バイト以下であることを確認

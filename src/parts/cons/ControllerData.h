@@ -13,7 +13,7 @@
 #include "MotorStateArray.h"
 #include <stdint.h>
 #include <types/Conditional.h>
-#include <types/ZeroType.h>
+#include <types/ZeroSizeType.h>
 
 // アライメントを1バイトに設定
 #pragma pack(push, 1)
