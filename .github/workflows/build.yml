@@ -5,10 +5,12 @@ on:
     paths:
       - '**/*.cpp'
       - '**/*.h'
+      - '**/*.ino'
   pull_request:
     paths:
       - '**/*.cpp'
       - '**/*.h'
+      - '**/*.ino'
   workflow_dispatch:
 
 jobs:
