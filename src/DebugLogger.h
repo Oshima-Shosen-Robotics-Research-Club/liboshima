@@ -6,6 +6,13 @@
 #include <stdio.h>
 
 /// ログレベルを定義する列挙型
+/**
+ * @enum DebugLoggerLevel
+ * @brief ログメッセージの重要度を示す列挙型
+ *
+ * この列挙型は、ログメッセージの重要度を示します。
+ * 各レベルは、情報メッセージ、警告メッセージ、エラーメッセージを表します。
+ */
 enum class DebugLoggerLevel : uint8_t {
   INFO, ///< 情報メッセージ
   WARN, ///< 警告メッセージ
@@ -13,6 +20,13 @@ enum class DebugLoggerLevel : uint8_t {
 };
 
 /// 待機モードを定義する列挙型
+/**
+ * @enum DebugLoggerMode
+ * @brief ログメッセージの出力時の待機モードを示す列挙型
+ *
+ * この列挙型は、ログメッセージの出力時にデータが利用可能になるまで待機するかどうかを示します。
+ * WAITモードはデータが利用可能になるまで待機し、NO_WAITモードはデータが利用できない場合は即座に終了します。
+ */
 enum class DebugLoggerMode : uint8_t {
   WAIT,   ///< データが利用可能になるまで待機
   NO_WAIT ///< データが利用できない場合は即座に終了
@@ -24,7 +38,8 @@ enum class DebugLoggerMode : uint8_t {
  *
  * `SerialType` 型のオブジェクトにデバッグメッセージを出力するためのクラスです。
  * 典型的には、Arduinoや組み込みシステムのシリアルポート（例えば
- * `Serial`）を使用して、クラス名、メソッド名、およびメッセージをシリアルポートに送信します。
+ * `Serial`）を使用して、
+ * クラス名、メソッド名、およびメッセージをシリアルポートに送信します。
  *
  * @tparam SerialType
  * シリアルポートクラスの型を指定します。例：`HardwareSerial`（Arduinoの場合）
@@ -68,18 +83,21 @@ public:
   void println(DebugLoggerLevel level, DebugLoggerMode wait,
                const char *className, const char *methodName,
                const char *message) {
+    // 現在のログレベルが指定されたレベルよりも高い場合、メッセージを出力しない
     if (logLevel > level) {
       return;
     }
 
+    // データが利用可能になるまで待機するか、即座に終了するかを決定
     if (wait == DebugLoggerMode::WAIT) {
       while (!serial.availableForWrite())
-        ;
+        ; // データが利用可能になるまで待機
     } else if (wait == DebugLoggerMode::NO_WAIT &&
                !serial.availableForWrite()) {
-      return;
+      return; // データが利用できない場合は即座に終了
     }
 
+    // メッセージをシリアルポートに出力
     serial.print("<");
     serial.print(className);
     serial.print("::");
@@ -116,5 +134,6 @@ public:
 private:
   /// デバッグメッセージを出力するシリアルポートへの参照
   SerialType &serial;
-  DebugLoggerLevel logLevel; ///< ログレベル
+  /// 現在のログレベル
+  DebugLoggerLevel logLevel;
 };

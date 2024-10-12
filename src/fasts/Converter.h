@@ -28,8 +28,7 @@ public:
    *
    * @param data 変換するバイトデータのポインタ
    * @param length バイトデータの長さ
-   * @param output
-   * 変換後の16進数文字列を格納するバッファ（null終端文字を含めた十分なサイズが必要です）
+   * @param output 変換後の16進数文字列を格納するバッファ（null終端文字を含めた十分なサイズが必要です）
    *
    * @note `output` バッファのサイズは `length * 2 + 1` バイト必要です。
    */

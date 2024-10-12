@@ -46,12 +46,15 @@ void TB67H450::setSpeed(float rate) {
   rate = constrain(rate, -1.0, 1.0);
 
   if (abs(rate) == 1.0) {
-    runDigital(rate > 0, rate < 0); // 最大出力で前進または後退
+    // 最大出力で前進または後退
+    runDigital(rate > 0, rate < 0);
   } else if (rate == 0) {
-    runDigital(HIGH, HIGH); // 停止
+    // 停止
+    runDigital(HIGH, HIGH);
   } else {
     // 速度に応じた PWM 値を計算
     uint8_t pwmValue = (uint8_t)(abs(rate) * 255);
+    // 正転または後転の PWM 信号を出力
     runAnalogue(rate > 0 ? pwmValue : 0, rate < 0 ? pwmValue : 0);
   }
 }

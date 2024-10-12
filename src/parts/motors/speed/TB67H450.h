@@ -9,8 +9,7 @@
  * @note このクラスは、PWM信号を使用してモーターを制御します。
  */
 
-#ifndef TB67H450_H
-#define TB67H450_H
+#pragma once
 
 #include "ISpeedAdjustable.h"
 
@@ -33,17 +32,17 @@ private:
    * このメソッドは、指定されたPWM値に基づいてモーターを制御します。
    *
    * @param analogueValue1 PWM信号の値1（0〜255）
-   * @param analogueValue2 PWM信号の値2（0〜255）
+   * @param analogueValue2 PWM信信号の値2（0〜255）
    */
   void runAnalogue(uint8_t analogueValue1, uint8_t analogueValue2);
 
   /**
    * @brief モーターを制御する内部メソッド
    *
-   * このメソッドは、指定されたDigital値に基づいてモーターを制御します。
+   * このメソッドは、指定されたデジタル値に基づいてモーターを制御します。
    *
-   * @param digitalValue1 Digital信号の値1（HIGH または LOW）
-   * @param digitalValue2 Digital信号の値2（HIGH または LOW）
+   * @param digitalValue1 デジタル信号の値1（HIGH または LOW）
+   * @param digitalValue2 デジタル信号の値2（HIGH または LOW）
    */
   void runDigital(bool digitalValue1, bool digitalValue2);
 
@@ -83,11 +82,9 @@ public:
    * @brief モーターの速度を設定するメソッド
    *
    * このメソッドは、モーターの速度を指定した割合で設定します。速度は
-   * 0.0（停止）から1.0（最大速度）までの範囲で設定できます。
+   * -1.0（最大逆転速度）から1.0（最大速度）までの範囲で設定できます。
    *
-   * @param rate モーターの速度割合（0.0〜1.0）
+   * @param rate モーターの速度割合（-1.0〜1.0）
    */
   void setSpeed(float rate) override;
 };
-
-#endif // TB67H450_H

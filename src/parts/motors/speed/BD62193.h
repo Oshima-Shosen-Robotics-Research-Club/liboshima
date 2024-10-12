@@ -10,8 +10,7 @@
  *       使用されるピンの設定を行います。
  */
 
-#ifndef BD62193_H
-#define BD62193_H
+#pragma once
 
 #include "ISpeedAdjustable.h"
 
@@ -105,5 +104,3 @@ public:
    */
   void setSpeed(float rate) override;
 };
-
-#endif // BD62193_H

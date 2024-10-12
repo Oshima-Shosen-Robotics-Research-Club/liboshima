@@ -11,8 +11,8 @@
 #pragma once
 
 #include "BitWidthElement.h"
-#include "types/TypeSelector.h"
 #include <stdint.h>
+#include <types/TypeSelector.h>
 
 /**
  * @brief 要素のビット幅を指定できる配列クラス
@@ -22,8 +22,7 @@
  * によって表現され、各要素はその中の 特定のビット位置に格納されます。
  *
  * @tparam EnumType 列挙型のタイプ。格納される値の種類を指定します。
- * @tparam BitWidth
- * 各要素のビット幅を指定します。例えば、8ビットなら1要素は1バイト。
+ * @tparam BitWidth 各要素のビット幅を指定します。例えば、8ビットなら1要素は1バイト。
  * @tparam numElements 配列の要素数を指定します。
  */
 template <typename EnumType, uint8_t elemBitSize, uint8_t numElements>
@@ -43,9 +42,11 @@ public:
    * @return ElementType 指定されたビット幅を持つ要素のラッパーオブジェクト
    */
   ElementType operator[](uint8_t index) {
+    // 静的アサーションを使用して、配列が十分なビット幅を持っているかを確認
     static_assert(
         sizeof(Type) < elemBitSize * numElements,
         "この配列は要素を格納するために十分なビット幅を持っていません");
+    // 指定されたインデックスの要素を返す
     return ElementType(array, index);
   }
 
