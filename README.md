@@ -74,7 +74,3 @@
     ```
     lib_deps = https://github.com/Oshima-Shosen-Robotics-Research-Club/liboshima#stable
     ```
-
-## todo
-
-- `develop`ブランチのiniの`#develop`指定を`stable`ブランチには反映させないようにする。
