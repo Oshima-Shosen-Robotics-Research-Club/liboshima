@@ -148,11 +148,10 @@ public:
 
     // データを送信
     serial.print("TXDA ");
-    for (uint8_t i = 0; i < sizeof(T); i++) {
-      serial.print(reinterpret_cast<const uint8_t *>(&data)[i] >> 4 & 0xF, HEX);
-      serial.print(reinterpret_cast<const uint8_t *>(&data)[i] & 0xF, HEX);
-    }
-    serial.println();
+    char hex[sizeof(T) * 2 + 1];
+    Converter::toHex(reinterpret_cast<const uint8_t *>(&data), sizeof(T), hex);
+    hex[sizeof(T) * 2] = '\0';
+    serial.println(hex);
 
     // ログに送信完了のメッセージを出力
     printLog(DebugLoggerLevel::INFO, "send", "Data sent");
