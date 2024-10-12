@@ -96,8 +96,8 @@ public:
     // MsTimer2を使用して、指定の間隔でコールバックを実行する設定
     MsTimer2::set(interval, callback);
     MsTimer2::start();
-    onColonNotReceived =
-        callback; // コロンが受信されなかった時のコールバックを保存
+    // コロンが受信されなかった時のコールバックを保存
+    onColonNotReceived = callback;
   }
 
   /**
