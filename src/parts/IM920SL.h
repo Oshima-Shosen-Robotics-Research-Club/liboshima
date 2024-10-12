@@ -209,7 +209,7 @@ public:
 
     // コロン以降のデータを読み込む
     printLog(DebugLoggerLevel::INFO, "receive", "Reading data after colon");
-    static char afterColon[100]; // 大きいので念のためstatic
+    static char afterColon[256]; // 大きいので念のためstatic
     for (uint8_t index = 0; index < sizeof(afterColon); index++) {
       printLog(DebugLoggerLevel::INFO, "receive", "Reading data");
       while (!serial.available())
