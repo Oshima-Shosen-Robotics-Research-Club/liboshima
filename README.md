@@ -48,3 +48,8 @@
 ## このリポジトリの変更の仕方
 
 [https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace](https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace) を参照。
+
+## versionを上げる方法
+
+- `library.json`の`version`を変更する。
+- `library.properties`の`version`を変更する。
