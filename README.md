@@ -10,7 +10,7 @@
     ```
 - プログラムの中で以下のように使う。(examplesフォルダを参照。)
     ```cpp
-    #include <libohima.h>
+    #include <liboshima.h>
     ```
 
 ## Arduino IDEでの使い方
@@ -36,12 +36,13 @@
 - 不必要な処理や重い処理を含むライブラリ関数を使わないこと。
 - フォルダ内に存在するファイルの数が、大きすぎず、小さすぎないようにすること。
 - スコープの広い物には、名前空間やクラス名でアクセスするようにすること。
-    - 例外: `FastSerial`（ArduinoのSerialに似せるため。）
+  - 例外: `FastSerial`（ArduinoのSerialに似せるため。）
 - インライン展開すべきクラスは、ヘッダファイルに実装すること。
 
 ## git cloneできない場合
 
 - `git config --global http.postBuffer 524288000`
+  - This command increases the buffer size for HTTP POST requests to 500MB, which can help resolve issues when cloning large repositories or pushing large commits.
 - WiFiの代わりにモバイルデータ通信や有線LANを使う。
 
 ## このリポジトリの変更の仕方
