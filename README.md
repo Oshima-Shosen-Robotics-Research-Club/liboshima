@@ -46,10 +46,4 @@
 
 ## このリポジトリの変更の仕方
 
-- [https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace](https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace) をVisual Studio Codeでクローンする。
-- クローンしたフォルダをVisual Studio Codeで開く。
-- `lib`ディレクトリに移動する。
-- そこでこのリポジトリをVisual Studio Codeでクローンする。
-- このリポジトリに変更を加える。
-- このリポジトリの変更をコミットする。
-- このリポジトリの変更をプッシュする。
+- [https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace](https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace) を参照。
