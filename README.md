@@ -47,4 +47,4 @@
 
 ## このリポジトリの変更の仕方
 
-- [https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace](https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace) を参照。
+[https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace](https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace) を参照。
