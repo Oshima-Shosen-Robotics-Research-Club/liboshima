@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "ButtonStateArray.h"
-#include "MotorStateArray.h"
+#include "AnotherButtonStateArray.h"
+#include "MotorButtonStateArray.h"
 #include <stdint.h>
 #include <types/Conditional.h>
 #include <types/ZeroSizeType.h>
@@ -32,24 +32,25 @@ template <uint8_t numMotors = 0, uint8_t numButtons = 0, uint8_t numSticks = 0>
 struct ControllerData {
 public:
   /**
-   * @brief モーターの状態を管理する配列
+   * @brief モーター専用のボタンの状態を管理する配列
    *
    * `numMotors` が0の場合、サイズ0の配列（`ZeroSizeType`）が使用されます。
-   * それ以外の場合、`MotorStateArray<numMotors>` 型の配列が使用されます。
+   * それ以外の場合、`MotorButtonStateArray<numMotors>` 型の配列が使用されます。
    */
   typename Conditional<numMotors == 0, ZeroSizeType,
-                       MotorStateArray<numMotors>>::Type
-      motors; ///< モーターの状態の配列
+                       MotorButtonStateArray<numMotors>>::Type
+      motorButtons; ///< モーターの状態の配列
 
   /**
    * @brief ボタンの状態を管理する配列
    *
    * `numButtons` が0の場合、サイズ0の配列（`ZeroSizeType`）が使用されます。
-   * それ以外の場合、`ButtonStateArray<numButtons>` 型の配列が使用されます。
+   * それ以外の場合、`AnotherButtonStateArray<numButtons>`
+   * 型の配列が使用されます。
    */
   typename Conditional<numButtons == 0, ZeroSizeType,
-                       ButtonStateArray<numButtons>>::Type
-      buttons; ///< ボタンの状態の配列
+                       AnotherButtonStateArray<numButtons>>::Type
+      otherButtons; ///< ボタンの状態の配列
 
   /**
    * @brief スティックの状態を管理する構造体

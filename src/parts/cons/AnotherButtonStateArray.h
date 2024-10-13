@@ -1,5 +1,5 @@
 /**
- * @file ButtonStateArray.h
+ * @file AnotherButtonStateArray.h
  * @brief ボタンの状態を管理するためのクラスと列挙型を定義します。
  *
  * このファイルには、ボタンの状態を表す列挙型と、複数のボタンの状態を効率的に管理するための
@@ -19,7 +19,7 @@
  * 各状態は1ビットで表現され、`RELEASED` および `PRESSED`
  * の2つの状態を持ちます。
  */
-enum class ButtonStateEnum : uint8_t {
+enum class AnotherButtonStateEnum : uint8_t {
   RELEASED = 0b0, ///< ボタンが離されている状態
   PRESSED = 0b1   ///< ボタンが押されている状態
 };
@@ -34,12 +34,13 @@ enum class ButtonStateEnum : uint8_t {
  * 使用例:
  * @code
  * // 5つのボタンの状態を管理するための配列を作成
- * ButtonStateArray<5> buttonStates;
+ * AnotherButtonStateArray<5> buttonStates;
  * // ボタン1の状態を設定
- * buttonStates[0] = ButtonStateEnum::PRESSED;
+ * buttonStates[0] = AnotherButtonStateEnum::PRESSED;
  * @endcode
  *
  * @tparam numButtons 管理するボタンの数（1以上の値でなければならない）
  */
 template <uint8_t numButtons>
-using ButtonStateArray = BitWidthArray<ButtonStateEnum, 1, numButtons>;
+using AnotherButtonStateArray =
+    BitWidthArray<AnotherButtonStateEnum, 1, numButtons>;

@@ -1,5 +1,5 @@
 /**
- * @file MotorStateArray.h
+ * @file MotorButtonStateArray.h
  * @brief モーターの状態を管理するためのクラスと列挙型を定義します。
  *
  * このファイルには、モーターの状態を表す列挙型と、複数のモーターの状態を効率的に管理するための
@@ -17,7 +17,7 @@
  * この列挙型は、モーターが停止、前進、後退のいずれかの状態にあることを表します。
  * 各状態は2ビットで表現され、以下の3つの状態があります。
  */
-enum class MotorStateEnum : uint8_t {
+enum class MotorButtonStateEnum : uint8_t {
   STOP = 0b00,    ///< モーターが停止している状態
   FORWARD = 0b01, ///< モーターが前進している状態
   REVERSE = 0b10  ///< モーターが後退している状態
@@ -32,12 +32,12 @@ enum class MotorStateEnum : uint8_t {
  * 使用例:
  * @code
  * // 4つのモーターの状態を管理するための配列を作成
- * MotorStateArray<4> motorStates;
+ * MotorButtonStateArray<4> motorStates;
  * // モーター1を前進させる
- * motorStates[0] = MotorStateEnum::FORWARD;
+ * motorStates[0] = MotorButtonStateEnum::FORWARD;
  * @endcode
  *
  * @tparam numMotors 管理するモーターの数（1以上の値でなければならない）
  */
 template <uint8_t numMotors>
-using MotorStateArray = BitWidthArray<MotorStateEnum, 2, numMotors>;
+using MotorButtonStateArray = BitWidthArray<MotorButtonStateEnum, 2, numMotors>;
