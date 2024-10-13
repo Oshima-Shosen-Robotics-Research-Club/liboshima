@@ -45,7 +45,7 @@
   - This command increases the buffer size for HTTP POST requests to 500MB, which can help resolve issues when cloning large repositories or pushing large commits.
 - WiFiの代わりにモバイルデータ通信や有線LANを使う。
 
-## このリポジトリの変更の仕方
+## このリポジトリの開発環境
 
 [https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace](https://github.com/Oshima-Shosen-Robotics-Research-Club/library-workspace) を参照。
 
