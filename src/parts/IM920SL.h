@@ -264,7 +264,7 @@ private:
    */
   inline void printLog(DebugLoggerLevel level, const char *methodName,
                        const char *message) {
-    if (!IsSame<LoggerType, void>::value) {
+    if constexpr (!IsSame<LoggerType, void>::value) {
       logger->println(level, DebugLoggerMode::WAIT, "IM920SL", methodName,
                       message);
     }
@@ -282,7 +282,7 @@ private:
    */
   void printLogf(DebugLoggerLevel level, const char *methodName,
                  const char *format, ...) {
-    if (!IsSame<LoggerType, void>::value) {
+    if constexpr (!IsSame<LoggerType, void>::value) {
       va_list args;
       va_start(args, format);
       logger->printlnf(level, DebugLoggerMode::WAIT, "IM920SL", methodName,
