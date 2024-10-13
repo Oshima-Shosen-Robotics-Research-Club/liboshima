@@ -53,3 +53,5 @@
 
 - `library.json`の`version`を変更する。
 - `library.properties`の`version`を変更する。
+- pushすると、GitHub Actionsが自動で新しいバージョンをリリースする。
+- 数時間待つと使えるようになる。
