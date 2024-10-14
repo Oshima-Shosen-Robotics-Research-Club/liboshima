@@ -17,7 +17,7 @@
  * この列挙型は、モーターが停止、前進、後退のいずれかの状態にあることを表します。
  * 各状態は2ビットで表現され、以下の3つの状態があります。
  */
-enum class MotorButtonStateEnum : uint8_t {
+enum class MotorButtonState : uint8_t {
   STOP = 0b00,    ///< モーターが停止している状態
   FORWARD = 0b01, ///< モーターが前進している状態
   REVERSE = 0b10  ///< モーターが後退している状態
@@ -34,10 +34,10 @@ enum class MotorButtonStateEnum : uint8_t {
  * // 4つのモーターの状態を管理するための配列を作成
  * MotorButtonStateArray<4> motorStates;
  * // モーター1を前進させる
- * motorStates[0] = MotorButtonStateEnum::FORWARD;
+ * motorStates[0] = MotorButtonState::FORWARD;
  * @endcode
  *
  * @tparam numMotors 管理するモーターの数（1以上の値でなければならない）
  */
 template <uint8_t numMotors>
-using MotorButtonStateArray = BitWidthArray<MotorButtonStateEnum, 2, numMotors>;
+using MotorButtonStateArray = BitWidthArray<MotorButtonState, 2, numMotors>;
