@@ -31,7 +31,7 @@
 #include "parts/LedTape.h"
 
 // コントローラーデータを管理するためのクラス
-#include "parts/cons/ControllerData.h"
+#include "parts/controllers/ControllerData.h"
 
 // 速度調整が不要なモーターを制御するためのクラス
 #include "parts/motors/NonSpeedAdjustable.h"
