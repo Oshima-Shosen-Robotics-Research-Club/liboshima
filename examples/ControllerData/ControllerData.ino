@@ -14,15 +14,15 @@ ControllerData<NUM_MOTOR_BUTTONS, NUM_OTHER_BUTTONS, NUM_STICKS> controllerData;
 void setup() {
   // モーターの初期状態を設定
   // モーター1を前進に設定
-  controllerData.motorButtons[0] = MotorButtonStateEnum::FORWARD;
+  controllerData.motorButtons[0] = MotorButtonState::FORWARD;
   // モーター2を後退に設定
-  controllerData.motorButtons[1] = MotorButtonStateEnum::REVERSE;
+  controllerData.motorButtons[1] = MotorButtonState::REVERSE;
 
   // ボタンの初期状態を設定
   // ボタン1を押下状態に設定
-  controllerData.otherButtons[0] = AnotherButtonStateEnum::PRESSED;
+  controllerData.otherButtons[0] = AnotherButtonState::PRESSED;
   // ボタン2を解放状態に設定
-  controllerData.otherButtons[1] = AnotherButtonStateEnum::RELEASED;
+  controllerData.otherButtons[1] = AnotherButtonState::RELEASED;
 
   // スティックの初期状態を設定
   controllerData.sticks[0].x = 0;   // X軸の状態を0に設定
