@@ -50,7 +50,7 @@ void TB67H450::setSpeed(float rate) {
     runDigital(rate > 0, rate < 0);
   } else if (rate == 0) {
     // 停止
-    runDigital(HIGH, HIGH);
+    runDigital(LOW, LOW);
   } else {
     // 速度に応じた PWM 値を計算
     uint8_t pwmValue = (uint8_t)(abs(rate) * 255);
