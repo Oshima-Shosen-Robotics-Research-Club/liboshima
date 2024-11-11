@@ -26,6 +26,6 @@ void NonSpeedAdjustable::reverse() {
 // モーター停止メソッド: モーターを停止させる
 void NonSpeedAdjustable::stop() {
   // pin1 と pin2 を両方 HIGH に設定してモーターを停止
-  digitalWriteFast(pin1, HIGH);
-  digitalWriteFast(pin2, HIGH);
+  digitalWriteFast(pin1, LOW);
+  digitalWriteFast(pin2, LOW);
 }
