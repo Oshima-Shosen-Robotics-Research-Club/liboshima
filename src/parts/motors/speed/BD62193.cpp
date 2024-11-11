@@ -61,7 +61,7 @@ void BD62193::setSpeed(float rate) {
 
   if (rate == 0) {
     // 速度が0の場合、モーターを停止
-    run(HIGH, HIGH);
+    run(LOW, LOW);
   } else if (!speedAdjustable) {
     // PWMを使用しない場合、inAStateとinBStateを設定
     run(rate > 0, rate < 0);
