@@ -26,9 +26,9 @@
  * これにより、データ送信がバッファの状態やキャリアセンスに応じて異なる動作を取ることができます。
  */
 enum class ImSendMode : uint8_t {
-  WAIT_FOR_BUFFER_FULL, ///< バッファがいっぱいになるまで待機して送信
-  USE_CARRIER_SENSE,    ///< キャリアセンスを考慮して送信
-  SEND_IMMEDIATELY      ///< データが利用できない場合は即座に終了
+  WAIT_FOR_BUFFER_AVAILABLE, ///< バッファが空になるまで待機
+  USE_CARRIER_SENSE,         ///< キャリアセンスを考慮して送信
+  EXIT_WHEN_BUFFER_FULL      ///< バッファが空になるまで待機せず、即座に終了
 };
 
 // 受信モードを定義する列挙型
@@ -40,8 +40,8 @@ enum class ImSendMode : uint8_t {
  * データが受信可能になるまで待機するか、データが利用できない場合にすぐに終了するかを決定します。
  */
 enum class ImReceiveMode : uint8_t {
-  WAIT_FOR_DATA,   ///< データが受信可能になるまで待機
-  NO_WAIT_FOR_DATA ///< データが利用できない場合は即座に終了
+  WAIT_FOR_SERIAL_BUFFER, ///< シリアルバッファが空になるまで待機
+  EXIT_WHEN_BUFFER_EMPTY, ///< バッファが空の場合は即座に終了
 };
 
 /**
@@ -133,11 +133,11 @@ public:
     constexpr uint8_t size = 5 + (sizeof(T) * 2);
 
     // 指定された送信モードに従い、バッファやキャリアセンスの状態を確認
-    if (waitmode == ImSendMode::SEND_IMMEDIATELY) {
+    if (waitmode == ImSendMode::EXIT_WHEN_BUFFER_FULL) {
       // バッファが空になるまで待機しない
       if (static_cast<uint8_t>(serial.availableForWrite()) < size)
         return;
-    } else if (waitmode == ImSendMode::WAIT_FOR_BUFFER_FULL) {
+    } else if (waitmode == ImSendMode::WAIT_FOR_BUFFER_AVAILABLE) {
       // バッファが空になるまで待機
       while (static_cast<uint8_t>(serial.availableForWrite()) < size)
         ;
@@ -186,11 +186,12 @@ public:
           break;
         }
       } else {
-        if (mode == ImReceiveMode::WAIT_FOR_DATA) {
-          printLog(DebugLoggerLevel::INFO, "receive", "Waiting for data");
+        if (mode == ImReceiveMode::WAIT_FOR_SERIAL_BUFFER) {
+          printLog(DebugLoggerLevel::INFO, "receive",
+                   "Waiting for serial data");
           while (!serial.available())
             ;
-        } else {
+        } else if (mode == ImReceiveMode::EXIT_WHEN_BUFFER_EMPTY) {
           printLog(DebugLoggerLevel::ERROR, "receive", "No data available");
           return;
         }
