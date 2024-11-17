@@ -40,8 +40,8 @@ enum class ImSendMode : uint8_t {
  * データが受信可能になるまで待機するか、データが利用できない場合にすぐに終了するかを決定します。
  */
 enum class ImReceiveMode : uint8_t {
-  WAIT_FOR_SERIAL_BUFFER, ///< シリアルバッファが空になるまで待機
-  EXIT_WHEN_BUFFER_EMPTY, ///< バッファが空の場合は即座に終了
+  WAIT_FOR_SERIAL_DATA,    ///< シリアルバッファが空になるまで待機
+  NO_WAIT_FOR_SERIAL_DATA, ///< バッファが空の場合は即座に終了
 };
 
 /**
@@ -186,12 +186,12 @@ public:
           break;
         }
       } else {
-        if (mode == ImReceiveMode::WAIT_FOR_SERIAL_BUFFER) {
+        if (mode == ImReceiveMode::WAIT_FOR_SERIAL_DATA) {
           printLog(DebugLoggerLevel::INFO, "receive",
                    "Waiting for serial data");
           while (!serial.available())
             ;
-        } else if (mode == ImReceiveMode::EXIT_WHEN_BUFFER_EMPTY) {
+        } else if (mode == ImReceiveMode::NO_WAIT_FOR_SERIAL_DATA) {
           printLog(DebugLoggerLevel::ERROR, "receive", "No data available");
           return;
         }
