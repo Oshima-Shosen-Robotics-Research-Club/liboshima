@@ -26,9 +26,9 @@
  * これにより、データ送信がバッファの状態やキャリアセンスに応じて異なる動作を取ることができます。
  */
 enum class ImSendMode : uint8_t {
-  BUFFER_FULL, ///< バッファがいっぱいになるまで待機して送信
-  CAREER_SENSE, ///< キャリアセンスを考慮して送信
-  NO_WAIT       ///< データが利用できない場合は即座に終了
+  WAIT_FOR_BUFFER_FULL, ///< バッファがいっぱいになるまで待機して送信
+  USE_CARRIER_SENSE,    ///< キャリアセンスを考慮して送信
+  SEND_IMMEDIATELY      ///< データが利用できない場合は即座に終了
 };
 
 // 受信モードを定義する列挙型
@@ -40,8 +40,8 @@ enum class ImSendMode : uint8_t {
  * データが受信可能になるまで待機するか、データが利用できない場合にすぐに終了するかを決定します。
  */
 enum class ImReceiveMode : uint8_t {
-  WAIT,   ///< データが受信可能になるまで待機
-  NO_WAIT ///< データが利用できない場合は即座に終了
+  WAIT_FOR_DATA,   ///< データが受信可能になるまで待機
+  NO_WAIT_FOR_DATA ///< データが利用できない場合は即座に終了
 };
 
 /**
@@ -133,16 +133,16 @@ public:
     constexpr uint8_t size = 5 + (sizeof(T) * 2);
 
     // 指定された送信モードに従い、バッファやキャリアセンスの状態を確認
-    if (waitmode == ImSendMode::NO_WAIT) {
-      // データが利用できない場合は即座に終了
+    if (waitmode == ImSendMode::SEND_IMMEDIATELY) {
+      // バッファが空になるまで待機しない
       if (static_cast<uint8_t>(serial.availableForWrite()) < size)
         return;
-    } else if (waitmode == ImSendMode::BUFFER_FULL) {
-      // バッファがいっぱいになるまで待機
+    } else if (waitmode == ImSendMode::WAIT_FOR_BUFFER_FULL) {
+      // バッファが空になるまで待機
       while (static_cast<uint8_t>(serial.availableForWrite()) < size)
         ;
-    } else if (waitmode == ImSendMode::CAREER_SENSE) {
-      // キャリアセンスを検出するまで待機
+    } else if (waitmode == ImSendMode::USE_CARRIER_SENSE) {
+      // キャリアセンスを考慮して送信
       delay(60);
     }
 
@@ -186,7 +186,7 @@ public:
           break;
         }
       } else {
-        if (mode == ImReceiveMode::WAIT) {
+        if (mode == ImReceiveMode::WAIT_FOR_DATA) {
           printLog(DebugLoggerLevel::INFO, "receive", "Waiting for data");
           while (!serial.available())
             ;
@@ -248,10 +248,10 @@ public:
   }
 
 private:
-  SerialType &serial; ///< シリアル通信オブジェクトの参照
-  LoggerType *logger; ///< ロガーオブジェクトへのポインタ
+  SerialType &serial;                     ///< シリアル通信オブジェクトの参照
+  LoggerType *logger;                     ///< ロガーオブジェクトへのポインタ
   void (*onColonNotReceived)() = nullptr; ///< コロン未受信時のコールバック
-  void (*onColonReceived)() = nullptr; ///< コロン受信時のコールバック
+  void (*onColonReceived)() = nullptr;    ///< コロン受信時のコールバック
 
   /**
    * @brief ログメッセージを出力するヘルパー関数
