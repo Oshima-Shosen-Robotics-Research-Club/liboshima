@@ -21,7 +21,7 @@ void loop() {
   int data;
 
   // データを受信する
-  im.receive(&data, ImReceiveMode::WAIT_FOR_SERIAL_BUFFER);
+  im.receive(&data, ImReceiveMode::WAIT_FOR_SERIAL_DATA);
 
   // 受信したデータを16進数で表示
   softSerial.print(data, HEX); // "1234"
